@@ -16,7 +16,8 @@ class LogFilter : OncePerRequestFilter() {
     companion object {
         private const val MDC_LOG_TRACED_ID_KEY = "LogTraceId"
 
-        // TODO: 로그를 남기지 않아도 될 URL 제외되도록 계속 반영
+        private val NO_LOG_URL_LIST = listOf("/swagger-ui", "/v3/api-docs")
+
         private val VISIBLE_TYPES: List<MediaType> = listOf(
             MediaType.valueOf("text/*"),
             MediaType.APPLICATION_FORM_URLENCODED,
@@ -55,6 +56,7 @@ class LogFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        val isLog = !NO_LOG_URL_LIST.any { request.requestURI.contains(it) }
         val responseWrapper = ResponseWrapper(response)
 
         try {
@@ -66,11 +68,11 @@ class LogFilter : OncePerRequestFilter() {
                 filterChain.doFilter(request, responseWrapper)
             } else {
                 val requestWrapper = RequestWrapper(request)
-                logRequest(requestWrapper)
+                if (isLog) logRequest(requestWrapper)
                 filterChain.doFilter(requestWrapper, responseWrapper)
             }
         } finally {
-            logResponse(responseWrapper)
+            if (isLog) logResponse(responseWrapper)
             responseWrapper.copyBodyToResponse()
         }
     }
