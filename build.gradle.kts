@@ -44,6 +44,9 @@ dependencies {
 
 	// Reflect
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	// Swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 }
 
 tasks.withType<KotlinCompile> {
