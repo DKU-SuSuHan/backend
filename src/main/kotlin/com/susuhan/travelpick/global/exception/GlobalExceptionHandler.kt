@@ -123,7 +123,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         }
 
         private fun getExceptionStackTraceToString(ex: Exception): String {
-            val stringWriter = StringWriter();
+            val stringWriter = StringWriter()
             ex.printStackTrace(PrintWriter(stringWriter))
             return stringWriter.toString()
         }
