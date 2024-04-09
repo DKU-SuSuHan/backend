@@ -3,7 +3,6 @@ package com.susuhan.travelpick.global.exception
 import com.susuhan.travelpick.global.exception.dto.ErrorResponse
 import com.susuhan.travelpick.global.exception.dto.FieldError
 import com.susuhan.travelpick.global.exception.dto.ValidationErrorResponse
-import jakarta.annotation.Nullable
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpHeaders
@@ -38,7 +37,6 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
             ))
     }
 
-    @Nullable
     override fun handleMethodArgumentNotValid(
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
@@ -47,14 +45,13 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     ) : ResponseEntity<Any> {
         logger.error("[Method_Argument_Not_Valid_Exception]: ${getExceptionStackTraceToString(ex)}");
 
-        val errors = ex.bindingResult.fieldErrors
-            .map { error ->
-                FieldError(
-                    error.field,
-                    error.rejectedValue?.toString() ?: "",
-                    error?.defaultMessage ?: ""
-                )
-            }.toList()
+        val errors = ex.bindingResult.fieldErrors.map { error ->
+            FieldError(
+                error.field,
+                error.rejectedValue?.toString() ?: "",
+                error?.defaultMessage ?: ""
+            )
+        }
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
@@ -69,14 +66,13 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleBusinessException(ex: ConstraintViolationException): ResponseEntity<ValidationErrorResponse> {
         logger.error("[Constraint_Violation_Exception]: ${getExceptionStackTraceToString(ex)}");
 
-        val errors = ex.constraintViolations
-            .map { violation ->
-                FieldError(
-                    getFieldName(violation),
-                    violation.invalidValue.toString(),
-                    violation.message
-                )
-            }.toList()
+        val errors = ex.constraintViolations.map { violation ->
+            FieldError(
+                getFieldName(violation),
+                violation.invalidValue.toString(),
+                violation.message
+            )
+        }
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
@@ -87,7 +83,6 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
             ))
     }
 
-    @Nullable
     override fun handleExceptionInternal(
         ex: Exception,
         body: Any?,
