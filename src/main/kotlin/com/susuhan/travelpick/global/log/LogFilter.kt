@@ -61,10 +61,8 @@ class LogFilter : OncePerRequestFilter() {
 
         try {
             if (isMultipartFormData(request.contentType)) {
-                logger.info(
-                    "[${MDC.get(MDC_LOG_TRACED_ID_KEY)}] Request - [${request.method}]: " +
-                            "uri=${request.requestURI}, payload=multipart/form-data",
-                )
+                logger.info("[${MDC.get(MDC_LOG_TRACED_ID_KEY)}] Request - [${request.method}]" +
+                        ": uri=${request.requestURI}, payload=multipart/form-data")
                 filterChain.doFilter(request, responseWrapper)
             } else {
                 val requestWrapper = RequestWrapper(request)
