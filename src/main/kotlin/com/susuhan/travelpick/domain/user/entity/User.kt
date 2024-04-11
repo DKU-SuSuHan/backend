@@ -1,7 +1,7 @@
 package com.susuhan.travelpick.domain.user.entity
 
-import com.susuhan.travelpick.domain.user.entity.constant.LoginType
-import com.susuhan.travelpick.domain.user.entity.constant.Role
+import com.susuhan.travelpick.domain.user.constant.LoginType
+import com.susuhan.travelpick.domain.user.constant.Role
 import com.susuhan.travelpick.global.common.BaseTimeEntity
 import com.susuhan.travelpick.global.common.ConstantUtils
 import jakarta.persistence.*
