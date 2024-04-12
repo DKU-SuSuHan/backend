@@ -11,3 +11,8 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     open-in-view: false
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expired-time: 10800000 # 3시간
+  refresh-token-expired-time: 1296000000 # 15일

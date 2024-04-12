@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
  * <ul>
  *     <li>10XX: 일반적인 서버 에러. 아래에 정의하지 않는 에러가 해당됨</li>
  *     <li>11XX: validation 관련 에러</li>
+ *     <li>12XX: auth (인증-인가) 관련 에러</li>
  * </ul>
  */
 enum class ErrorCode(
@@ -22,5 +23,13 @@ enum class ErrorCode(
      * Validation Exception
      */
     METHOD_ARGUMENT_NOT_VALID(1100, "데이터 유효성 검사에 실패했습니다.", HttpStatus.BAD_REQUEST),
-    CONSTRAINT_VIOLATION(1101, "데이터 유효성 검사에 실패했습니다.", HttpStatus.BAD_REQUEST)
+    CONSTRAINT_VIOLATION(1101, "데이터 유효성 검사에 실패했습니다.", HttpStatus.BAD_REQUEST),
+
+    /**
+     * Auth Exception
+     */
+    UNAUTHORIZED(1200, "인증 과정에 문제가 발생해 인증에 실패했습니다.", HttpStatus.UNAUTHORIZED),
+    FORBIDDEN(1201, "자원에 대한 권한이 없어 접근이 거부되었습니다.", HttpStatus.FORBIDDEN),
+    TOKEN_NOT_VALID(1202, "유효하지 않는 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    TOKEN_EXPIRED(1203, "유효기간이 만료된 토큰입니다.", HttpStatus.UNAUTHORIZED),
 }
