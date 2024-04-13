@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus
  *     <li>10XX: 일반적인 서버 에러. 아래에 정의하지 않는 에러가 해당됨</li>
  *     <li>11XX: validation 관련 에러</li>
  *     <li>12XX: auth (인증-인가) 관련 에러</li>
+ *     <li>13XX: 소셜로그인 관련 에러</li>
+ *     <li>14XX: 사용자 관련 에러</li>
  * </ul>
  */
 enum class ErrorCode(
@@ -32,4 +34,14 @@ enum class ErrorCode(
     FORBIDDEN(1201, "자원에 대한 권한이 없어 접근이 거부되었습니다.", HttpStatus.FORBIDDEN),
     TOKEN_NOT_VALID(1202, "유효하지 않는 토큰입니다.", HttpStatus.UNAUTHORIZED),
     TOKEN_EXPIRED(1203, "유효기간이 만료된 토큰입니다.", HttpStatus.UNAUTHORIZED),
+
+    /**
+     * OAuth Exception
+     */
+    KAKAO_SERVER_ERROR(1300, "카카오 서버와 통신 중 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+
+    /**
+     * User Exception
+     */
+    USER_ID_NOT_FOUND(1400, "해당 PK를 가진 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
 }

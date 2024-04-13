@@ -37,7 +37,7 @@ class User(
     val socialId: String? = socialId
 
     @Column(name = "profile_image_url")
-    var profileImageUrl: String? = ConstantUtils.DEFAULT_PROFILE_IMAGE_URL
+    var profileImageUrl: String = ConstantUtils.DEFAULT_PROFILE_IMAGE_URL
         private set
 
     @Column(name = "role", nullable = false)
@@ -48,4 +48,12 @@ class User(
     @Column(name = "login_type", nullable = false)
     @Enumerated(EnumType.STRING)
     val loginType: LoginType = loginType
+
+    // TODO: redis로 관리할 예정
+    @Column(name = "refresh_token")
+    var refreshToken: String? = null
+
+    fun updateRefreshToken(refreshToken: String) {
+        this.refreshToken = refreshToken
+    }
 }
