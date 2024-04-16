@@ -53,6 +53,10 @@ class User(
     @Column(name = "refresh_token")
     var refreshToken: String? = null
 
+    fun updateNickname(nickname: String) {
+        this.nickname = nickname
+    }
+
     fun updateRefreshToken(refreshToken: String) {
         this.refreshToken = refreshToken
     }
