@@ -7,6 +7,9 @@ import com.susuhan.travelpick.domain.user.dto.response.NicknameUpdateResponse
 import com.susuhan.travelpick.domain.user.service.UserCommandService
 import com.susuhan.travelpick.domain.user.service.UserQueryService
 import com.susuhan.travelpick.global.security.CustomUserDetails
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -26,9 +29,14 @@ class UserController(
     private val userQueryService: UserQueryService
 ) {
 
-    @PatchMapping
+    @Operation(
+        summary = "회원의 닉네임 수정",
+        description = "회원이 변경하고자 하는 닉네임을 전달받아 닉네임을 수정합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @PatchMapping("/nickname")
     fun updateNickname(
-        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @Parameter(hidden = true) @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody nicknameUpdateRequest: NicknameUpdateRequest
     ): ResponseEntity<NicknameUpdateResponse> {
         val userId = customUserDetails.userId.toLong()
@@ -38,6 +46,11 @@ class UserController(
             .body(userCommandService.updateNickname(userId, nicknameUpdateRequest))
     }
 
+    @Operation(
+        summary = "회원의 닉네임 중복 확인",
+        description = "회원이 변경하고자 하는 닉네임을 전달받아 DB에 존재하는지 확인합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
     @GetMapping("/check/nickname")
     fun checkNicknameDuplicated(
         @Valid @RequestBody nicknameCheckRequest: NicknameCheckRequest
