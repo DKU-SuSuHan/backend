@@ -10,4 +10,6 @@ interface UserRepository : Repository<User, Long> {
     fun findById(id: Long): User?
 
     fun findBySocialId(id: String): User?
+
+    fun existsByNickname(nickname: String): Boolean
 }
