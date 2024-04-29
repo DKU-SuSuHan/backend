@@ -25,10 +25,6 @@ allOpen {
 	annotation("javax.persistence.Embeddable")
 }
 
-noArg {
-	annotation("jakarta.persistence.Entity")
-}
-
 dependencies {
 	// Spring MVC
 	implementation("org.springframework.boot:spring-boot-starter-web")
