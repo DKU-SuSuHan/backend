@@ -36,7 +36,7 @@ class User(
     @Column(name = "social_id", unique = true)
     val socialId: String? = socialId
 
-    @Column(name = "profile_image_url")
+    @Column(name = "profile_image_url", nullable = false)
     var profileImageUrl: String = ConstantUtils.DEFAULT_PROFILE_IMAGE_URL
         private set
 
