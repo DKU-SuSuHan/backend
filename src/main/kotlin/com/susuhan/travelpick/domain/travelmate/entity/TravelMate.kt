@@ -30,5 +30,5 @@ class TravelMate(
     @Column(name = "group_role", nullable = false)
     @Enumerated(EnumType.STRING)
     var groupRole: GroupRole = groupRole
-        private set
+        protected set
 }

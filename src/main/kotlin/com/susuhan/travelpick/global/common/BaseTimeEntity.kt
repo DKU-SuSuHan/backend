@@ -15,10 +15,10 @@ abstract class BaseTimeEntity {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     var createAt: LocalDateTime = LocalDateTime.now()
-        private set
+        protected set
 
     @LastModifiedDate
     @Column(nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
-        private set
+        protected set
 }
