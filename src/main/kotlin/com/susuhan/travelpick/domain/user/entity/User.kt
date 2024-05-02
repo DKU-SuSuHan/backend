@@ -23,27 +23,27 @@ class User(
 
     @Column(name = "email", unique = true)
     var email: String? = email
-        private set
+        protected set
 
     @Column(name = "password", length = 20)
     var password: String? = password
-        private set
+        protected set
 
     @Column(name = "nickname", unique = true, length = 10)
     var nickname: String? = nickname
-        private set
+        protected set
 
     @Column(name = "social_id", unique = true)
     val socialId: String? = socialId
 
     @Column(name = "profile_image_url", nullable = false)
     var profileImageUrl: String = ConstantUtils.DEFAULT_PROFILE_IMAGE_URL
-        private set
+        protected set
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER
-        private set
+        protected set
 
     @Column(name = "login_type", nullable = false)
     @Enumerated(EnumType.STRING)

@@ -21,26 +21,26 @@ class Travel(
 
     @Column(name = "title", nullable = false)
     var title: String = title
-        private set
+        protected set
 
     @Column(name = "start_at", nullable = false)
     var startAt: LocalDate = startAt
-        private set
+        protected set
 
     @Column(name = "end_at", nullable = false)
     var endAt: LocalDate = endAt
-        private set
+        protected set
 
     @Column(name = "address", nullable = false)
     @Embedded
     var address: Address = address
-        private set
+        protected set
 
     @Column(name = "template_num", nullable = false)
     var templateNum: Long = templateNum
-        private set
+        protected set
 
     @Column(name = "is_private", nullable = false)
     var isPrivate: Boolean = false
-        private set
+        protected set
 }
