@@ -7,7 +7,6 @@ import com.susuhan.travelpick.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Transactional(readOnly = true)
 @Service
 class UserCommandService(
     private val userRepository: UserRepository
