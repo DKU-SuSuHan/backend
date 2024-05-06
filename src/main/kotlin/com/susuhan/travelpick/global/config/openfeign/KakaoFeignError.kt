@@ -1,6 +1,6 @@
 package com.susuhan.travelpick.global.config.openfeign
 
-import com.susuhan.travelpick.global.common.logger
+import com.susuhan.travelpick.global.common.log.logger
 import com.susuhan.travelpick.global.kakao.exception.KakaoServerException
 import feign.Response
 import feign.codec.ErrorDecoder

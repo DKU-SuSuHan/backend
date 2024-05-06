@@ -1,7 +1,7 @@
 package com.susuhan.travelpick.global.security.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.susuhan.travelpick.global.common.logger
+import com.susuhan.travelpick.global.common.log.logger
 import com.susuhan.travelpick.global.exception.ErrorCode
 import com.susuhan.travelpick.global.exception.dto.ErrorResponse
 import jakarta.servlet.http.HttpServletRequest

@@ -2,7 +2,7 @@ package com.susuhan.travelpick.domain.notification.entity
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.user.entity.User
-import com.susuhan.travelpick.global.common.BaseTimeEntity
+import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import jakarta.persistence.*
 
 @Table(name = "notifications")

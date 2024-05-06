@@ -1,6 +1,6 @@
 package com.susuhan.travelpick.domain.travel.entity
 
-import com.susuhan.travelpick.global.common.BaseTimeEntity
+import com.susuhan.travelpick.global.common.entity.BaseEntity
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -12,7 +12,7 @@ class Travel(
     endAt: LocalDate,
     address: Address,
     templateNum: Long
-) : BaseTimeEntity() {
+) : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
