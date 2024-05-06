@@ -21,11 +21,11 @@ data class TravelCreateRequest(
     @field:NotBlank
     val sgg: String,
 
-    @Schema(description = "여행 시작 날짜")
+    @Schema(description = "여행 시작 날짜", example = "2024-05-05")
     @field:DateTimeFormat(pattern = "yyyy-MM-dd")
     val startAt: LocalDate,
 
-    @Schema(description = "여행 종료 날짜")
+    @Schema(description = "여행 종료 날짜", example = "2024-05-10")
     @field:DateTimeFormat(pattern = "yyyy-MM-dd")
     val endAt: LocalDate,
 )
