@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.global.common
+package com.susuhan.travelpick.global.common.log
 
 import org.slf4j.LoggerFactory
 

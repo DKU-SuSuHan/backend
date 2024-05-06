@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.global.common
+package com.susuhan.travelpick.global.common.util
 
 /**
  * 어플리케이션에서 사용되는 상수 값을 관리하는 클래스

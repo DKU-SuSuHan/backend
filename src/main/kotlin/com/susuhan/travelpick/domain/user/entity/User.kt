@@ -2,8 +2,8 @@ package com.susuhan.travelpick.domain.user.entity
 
 import com.susuhan.travelpick.domain.user.constant.LoginType
 import com.susuhan.travelpick.domain.user.constant.Role
-import com.susuhan.travelpick.global.common.BaseTimeEntity
-import com.susuhan.travelpick.global.common.ConstantUtils
+import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
+import com.susuhan.travelpick.global.common.util.ConstantUtils
 import jakarta.persistence.*
 
 @Table(name = "users")

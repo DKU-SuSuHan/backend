@@ -1,6 +1,6 @@
 package com.susuhan.travelpick.domain.travel.entity
 
-import com.susuhan.travelpick.global.common.BaseTimeEntity
+import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import jakarta.persistence.*
 import java.time.LocalDate
 
