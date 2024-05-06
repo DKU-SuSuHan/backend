@@ -6,4 +6,6 @@ import org.springframework.data.repository.Repository
 interface TravelRepository : Repository<Travel, Long> {
 
     fun save(entity: Travel): Travel
+
+    fun findById(id: Long): Travel?
 }
