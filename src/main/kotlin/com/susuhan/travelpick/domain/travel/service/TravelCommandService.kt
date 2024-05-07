@@ -9,16 +9,18 @@ import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.travel.exception.TravelCreatorRequiredException
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
+import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TravelCommandService(
-    private val travelRepository: TravelRepository
+    private val travelRepository: TravelRepository,
+    private val travelMateCommandService: TravelMateCommandService
 ) {
 
     @Transactional
-    fun createTravel(request: TravelCreateRequest): TravelCreateResponse {
+    fun createTravel(userId: Long, request: TravelCreateRequest): TravelCreateResponse {
         val travel = Travel(
             templateNum = request.templateNum,
             address = Address(request.sido, request.sgg),
@@ -27,6 +29,7 @@ class TravelCommandService(
             endAt = request.endAt
         )
         val savedTravel = travelRepository.save(travel)
+        travelMateCommandService.createTravelLeader(userId, savedTravel)
         return TravelCreateResponse.from(savedTravel)
     }
 
