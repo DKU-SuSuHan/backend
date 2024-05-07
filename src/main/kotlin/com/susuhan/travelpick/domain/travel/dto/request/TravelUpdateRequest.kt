@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
-data class TravelCreateRequest(
+data class TravelUpdateRequest(
     @Schema(description = "여행지의 템플릿 이미지 번호")
     val templateNum: Long,
 

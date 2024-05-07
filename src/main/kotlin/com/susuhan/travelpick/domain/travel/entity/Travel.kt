@@ -43,4 +43,24 @@ class Travel(
     @Column(name = "is_private", nullable = false)
     var isPrivate: Boolean = false
         protected set
+
+    fun updateTitle(title: String) {
+        this.title = title
+    }
+
+    fun updateStartAt(startAt: LocalDate) {
+        this.startAt = startAt
+    }
+
+    fun updateEndAt(endAt: LocalDate) {
+        this.endAt = endAt
+    }
+
+    fun updateAddress(address: Address) {
+        this.address = address
+    }
+
+    fun updateTemplateNum(templateNum: Long) {
+        this.templateNum = templateNum
+    }
 }

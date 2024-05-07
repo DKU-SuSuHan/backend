@@ -4,7 +4,7 @@ import com.susuhan.travelpick.domain.travel.entity.Travel
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 
-data class TravelCreateResponse(
+data class TravelUpdateResponse(
     @Schema(description = "여행지의 PK")
     val id: Long,
 
@@ -25,8 +25,8 @@ data class TravelCreateResponse(
 ) {
 
     companion object {
-        fun from(travel: Travel): TravelCreateResponse {
-            return TravelCreateResponse(
+        fun from(travel: Travel): TravelUpdateResponse {
+            return TravelUpdateResponse(
                 travel.id!!,
                 travel.title,
                 travel.address.sido,

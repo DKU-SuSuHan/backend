@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus
  *     <li>12XX: auth (인증-인가) 관련 에러</li>
  *     <li>13XX: 소셜로그인 관련 에러</li>
  *     <li>14XX: 사용자 관련 에러</li>
+ *     <li>15XX: 여행지 관련 에러</li>
  * </ul>
  */
 enum class ErrorCode(
@@ -43,5 +44,11 @@ enum class ErrorCode(
     /**
      * User Exception
      */
-    USER_ID_NOT_FOUND(1400, "해당 PK를 가진 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    USER_ID_NOT_FOUND(1400, "해당 PK를 가진 USER 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+
+    /**
+     * Travel Exception
+     */
+    TRAVEL_ID_NOT_FOUND(1500, "해당 PK를 가진 TRAVEL 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    TRAVEL_CREATOR_REQUIRED(1501, "해당 여행지를 생성한 사용자만 수행 가능한 API입니다.", HttpStatus.FORBIDDEN)
 }
