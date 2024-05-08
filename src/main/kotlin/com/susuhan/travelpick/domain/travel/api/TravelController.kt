@@ -34,11 +34,14 @@ class TravelController(
     )
     @PostMapping
     fun createTravel(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody travelCreateRequest: TravelCreateRequest
     ): ResponseEntity<TravelCreateResponse> {
+        val userId = customUserDetails.userId.toLong()
+
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelCommandService.createTravel(travelCreateRequest))
+            .body(travelCommandService.createTravel(userId, travelCreateRequest))
     }
 
     @Operation(
