@@ -33,7 +33,7 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun createTravelMate(
+    fun createTravelParticipant(
         userId: String, travelId: Long, request: TravelMateCreateRequest
     ): TravelMateCreateResponse {
         val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()

@@ -33,8 +33,8 @@ class TravelMateController(
     ): ResponseEntity<TravelMateCreateResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelMateCommandService.createTravelMate(
-                customUserDetails.userId, travelId, travelMateCreateRequest)
-            )
+            .body(travelMateCommandService.createTravelParticipant(
+                customUserDetails.userId, travelId, travelMateCreateRequest
+            ))
     }
 }
