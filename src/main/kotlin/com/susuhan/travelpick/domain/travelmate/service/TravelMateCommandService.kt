@@ -39,7 +39,7 @@ class TravelMateCommandService(
         val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
 
         if (userId != travel.createdBy) {
-            throw TravelCreatorRequiredException()
+            throw TravelCreatorRequiredException(travel.createdBy!!)
         }
 
         val travelMate = TravelMate(
