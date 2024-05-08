@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
  *     <li>13XX: 소셜로그인 관련 에러</li>
  *     <li>14XX: 사용자 관련 에러</li>
  *     <li>15XX: 여행지 관련 에러</li>
+ *     <li>16XX: 여행지 메이트 관련 에러</li>
  * </ul>
  */
 enum class ErrorCode(
@@ -50,5 +51,11 @@ enum class ErrorCode(
      * Travel Exception
      */
     TRAVEL_ID_NOT_FOUND(1500, "해당 PK를 가진 TRAVEL 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
-    TRAVEL_CREATOR_REQUIRED(1501, "해당 여행지를 생성한 사용자만 수행 가능한 API입니다.", HttpStatus.FORBIDDEN)
+    TRAVEL_CREATOR_REQUIRED(1501, "해당 여행지를 생성한 사용자만 수행 가능한 API입니다.", HttpStatus.FORBIDDEN),
+
+    /**
+     * TravelMate Exception
+     */
+    TRAVEL_MATE_ID_NOT_FOUND(1600, "해당 PK를 가진 TRAVELMATE 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    TRAVEL_LEADER_DELETION(1601, "Leader 역할을 가진 TravelMate는 삭제가 불가능합니다.", HttpStatus.FORBIDDEN),
 }

@@ -8,6 +8,8 @@ import com.susuhan.travelpick.domain.travelmate.dto.request.TravelMateCreateRequ
 import com.susuhan.travelpick.domain.travelmate.dto.response.TravelMateCreateResponse
 import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
+import com.susuhan.travelpick.domain.travelmate.exception.TravelLeaderDeletionException
+import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
 import com.susuhan.travelpick.domain.user.repository.UserRepository
@@ -49,5 +51,22 @@ class TravelMateCommandService(
         )
         val savedTravelMate = travelMateRepository.save(travelMate)
         return TravelMateCreateResponse.from(savedTravelMate)
+    }
+
+    @Transactional
+    fun deleteTravelMate(userId: String, travelId: Long, travelMateId: Long) {
+        val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
+
+        if (userId != travel.createdBy) {
+            throw TravelCreatorRequiredException(travel.createdBy!!)
+        }
+
+        val travelMate = travelMateRepository.findById(travelMateId) ?: throw TravelMateIdNotFoundException()
+
+        if (travelMate.groupRole == GroupRole.LEADER) {
+            throw TravelLeaderDeletionException(travelMate.id!!)
+        }
+
+        travelMateRepository.delete(travelMate)
     }
 }

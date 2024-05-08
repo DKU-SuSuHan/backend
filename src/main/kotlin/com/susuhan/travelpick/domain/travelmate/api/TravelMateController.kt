@@ -37,4 +37,22 @@ class TravelMateController(
                 customUserDetails.userId, travelId, travelMateCreateRequest
             ))
     }
+
+    @Operation(
+        summary = "여행 메이트 삭제",
+        description = "여행지의 기존 여행 메이트를 삭제합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @DeleteMapping("/{travelId}/mates/{travelMateId}")
+    fun deleteTravelMate(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelMateId") travelMateId: Long
+    ): ResponseEntity<Unit> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelMateCommandService.deleteTravelMate(
+                customUserDetails.userId, travelId, travelMateId
+            ))
+    }
 }
