@@ -1,5 +1,6 @@
 package com.susuhan.travelpick.global.exception
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.susuhan.travelpick.global.exception.dto.ErrorResponse
 import com.susuhan.travelpick.global.exception.dto.FieldError
 import com.susuhan.travelpick.global.exception.dto.ValidationErrorResponse
@@ -90,12 +91,18 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         statusCode: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any> {
-        logger.error("[Spring_MVC_Standard_Exception]: ${getExceptionStackTraceToString(ex)}");
+        logger.error("[Spring_MVC_Standard_Exception]: ${getExceptionStackTraceToString(ex)}")
+
+        // jackson의 validation 관련 예외와 분기해서 처리
+        val errorCode = when (ex.cause) {
+            is MismatchedInputException -> ErrorCode.CONSTRAINT_VIOLATION.code
+            else -> ErrorCode.UNHANDLED.code
+        }
 
         return ResponseEntity
             .status(statusCode.value())
             .body(ErrorResponse(
-                ErrorCode.UNHANDLED.code, ex?.message
+                errorCode, ex?.message
             ))
     }
 
