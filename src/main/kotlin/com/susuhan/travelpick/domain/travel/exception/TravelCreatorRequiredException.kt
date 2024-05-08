@@ -6,7 +6,5 @@ import com.susuhan.travelpick.global.exception.ErrorCode
 class TravelCreatorRequiredException(userId: String)
     : BusinessException(ErrorCode.TRAVEL_CREATOR_REQUIRED, "Travel.createdBy = $userId") {
 
-    override fun isNecessaryToLog(): Boolean {
-        return true
-    }
+    override fun isNecessaryToLog(): Boolean = true
 }

@@ -6,7 +6,5 @@ import com.susuhan.travelpick.global.exception.ErrorCode
 class TravelLeaderDeletionException(travelMateId: Long)
     : BusinessException(ErrorCode.TRAVEL_LEADER_DELETION, "travelMateId = $travelMateId") {
 
-    override fun isNecessaryToLog(): Boolean {
-        return false
-    }
+    override fun isNecessaryToLog(): Boolean = false
 }

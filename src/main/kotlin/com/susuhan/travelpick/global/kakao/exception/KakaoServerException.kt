@@ -6,7 +6,5 @@ import com.susuhan.travelpick.global.exception.ErrorCode
 class KakaoServerException(errorMessage: String = "")
     : BusinessException(ErrorCode.KAKAO_SERVER_ERROR, errorMessage) {
 
-    override fun isNecessaryToLog(): Boolean {
-        return true
-    }
+    override fun isNecessaryToLog(): Boolean = true
 }

@@ -50,12 +50,12 @@ enum class ErrorCode(
     /**
      * Travel Exception
      */
-    TRAVEL_ID_NOT_FOUND(1500, "해당 PK를 가진 TRAVEL 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
-    TRAVEL_CREATOR_REQUIRED(1501, "해당 여행지를 생성한 사용자만 수행 가능한 API입니다.", HttpStatus.FORBIDDEN),
+    TRAVEL_ID_NOT_FOUND(1500, "해당 PK를 가진 Travel 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    TRAVEL_CREATOR_REQUIRED(1501, "해당 여행지를 생성한 사용자만 수행 가능합니다.", HttpStatus.FORBIDDEN),
 
     /**
      * TravelMate Exception
      */
-    TRAVEL_MATE_ID_NOT_FOUND(1600, "해당 PK를 가진 TRAVELMATE 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
-    TRAVEL_LEADER_DELETION(1601, "Leader 역할을 가진 TravelMate는 삭제가 불가능합니다.", HttpStatus.FORBIDDEN),
+    TRAVEL_MATE_ID_NOT_FOUND(1600, "해당 PK를 가진 TravelMate 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    TRAVEL_LEADER_DELETION(1601, "Leader인 TravelMate 엔티티는 삭제가 불가능합니다.", HttpStatus.FORBIDDEN),
 }
