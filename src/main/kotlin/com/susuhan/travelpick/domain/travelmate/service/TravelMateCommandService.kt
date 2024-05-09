@@ -38,7 +38,7 @@ class TravelMateCommandService(
     fun createTravelParticipant(
         userId: String, travelId: Long, request: TravelMateCreateRequest
     ): TravelMateCreateResponse {
-        val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
+        val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
         TravelPolicy.isTravelCreator(userId, travel)
 
         val user = userRepository.findById(request.userId!!) ?: throw UserIdNotFoundException()
@@ -54,7 +54,7 @@ class TravelMateCommandService(
 
     @Transactional
     fun deleteTravelMate(userId: String, travelId: Long, travelMateId: Long) {
-        val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
+        val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
         TravelPolicy.isTravelCreator(userId, travel)
 
         val travelMate = travelMateRepository.findById(travelMateId) ?: throw TravelMateIdNotFoundException()

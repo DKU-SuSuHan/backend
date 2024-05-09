@@ -37,7 +37,7 @@ class TravelCommandService(
 
     @Transactional
     fun updateTravel(userId: String, travelId: Long, request: TravelUpdateRequest): TravelUpdateResponse {
-        var travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
+        var travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
         TravelPolicy.isTravelCreator(userId, travel)
 
         travel.updateTitle(request.title)
@@ -51,7 +51,7 @@ class TravelCommandService(
 
     @Transactional
     fun deleteTravel(userId: String, travelId: Long) {
-        var travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
+        var travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
         TravelPolicy.isTravelCreator(userId, travel)
 
         travel.softDelete()
