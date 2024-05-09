@@ -13,8 +13,7 @@ class UserQueryService(
 ) {
 
     fun checkNicknameDuplicated(nicknameCheckRequest: NicknameCheckRequest): NicknameCheckResponse {
-        return NicknameCheckResponse(
-            userRepository.existsByNickname(nicknameCheckRequest.nickname)
-        )
+        val isDuplicated = userRepository.existsByNickname(nicknameCheckRequest.nickname)
+        return NicknameCheckResponse.of(isDuplicated)
     }
 }

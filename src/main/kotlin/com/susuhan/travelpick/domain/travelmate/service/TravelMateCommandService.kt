@@ -1,18 +1,17 @@
 package com.susuhan.travelpick.domain.travelmate.service
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
-import com.susuhan.travelpick.domain.travel.exception.TravelCreatorRequiredException
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelmate.dto.request.TravelMateCreateRequest
 import com.susuhan.travelpick.domain.travelmate.dto.response.TravelMateCreateResponse
 import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
-import com.susuhan.travelpick.domain.travelmate.exception.TravelLeaderDeletionException
 import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
 import com.susuhan.travelpick.domain.user.repository.UserRepository
+import com.susuhan.travelpick.global.common.policy.TravelPolicy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -39,10 +38,7 @@ class TravelMateCommandService(
         userId: String, travelId: Long, request: TravelMateCreateRequest
     ): TravelMateCreateResponse {
         val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
-
-        if (userId != travel.createdBy) {
-            throw TravelCreatorRequiredException(travel.createdBy!!)
-        }
+        TravelPolicy.isTravelCreator(userId, travel)
 
         val travelMate = TravelMate(
             user = userRepository.findById(request.userId!!) ?: throw UserIdNotFoundException(),
@@ -56,16 +52,10 @@ class TravelMateCommandService(
     @Transactional
     fun deleteTravelMate(userId: String, travelId: Long, travelMateId: Long) {
         val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
-
-        if (userId != travel.createdBy) {
-            throw TravelCreatorRequiredException(travel.createdBy!!)
-        }
+        TravelPolicy.isTravelCreator(userId, travel)
 
         val travelMate = travelMateRepository.findById(travelMateId) ?: throw TravelMateIdNotFoundException()
-
-        if (travelMate.groupRole == GroupRole.LEADER) {
-            throw TravelLeaderDeletionException(travelMate.id!!)
-        }
+        TravelPolicy.isTravelLeaderDeletion(travelMate)
 
         travelMateRepository.delete(travelMate)
     }
