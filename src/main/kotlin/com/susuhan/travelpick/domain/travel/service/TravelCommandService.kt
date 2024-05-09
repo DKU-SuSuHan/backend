@@ -38,7 +38,6 @@ class TravelCommandService(
     @Transactional
     fun updateTravel(userId: String, travelId: Long, request: TravelUpdateRequest): TravelUpdateResponse {
         var travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
-
         TravelPolicy.isTravelCreator(userId, travel)
 
         travel.updateTitle(request.title)
@@ -48,5 +47,13 @@ class TravelCommandService(
         travel.updateTemplateNum(request.templateNum)
 
         return TravelUpdateResponse.from(travel)
+    }
+
+    @Transactional
+    fun deleteTravel(userId: String, travelId: Long) {
+        var travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
+        TravelPolicy.isTravelCreator(userId, travel)
+
+        travel.softDelete()
     }
 }

@@ -30,6 +30,7 @@ class TravelMateCommandService(
             travel = travel,
             groupRole = GroupRole.LEADER
         )
+
         travelMateRepository.save(travelMate)
     }
 
@@ -40,12 +41,14 @@ class TravelMateCommandService(
         val travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
         TravelPolicy.isTravelCreator(userId, travel)
 
+        val user = userRepository.findById(request.userId!!) ?: throw UserIdNotFoundException()
         val travelMate = TravelMate(
-            user = userRepository.findById(request.userId!!) ?: throw UserIdNotFoundException(),
+            user = user,
             travel = travel,
             groupRole = GroupRole.PARTICIPANT
         )
         val savedTravelMate = travelMateRepository.save(travelMate)
+
         return TravelMateCreateResponse.from(savedTravelMate)
     }
 

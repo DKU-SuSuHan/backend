@@ -3,6 +3,7 @@ package com.susuhan.travelpick.domain.travel.entity
 import com.susuhan.travelpick.global.common.entity.BaseEntity
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Table(name = "travels")
 @Entity
@@ -44,6 +45,10 @@ class Travel(
     var isPrivate: Boolean = false
         protected set
 
+    @Column(name = "delete_at")
+    var deleteAt: LocalDateTime? = null
+        protected set
+
     fun updateTitle(title: String) {
         this.title = title
     }
@@ -62,5 +67,9 @@ class Travel(
 
     fun updateTemplateNum(templateNum: Long) {
         this.templateNum = templateNum
+    }
+
+    fun softDelete() {
+        this.deleteAt = LocalDateTime.now()
     }
 }
