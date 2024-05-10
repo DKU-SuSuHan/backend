@@ -1,5 +1,7 @@
 package com.susuhan.travelpick.domain.travel.dto.request
 
+import com.susuhan.travelpick.domain.travel.entity.Address
+import com.susuhan.travelpick.domain.travel.entity.Travel
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import org.springframework.format.annotation.DateTimeFormat
@@ -28,4 +30,15 @@ data class TravelCreateRequest(
     @Schema(description = "여행 종료 날짜", example = "2024-05-10")
     @field:DateTimeFormat(pattern = "yyyy-MM-dd")
     val endAt: LocalDate,
-)
+) {
+
+    fun toEntity(): Travel {
+        return Travel(
+            templateNum = this.templateNum,
+            address = Address(this.sido, this.sgg),
+            title = this.title,
+            startAt = this.startAt,
+            endAt = this.endAt
+        )
+    }
+}
