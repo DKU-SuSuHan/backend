@@ -95,7 +95,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
         // jackson의 validation 관련 예외와 분기해서 처리
         val errorCode = when (ex.cause) {
-            is MismatchedInputException -> ErrorCode.CONSTRAINT_VIOLATION.code
+            is MismatchedInputException -> ErrorCode.METHOD_ARGUMENT_NOT_VALID.code
             else -> ErrorCode.UNHANDLED.code
         }
 
