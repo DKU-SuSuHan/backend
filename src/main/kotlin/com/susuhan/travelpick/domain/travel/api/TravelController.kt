@@ -13,6 +13,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -28,7 +29,7 @@ class TravelController(
 ) {
 
     @Operation(
-        summary = "새로운 여행지 생성",
+        summary = "새 여행지 생성",
         description = "새로운 여행지에 대한 데이터를 받아 새 여행지를 생성합니다.",
         security = [SecurityRequirement(name = "access-token")]
     )
@@ -61,5 +62,20 @@ class TravelController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelCommandService.updateTravel(customUserDetails.userId, travelId, travelUpdateRequest))
+    }
+
+    @Operation(
+        summary = "여행지 삭제",
+        description = "여행지의 PK를 전달받아 해당 여행지를 삭제합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @DeleteMapping("/{travelId}")
+    fun deleteTravel(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+    ): ResponseEntity<Unit> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelCommandService.deleteTravel(customUserDetails.userId, travelId))
     }
 }

@@ -6,10 +6,10 @@ import com.susuhan.travelpick.domain.travel.dto.response.TravelCreateResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelUpdateResponse
 import com.susuhan.travelpick.domain.travel.entity.Address
 import com.susuhan.travelpick.domain.travel.entity.Travel
-import com.susuhan.travelpick.domain.travel.exception.TravelCreatorRequiredException
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
+import com.susuhan.travelpick.global.common.policy.TravelPolicy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,17 +29,16 @@ class TravelCommandService(
             endAt = request.endAt
         )
         val savedTravel = travelRepository.save(travel)
+
         travelMateCommandService.createTravelLeader(userId, savedTravel)
+
         return TravelCreateResponse.from(savedTravel)
     }
 
     @Transactional
     fun updateTravel(userId: String, travelId: Long, request: TravelUpdateRequest): TravelUpdateResponse {
-        var travel = travelRepository.findById(travelId) ?: throw TravelIdNotFoundException()
-
-        if (userId != travel.createdBy) {
-            throw TravelCreatorRequiredException(travel.createdBy!!)
-        }
+        var travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
+        TravelPolicy.isTravelCreator(userId, travel)
 
         travel.updateTitle(request.title)
         travel.updateStartAt(request.startAt)
@@ -48,5 +47,16 @@ class TravelCommandService(
         travel.updateTemplateNum(request.templateNum)
 
         return TravelUpdateResponse.from(travel)
+    }
+
+    @Transactional
+    fun deleteTravel(userId: String, travelId: Long) {
+        var travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
+        TravelPolicy.isTravelCreator(userId, travel)
+
+        // 여행지 삭제 전, 여행 메이트 전체 삭제
+        travelMateCommandService.deleteAll(travelId)
+
+        travel.softDelete()
     }
 }
