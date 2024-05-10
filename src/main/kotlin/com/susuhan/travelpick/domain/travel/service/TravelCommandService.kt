@@ -54,6 +54,9 @@ class TravelCommandService(
         var travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
         TravelPolicy.isTravelCreator(userId, travel)
 
+        // 여행지 삭제 전, 여행 메이트 전체 삭제
+        travelMateCommandService.deleteAll(travelId)
+
         travel.softDelete()
     }
 }

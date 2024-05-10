@@ -62,4 +62,9 @@ class TravelMateCommandService(
 
         travelMateRepository.delete(travelMate)
     }
+
+    @Transactional
+    fun deleteAll(travelId: Long) {
+        travelMateRepository.deleteAllByTravelId(travelId)
+    }
 }
