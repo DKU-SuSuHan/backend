@@ -1,8 +1,10 @@
 package com.susuhan.travelpick.domain.travelmate.api
 
 import com.susuhan.travelpick.domain.travelmate.dto.request.TravelMateCreateRequest
+import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateListResponse
 import com.susuhan.travelpick.domain.travelmate.dto.response.TravelMateCreateResponse
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
+import com.susuhan.travelpick.domain.travelmate.service.TravelMateQueryService
 import com.susuhan.travelpick.global.security.CustomUserDetails
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -17,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @Tag(name = "여행 메이트 관련 API")
 class TravelMateController(
-    private val travelMateCommandService: TravelMateCommandService
+    private val travelMateCommandService: TravelMateCommandService,
+    private val travelMateQueryService: TravelMateQueryService
 ) {
 
     @Operation(
@@ -54,5 +57,20 @@ class TravelMateController(
             .body(travelMateCommandService.deleteTravelMate(
                 customUserDetails.userId, travelId, travelMateId
             ))
+    }
+
+    @Operation(
+        summary = "참여자 역할의 메이트 목록 조회",
+        description = "여행의 참여자 역할을 가진 여행 메이트 목록 조회합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @GetMapping("/{travelId}/mates")
+    fun getParticipantMateList(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+    ): ResponseEntity<List<ParticipantMateListResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelMateQueryService.getParticipantMateList(customUserDetails.userId, travelId))
     }
 }
