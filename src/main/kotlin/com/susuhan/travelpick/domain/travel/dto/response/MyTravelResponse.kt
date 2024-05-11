@@ -2,24 +2,22 @@ package com.susuhan.travelpick.domain.travel.dto.response
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.global.common.util.DateUtils
-import java.time.Period
 
-data class MyTravelListResponse(
-    val id: Long?,
+data class MyTravelResponse(
+    val travelId: Long?,
     val title: String,
     val startAt: String,
-    val endAt: String,
-    val dateDiff: Int,
+    val endAt: String
+    // TODO: 총 예산 필드 추가
 ) {
 
     companion object {
-        fun from(travel: Travel): MyTravelListResponse {
-            return MyTravelListResponse(
+        fun from(travel: Travel): MyTravelResponse {
+            return MyTravelResponse(
                 travel?.id,
                 travel.title,
                 DateUtils.parse(travel.startAt),
-                DateUtils.parse(travel.endAt),
-                Period.between(travel.startAt, travel.endAt).days
+                DateUtils.parse(travel.endAt)
             )
         }
     }

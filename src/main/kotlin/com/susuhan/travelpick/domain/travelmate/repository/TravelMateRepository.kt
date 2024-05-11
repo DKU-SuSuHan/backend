@@ -19,6 +19,9 @@ interface TravelMateRepository : Repository<TravelMate, Long> {
     fun deleteAllByTravelId(travelId: Long)
 
     // TODO: QueryDsl 사용하도록
+    @Query("SELECT tm.travel FROM TravelMate tm WHERE tm.user.id = :userId AND tm.travel.id = :travelId")
+    fun findTravel(userId: Long, travelId: Long): Travel?
+
     @Query("SELECT tm.travel FROM TravelMate tm WHERE tm.user.id = :userId AND tm.travel.startAt > CURRENT_DATE")
     fun findPlannedTravel(userId: Long): List<Travel>
 

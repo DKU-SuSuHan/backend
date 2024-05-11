@@ -3,6 +3,7 @@ package com.susuhan.travelpick.domain.travel.api
 import com.susuhan.travelpick.domain.travel.dto.request.TravelCreateRequest
 import com.susuhan.travelpick.domain.travel.dto.request.TravelUpdateRequest
 import com.susuhan.travelpick.domain.travel.dto.response.MyTravelListResponse
+import com.susuhan.travelpick.domain.travel.dto.response.MyTravelResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelCreateResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelUpdateResponse
 import com.susuhan.travelpick.domain.travel.entity.constant.Status
@@ -79,12 +80,28 @@ class TravelController(
     @DeleteMapping("/{travelId}")
     fun deleteTravel(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelId") travelId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelCommandService.deleteTravel(customUserDetails.userId, travelId))
     }
+
+    @Operation(
+        summary = "나의 여행지 단건 조회",
+        description = "특정 여행지에 대한 데이터를 조회합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @GetMapping("/{travelId}")
+    fun getTravel(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long
+    ): ResponseEntity<MyTravelResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelQueryService.getTravel(customUserDetails.userId.toLong(), travelId))
+    }
+
 
     @Operation(
         summary = "예정 / 종료된 나의 여행지 목록 조회",
