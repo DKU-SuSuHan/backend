@@ -1,14 +1,14 @@
 package com.susuhan.travelpick.domain.travel.dto.response
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
-import java.time.LocalDate
+import com.susuhan.travelpick.global.common.util.DateUtils
 import java.time.Period
 
 data class MyTravelListResponse(
     val id: Long?,
     val title: String,
-    val startAt: LocalDate,
-    val endAt: LocalDate,
+    val startAt: String,
+    val endAt: String,
     val dateDiff: Int,
 ) {
 
@@ -17,8 +17,8 @@ data class MyTravelListResponse(
             return MyTravelListResponse(
                 travel?.id,
                 travel.title,
-                travel.startAt,
-                travel.endAt,
+                DateUtils.parse(travel.startAt),
+                DateUtils.parse(travel.endAt),
                 Period.between(travel.startAt, travel.endAt).days
             )
         }
