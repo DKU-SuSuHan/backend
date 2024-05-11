@@ -51,7 +51,7 @@ enum class ErrorCode(
      * Travel Exception
      */
     TRAVEL_ID_NOT_FOUND(1500, "해당 PK를 가진 Travel 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
-    TRAVEL_CREATOR_REQUIRED(1501, "해당 여행지를 생성한 사용자만 수행 가능합니다.", HttpStatus.FORBIDDEN),
+    TRAVEL_LEADER_REQUIRED(1501, "해당 요청은 여행의 Leader 역할을 가진 사용자만 가능합니다.", HttpStatus.FORBIDDEN),
 
     /**
      * TravelMate Exception

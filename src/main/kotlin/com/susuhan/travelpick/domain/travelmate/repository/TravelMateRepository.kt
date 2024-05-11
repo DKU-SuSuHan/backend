@@ -2,6 +2,7 @@ package com.susuhan.travelpick.domain.travelmate.repository
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
+import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.Repository
@@ -11,6 +12,13 @@ interface TravelMateRepository : Repository<TravelMate, Long> {
     fun save(entity: TravelMate): TravelMate
 
     fun findById(travelMateId: Long): TravelMate?
+
+    // TODO: QueryDsl 사용하도록
+    @Query("SELECT tm.groupRole FROM TravelMate tm WHERE tm.user.id = :userId AND tm.travel.id = :travelId")
+    fun findGroupRoleByUserIdAndTravelId(userId: Long, travelId: Long): GroupRole?
+
+    @Query("SELECT tm FROM TravelMate tm JOIN FETCH tm.user WHERE tm.groupRole = :groupRole AND tm.travel.id = :travelId")
+    fun findAllByUserIdAndTravelId(groupRole: GroupRole, travelId: Long): List<TravelMate>
 
     fun delete(entity: TravelMate)
 

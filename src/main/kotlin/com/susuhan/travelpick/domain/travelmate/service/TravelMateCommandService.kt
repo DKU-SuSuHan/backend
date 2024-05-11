@@ -36,12 +36,13 @@ class TravelMateCommandService(
 
     @Transactional
     fun createTravelParticipant(
-        userId: String, travelId: Long, request: TravelMateCreateRequest
+        userId: Long, travelId: Long, request: TravelMateCreateRequest
     ): TravelMateCreateResponse {
         val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
-        TravelPolicy.isTravelCreator(userId, travel)
+        val user = userRepository.findById(request.userId) ?: throw UserIdNotFoundException()
 
-        val user = userRepository.findById(request.userId!!) ?: throw UserIdNotFoundException()
+        checkTravelLeader(userId, travelId)
+
         val savedTravelMate = travelMateRepository.save(
             request.toEntity(user, travel)
         )
@@ -50,11 +51,15 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun deleteTravelMate(userId: String, travelId: Long, travelMateId: Long) {
-        val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
-        TravelPolicy.isTravelCreator(userId, travel)
+    fun deleteTravelMate(userId: Long, travelId: Long, travelMateId: Long) {
+        if (!travelRepository.existsByIdAndDeleteAtIsNull(travelId)) {
+            throw TravelIdNotFoundException()
+        }
+
+        checkTravelLeader(userId, travelId)
 
         val travelMate = travelMateRepository.findById(travelMateId) ?: throw TravelMateIdNotFoundException()
+
         TravelPolicy.isTravelLeaderDeletion(travelMate)
 
         travelMateRepository.delete(travelMate)
@@ -63,5 +68,12 @@ class TravelMateCommandService(
     @Transactional
     fun deleteAll(travelId: Long) {
         travelMateRepository.deleteAllByTravelId(travelId)
+    }
+
+    private fun checkTravelLeader(userId: Long, travelId: Long) {
+        val groupRole = travelMateRepository.findGroupRoleByUserIdAndTravelId(userId, travelId)
+            ?: throw TravelMateIdNotFoundException()
+
+        TravelPolicy.isTravelLeader(userId, groupRole)
     }
 }
