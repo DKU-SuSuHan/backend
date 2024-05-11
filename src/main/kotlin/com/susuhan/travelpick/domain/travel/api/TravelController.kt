@@ -66,9 +66,11 @@ class TravelController(
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelUpdateRequest: TravelUpdateRequest
     ): ResponseEntity<TravelUpdateResponse> {
+        val userId = customUserDetails.userId.toLong()
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelCommandService.updateTravel(customUserDetails.userId, travelId, travelUpdateRequest))
+            .body(travelCommandService.updateTravel(userId, travelId, travelUpdateRequest))
     }
 
     @Operation(
@@ -81,9 +83,11 @@ class TravelController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
     ): ResponseEntity<Unit> {
+        val userId = customUserDetails.userId.toLong()
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelCommandService.deleteTravel(customUserDetails.userId, travelId))
+            .body(travelCommandService.deleteTravel(userId, travelId))
     }
 
     @Operation(

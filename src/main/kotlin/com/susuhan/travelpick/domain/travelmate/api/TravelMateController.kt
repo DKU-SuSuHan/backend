@@ -34,10 +34,12 @@ class TravelMateController(
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelMateCreateRequest: TravelMateCreateRequest
     ): ResponseEntity<TravelMateCreateResponse> {
+        val userId = customUserDetails.userId.toLong()
+
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(travelMateCommandService.createTravelParticipant(
-                customUserDetails.userId, travelId, travelMateCreateRequest
+                userId, travelId, travelMateCreateRequest
             ))
     }
 
@@ -52,11 +54,11 @@ class TravelMateController(
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelMateId") travelMateId: Long
     ): ResponseEntity<Unit> {
+        val userId = customUserDetails.userId.toLong()
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelMateCommandService.deleteTravelMate(
-                customUserDetails.userId, travelId, travelMateId
-            ))
+            .body(travelMateCommandService.deleteTravelMate(userId, travelId, travelMateId))
     }
 
     @Operation(
@@ -69,8 +71,10 @@ class TravelMateController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
     ): ResponseEntity<List<ParticipantMateListResponse>> {
+        val userId = customUserDetails.userId.toLong()
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelMateQueryService.getParticipantMateList(customUserDetails.userId, travelId))
+            .body(travelMateQueryService.getParticipantMateList(userId, travelId))
     }
 }

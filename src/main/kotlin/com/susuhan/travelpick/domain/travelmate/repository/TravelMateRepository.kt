@@ -14,8 +14,11 @@ interface TravelMateRepository : Repository<TravelMate, Long> {
     fun findById(travelMateId: Long): TravelMate?
 
     // TODO: QueryDsl 사용하도록
+    @Query("SELECT tm.groupRole FROM TravelMate tm WHERE tm.user.id = :userId AND tm.travel.id = :travelId")
+    fun findGroupRoleByUserIdAndTravelId(userId: Long, travelId: Long): GroupRole?
+
     @Query("SELECT tm FROM TravelMate tm JOIN FETCH tm.user WHERE tm.groupRole = :groupRole AND tm.travel.id = :travelId")
-    fun findAllParticipantMateByTravelId(groupRole: GroupRole, travelId: Long): List<TravelMate>
+    fun findAllByUserIdAndTravelId(groupRole: GroupRole, travelId: Long): List<TravelMate>
 
     fun delete(entity: TravelMate)
 

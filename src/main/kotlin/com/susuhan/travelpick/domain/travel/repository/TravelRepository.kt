@@ -7,5 +7,7 @@ interface TravelRepository : Repository<Travel, Long> {
 
     fun save(entity: Travel): Travel
 
+    fun existsByIdAndDeleteAtIsNull(id: Long): Boolean
+
     fun findByIdAndDeleteAtIsNull(id: Long): Travel?
 }
