@@ -1,6 +1,5 @@
 package com.susuhan.travelpick.domain.user.api
 
-import com.susuhan.travelpick.domain.user.dto.request.NicknameCheckRequest
 import com.susuhan.travelpick.domain.user.dto.request.NicknameUpdateRequest
 import com.susuhan.travelpick.domain.user.dto.response.NicknameCheckResponse
 import com.susuhan.travelpick.domain.user.dto.response.NicknameUpdateResponse
@@ -12,15 +11,20 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Size
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
+@Validated
 @RequestMapping("/api/v1/users")
 @RestController
 @Tag(name = "회원 관련 API")
@@ -53,10 +57,10 @@ class UserController(
     )
     @GetMapping("/check/nickname")
     fun checkNicknameDuplicated(
-        @Valid @RequestBody nicknameCheckRequest: NicknameCheckRequest
+        @NotBlank @Size(max = 10) @RequestParam nickname: String
     ): ResponseEntity<NicknameCheckResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userQueryService.checkNicknameDuplicated(nicknameCheckRequest))
+            .body(userQueryService.checkNicknameDuplicated(nickname))
     }
 }

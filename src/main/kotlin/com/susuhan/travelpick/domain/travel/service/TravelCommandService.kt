@@ -5,7 +5,6 @@ import com.susuhan.travelpick.domain.travel.dto.request.TravelUpdateRequest
 import com.susuhan.travelpick.domain.travel.dto.response.TravelCreateResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelUpdateResponse
 import com.susuhan.travelpick.domain.travel.entity.Address
-import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
@@ -21,14 +20,9 @@ class TravelCommandService(
 
     @Transactional
     fun createTravel(userId: Long, request: TravelCreateRequest): TravelCreateResponse {
-        val travel = Travel(
-            templateNum = request.templateNum,
-            address = Address(request.sido, request.sgg),
-            title = request.title,
-            startAt = request.startAt,
-            endAt = request.endAt
+        val savedTravel = travelRepository.save(
+            request.toEntity()
         )
-        val savedTravel = travelRepository.save(travel)
 
         travelMateCommandService.createTravelLeader(userId, savedTravel)
 
