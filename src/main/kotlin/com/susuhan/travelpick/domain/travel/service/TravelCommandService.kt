@@ -33,11 +33,13 @@ class TravelCommandService(
     }
 
     @Transactional
-    fun updateTravel(userId: Long, travelId: Long, request: TravelUpdateRequest): TravelUpdateResponse {
+    fun updateTravel(
+        userId: Long, travelId: Long, request: TravelUpdateRequest
+    ): TravelUpdateResponse {
         val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId)
             ?: throw TravelIdNotFoundException()
 
-        checkTravelLeader(userId, travelId)
+        checkUserIsTravelLeader(userId, travelId)
 
         travel.updateTitle(request.title)
         travel.updateStartAt(request.startAt)
@@ -53,7 +55,7 @@ class TravelCommandService(
         val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId)
             ?: throw TravelIdNotFoundException()
 
-        checkTravelLeader(userId, travelId)
+        checkUserIsTravelLeader(userId, travelId)
 
         // 여행지 삭제 전, 여행 메이트 전체 삭제
         travelMateCommandService.deleteAll(travelId)
@@ -61,7 +63,7 @@ class TravelCommandService(
         travel.softDelete()
     }
 
-    private fun checkTravelLeader(userId: Long, travelId: Long) {
+    private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
         val groupRole = travelMateRepository.findGroupRoleByUserIdAndTravelId(userId, travelId)
             ?: throw TravelMateIdNotFoundException()
 

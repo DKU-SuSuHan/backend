@@ -18,6 +18,7 @@ class TravelQueryService (
         val travel = travelMateRepository.findTravel(userId, travelId) ?: throw TravelIdNotFoundException()
         val travelMate = travelMateRepository.findByUserIdAndTravelId(userId, travelId)
             ?: throw  TravelMateIdNotFoundException()
+
         return MyTravelResponse.from(travel, travelMate)
     }
 

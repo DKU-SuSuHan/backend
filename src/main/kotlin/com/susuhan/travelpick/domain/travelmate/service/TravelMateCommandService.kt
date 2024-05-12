@@ -40,10 +40,13 @@ class TravelMateCommandService(
     fun createTravelParticipant(
         userId: Long, travelId: Long, request: TravelMateCreateRequest
     ): TravelMateCreateResponse {
-        val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId) ?: throw TravelIdNotFoundException()
-        val user = userRepository.findById(request.userId) ?: throw UserIdNotFoundException()
+        val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId)
+            ?: throw TravelIdNotFoundException()
 
-        checkTravelLeader(userId, travelId)
+        val user = userRepository.findById(request.userId)
+            ?: throw UserIdNotFoundException()
+
+        checkUserIsTravelLeader(userId, travelId)
 
         val savedTravelMate = travelMateRepository.save(
             request.toEntity(user, travel)
@@ -58,9 +61,10 @@ class TravelMateCommandService(
             throw TravelIdNotFoundException()
         }
 
-        checkTravelLeader(userId, travelId)
+        checkUserIsTravelLeader(userId, travelId)
 
-        val travelMate = travelMateRepository.findById(travelMateId) ?: throw TravelMateIdNotFoundException()
+        val travelMate = travelMateRepository.findById(travelMateId)
+            ?: throw TravelMateIdNotFoundException()
 
         TravelPolicy.isTravelLeaderDeletion(travelMate)
 
@@ -94,7 +98,7 @@ class TravelMateCommandService(
         return LeaderDelegateResponse.of(travelId)
     }
 
-    private fun checkTravelLeader(userId: Long, travelId: Long) {
+    private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
         val groupRole = travelMateRepository.findGroupRoleByUserIdAndTravelId(userId, travelId)
             ?: throw TravelMateIdNotFoundException()
 
