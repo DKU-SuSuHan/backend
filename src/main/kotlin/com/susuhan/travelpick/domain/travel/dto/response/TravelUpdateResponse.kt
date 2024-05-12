@@ -25,15 +25,13 @@ data class TravelUpdateResponse(
 ) {
 
     companion object {
-        fun from(travel: Travel): TravelUpdateResponse {
-            return TravelUpdateResponse(
-                travel.id!!,
-                travel.title,
-                travel.address.sido,
-                travel.address.sgg,
-                travel.startAt,
-                travel.endAt
-            )
-        }
+        fun from(travel: Travel) = TravelUpdateResponse(
+            travel.id!!,
+            travel.title,
+            travel.address.sido,
+            travel.address.sgg,
+            travel.startAt,
+            travel.endAt
+        )
     }
 }

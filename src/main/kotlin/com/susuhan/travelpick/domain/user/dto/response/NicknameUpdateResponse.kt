@@ -13,10 +13,10 @@ data class NicknameUpdateResponse (
 ) {
 
     companion object {
-        fun from(user: User): NicknameUpdateResponse {
-            return NicknameUpdateResponse(
-                user.profileImageUrl, user?.email, user?.nickname
-            )
-        }
+        fun from(user: User) = NicknameUpdateResponse(
+            user.profileImageUrl,
+            user?.email,
+            user?.nickname
+        )
     }
 }

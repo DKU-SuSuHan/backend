@@ -8,4 +8,9 @@ data class TokenResponse(
 
     @Schema(description = "서버에서 내부에서 발급한 리프레시 토큰")
     val refreshToken: String
-)
+) {
+
+    companion object {
+        fun of(accessToken: String, refreshToken: String) = TokenResponse(accessToken, refreshToken)
+    }
+}

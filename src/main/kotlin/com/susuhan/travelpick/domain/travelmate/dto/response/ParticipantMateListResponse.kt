@@ -12,11 +12,9 @@ data class ParticipantMateListResponse(
 ) {
 
     companion object {
-        fun from(travelMate: TravelMate): ParticipantMateListResponse {
-            return ParticipantMateListResponse(
-                travelMate.id!!,
-                travelMate.user?.nickname
-            )
-        }
+        fun from(travelMate: TravelMate) = ParticipantMateListResponse(
+            travelMate.id!!,
+            travelMate.user?.nickname
+        )
     }
 }

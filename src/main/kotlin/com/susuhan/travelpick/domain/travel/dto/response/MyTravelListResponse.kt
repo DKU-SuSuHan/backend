@@ -23,14 +23,12 @@ data class MyTravelListResponse(
 ) {
 
     companion object {
-        fun from(travel: Travel): MyTravelListResponse {
-            return MyTravelListResponse(
-                travel.id!!,
-                travel.title,
-                DateUtils.parse(travel.startAt),
-                DateUtils.parse(travel.endAt),
-                Period.between(travel.startAt, travel.endAt).days
-            )
-        }
+        fun from(travel: Travel) = MyTravelListResponse(
+            travel.id!!,
+            travel.title,
+            DateUtils.parse(travel.startAt),
+            DateUtils.parse(travel.endAt),
+            Period.between(travel.startAt, travel.endAt).days
+        )
     }
 }

@@ -25,15 +25,13 @@ data class TravelCreateResponse(
 ) {
 
     companion object {
-        fun from(travel: Travel): TravelCreateResponse {
-            return TravelCreateResponse(
-                travel.id!!,
-                travel.title,
-                travel.address.sido,
-                travel.address.sgg,
-                travel.startAt,
-                travel.endAt
-            )
-        }
+        fun from(travel: Travel) = TravelCreateResponse(
+            travel.id!!,
+            travel.title,
+            travel.address.sido,
+            travel.address.sgg,
+            travel.startAt,
+            travel.endAt
+        )
     }
 }

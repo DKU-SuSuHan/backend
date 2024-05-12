@@ -8,8 +8,6 @@ data class LeaderDelegateResponse(
 ) {
 
     companion object {
-        fun of(travelId: Long): LeaderDelegateResponse {
-            return LeaderDelegateResponse(travelId)
-        }
+        fun of(travelId: Long) = LeaderDelegateResponse(travelId)
     }
 }

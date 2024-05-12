@@ -8,8 +8,6 @@ data class NicknameCheckResponse (
 ) {
 
     companion object {
-        fun of(isDuplicated: Boolean): NicknameCheckResponse {
-            return NicknameCheckResponse(isDuplicated)
-        }
+        fun of(isDuplicated: Boolean) = NicknameCheckResponse(isDuplicated)
     }
 }

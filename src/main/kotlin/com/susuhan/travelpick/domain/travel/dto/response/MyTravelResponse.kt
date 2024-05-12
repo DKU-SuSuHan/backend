@@ -34,17 +34,15 @@ data class MyTravelResponse(
 ) {
 
     companion object {
-        fun from(travel: Travel, travelMate: TravelMate): MyTravelResponse {
-            return MyTravelResponse(
-                travel.id!!,
-                travelMate.id!!,
-                travel.title,
-                travel.address.sido,
-                travel.address.sgg,
-                DateUtils.parse(travel.startAt),
-                DateUtils.parse(travel.endAt),
-                travelMate.groupRole
-            )
-        }
+        fun from(travel: Travel, travelMate: TravelMate) = MyTravelResponse(
+            travel.id!!,
+            travelMate.id!!,
+            travel.title,
+            travel.address.sido,
+            travel.address.sgg,
+            DateUtils.parse(travel.startAt),
+            DateUtils.parse(travel.endAt),
+            travelMate.groupRole
+        )
     }
 }
