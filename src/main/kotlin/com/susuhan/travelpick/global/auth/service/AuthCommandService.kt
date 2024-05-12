@@ -29,6 +29,6 @@ class AuthCommandService(
 
         user.updateRefreshToken(refreshToken)
 
-        return TokenResponse(accessToken, refreshToken)
+        return TokenResponse.of(accessToken, refreshToken)
     }
 }

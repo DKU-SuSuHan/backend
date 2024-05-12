@@ -22,14 +22,14 @@ class TravelMateQueryService(
             throw TravelIdNotFoundException()
         }
 
-        checkTravelLeader(userId, travelId)
+        checkUserIsTravelLeader(userId, travelId)
 
         return travelMateRepository.findAllByUserIdAndTravelId(GroupRole.PARTICIPANT, travelId)
             .map { travelMate ->  ParticipantMateListResponse.from(travelMate)}
             .toList()
     }
 
-    private fun checkTravelLeader(userId: Long, travelId: Long) {
+    private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
         val groupRole = travelMateRepository.findGroupRoleByUserIdAndTravelId(userId, travelId)
             ?: throw TravelMateIdNotFoundException()
 

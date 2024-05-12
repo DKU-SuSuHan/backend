@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 data class TravelCreateResponse(
     @Schema(description = "여행지의 PK")
-    val id: Long?,
+    val id: Long,
 
     @Schema(description = "여행지의 이름")
     val title: String,
@@ -25,15 +25,13 @@ data class TravelCreateResponse(
 ) {
 
     companion object {
-        fun from(travel: Travel): TravelCreateResponse {
-            return TravelCreateResponse(
-                travel?.id,
-                travel.title,
-                travel.address.sido,
-                travel.address.sgg,
-                travel.startAt,
-                travel.endAt
-            )
-        }
+        fun from(travel: Travel) = TravelCreateResponse(
+            travel.id!!,
+            travel.title,
+            travel.address.sido,
+            travel.address.sgg,
+            travel.startAt,
+            travel.endAt
+        )
     }
 }

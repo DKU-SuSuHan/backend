@@ -14,7 +14,7 @@ class UserCommandService(
 
     @Transactional
     fun updateNickname(userId: Long, nicknameUpdateRequest: NicknameUpdateRequest): NicknameUpdateResponse {
-        var user = userRepository.findById(userId) ?: throw UserIdNotFoundException()
+        val user = userRepository.findById(userId) ?: throw UserIdNotFoundException()
 
         user.updateNickname(nicknameUpdateRequest.nickname)
 

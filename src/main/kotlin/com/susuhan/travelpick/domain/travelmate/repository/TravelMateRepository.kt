@@ -14,6 +14,9 @@ interface TravelMateRepository : Repository<TravelMate, Long> {
     fun findById(travelMateId: Long): TravelMate?
 
     // TODO: QueryDsl 사용하도록
+    @Query("SELECT tm FROM TravelMate tm WHERE tm.user.id = :userId AND tm.travel.id = :travelId")
+    fun findByUserIdAndTravelId(userId: Long, travelId: Long): TravelMate?
+
     @Query("SELECT tm.groupRole FROM TravelMate tm WHERE tm.user.id = :userId AND tm.travel.id = :travelId")
     fun findGroupRoleByUserIdAndTravelId(userId: Long, travelId: Long): GroupRole?
 

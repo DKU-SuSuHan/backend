@@ -31,4 +31,12 @@ class TravelMate(
     @Enumerated(EnumType.STRING)
     var groupRole: GroupRole = groupRole
         protected set
+
+    fun updateToLeaderRole() {
+        this.groupRole = GroupRole.LEADER
+    }
+
+    fun updateToParticipantRole() {
+        this.groupRole = GroupRole.PARTICIPANT
+    }
 }

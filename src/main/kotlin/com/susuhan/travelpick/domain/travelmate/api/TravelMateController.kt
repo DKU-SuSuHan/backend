@@ -1,6 +1,8 @@
 package com.susuhan.travelpick.domain.travelmate.api
 
+import com.susuhan.travelpick.domain.travelmate.dto.request.LeaderDelegateRequest
 import com.susuhan.travelpick.domain.travelmate.dto.request.TravelMateCreateRequest
+import com.susuhan.travelpick.domain.travelmate.dto.response.LeaderDelegateResponse
 import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateListResponse
 import com.susuhan.travelpick.domain.travelmate.dto.response.TravelMateCreateResponse
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
@@ -62,7 +64,7 @@ class TravelMateController(
     }
 
     @Operation(
-        summary = "참여자 역할의 메이트 목록 조회",
+        summary = "참여자 역할의 여행 메이트 목록 조회",
         description = "여행의 참여자 역할을 가진 여행 메이트 목록 조회합니다.",
         security = [SecurityRequirement(name = "access-token")]
     )
@@ -76,5 +78,26 @@ class TravelMateController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelMateQueryService.getParticipantMateList(userId, travelId))
+    }
+
+    @Operation(
+        summary = "여행의 Leader 권한 위임",
+        description = "여행마다 한 명씩 존재하는 Leader 권한을 다른 여행 메이트에게 위임합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @PutMapping("/{travelId}/mates/{travelMateId}/delegation/role")
+    fun delegateLeaderRole(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelMateId") travelMateId: Long,
+        @Valid @RequestBody leaderDelegateRequest: LeaderDelegateRequest
+    ): ResponseEntity<LeaderDelegateResponse> {
+        val userId = customUserDetails.userId.toLong()
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelMateCommandService.delegateLeaderRole(
+                userId, travelId, travelMateId, leaderDelegateRequest
+            ))
     }
 }
