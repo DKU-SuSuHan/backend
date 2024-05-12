@@ -3,7 +3,6 @@ package com.susuhan.travelpick.domain.travelmate.service
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateListResponse
-import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.global.common.policy.TravelPolicy
@@ -24,13 +23,13 @@ class TravelMateQueryService(
 
         checkUserIsTravelLeader(userId, travelId)
 
-        return travelMateRepository.findAllByUserIdAndTravelId(GroupRole.PARTICIPANT, travelId)
+        return travelMateRepository.findAllParticipantMate(travelId)
             .map { travelMate ->  ParticipantMateListResponse.from(travelMate)}
             .toList()
     }
 
     private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
-        val groupRole = travelMateRepository.findGroupRoleByUserIdAndTravelId(userId, travelId)
+        val groupRole = travelMateRepository.findGroupRole(userId, travelId)
             ?: throw TravelMateIdNotFoundException()
 
         TravelPolicy.isTravelLeader(userId, groupRole)

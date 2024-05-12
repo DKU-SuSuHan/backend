@@ -73,7 +73,7 @@ class TravelMateCommandService(
 
     @Transactional
     fun deleteAll(travelId: Long) {
-        travelMateRepository.deleteAllByTravelId(travelId)
+        travelMateRepository.deleteAll(travelId)
     }
 
     @Transactional
@@ -99,7 +99,7 @@ class TravelMateCommandService(
     }
 
     private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
-        val groupRole = travelMateRepository.findGroupRoleByUserIdAndTravelId(userId, travelId)
+        val groupRole = travelMateRepository.findGroupRole(userId, travelId)
             ?: throw TravelMateIdNotFoundException()
 
         TravelPolicy.isTravelLeader(userId, groupRole)

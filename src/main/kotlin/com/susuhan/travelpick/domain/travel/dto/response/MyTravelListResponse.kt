@@ -9,6 +9,9 @@ data class MyTravelListResponse(
     @Schema(description = "여행지의 PK")
     val id: Long,
 
+    @Schema(description = "여행지의 템플릿 이미지 번호")
+    val templateNum: Long,
+
     @Schema(description = "여행지의 이름")
     val title: String,
 
@@ -25,6 +28,7 @@ data class MyTravelListResponse(
     companion object {
         fun from(travel: Travel) = MyTravelListResponse(
             travel.id!!,
+            travel.templateNum,
             travel.title,
             DateUtils.parse(travel.startAt),
             DateUtils.parse(travel.endAt),
