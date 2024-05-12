@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.23"
 	kotlin("plugin.jpa") version "1.9.23"
 	kotlin("plugin.allopen") version "1.9.23"
+	kotlin("kapt") version "1.9.24"
 }
 
 group = "com.susuhan"
@@ -35,6 +36,12 @@ dependencies {
 
 	// DB - MySQL
 	runtimeOnly("com.mysql:mysql-connector-j")
+
+	// Querydsl
+	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+	kapt("jakarta.annotation:jakarta.annotation-api")
+	kapt("jakarta.persistence:jakarta.persistence-api")
 
 	// Security
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -74,4 +81,17 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// Querydsl 설정
+val querydslDirPath = "build/generated"
+
+tasks.withType<JavaCompile> {
+	options.generatedSourceOutputDirectory.set(file(querydslDirPath))
+}
+
+tasks.named("clean") {
+	doLast {
+		file(querydslDirPath).deleteRecursively()
+	}
 }
