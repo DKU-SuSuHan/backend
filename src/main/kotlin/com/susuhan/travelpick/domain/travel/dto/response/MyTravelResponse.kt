@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class MyTravelResponse(
     @Schema(description = "여행지의 PK")
-    val travelId: Long?,
+    val travelId: Long,
 
     @Schema(description = "여행을 조회한 사용자의 여행지 메이트 PK")
-    val travelMateId: Long?,
+    val travelMateId: Long,
 
     @Schema(description = "여행지의 이름")
     val title: String,
@@ -36,8 +36,8 @@ data class MyTravelResponse(
     companion object {
         fun from(travel: Travel, travelMate: TravelMate): MyTravelResponse {
             return MyTravelResponse(
-                travel?.id,
-                travelMate?.id,
+                travel.id!!,
+                travelMate.id!!,
                 travel.title,
                 travel.address.sido,
                 travel.address.sgg,

@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class ParticipantMateListResponse(
     @Schema(description = "여행 메이트의 PK")
-    val id: Long?,
+    val id: Long,
 
     @Schema(description = "여행 메이트의 닉네임")
     val nickname: String?
@@ -14,7 +14,7 @@ data class ParticipantMateListResponse(
     companion object {
         fun from(travelMate: TravelMate): ParticipantMateListResponse {
             return ParticipantMateListResponse(
-                travelMate?.id,
+                travelMate.id!!,
                 travelMate.user?.nickname
             )
         }

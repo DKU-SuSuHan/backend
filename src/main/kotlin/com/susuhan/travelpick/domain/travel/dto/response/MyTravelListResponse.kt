@@ -7,7 +7,7 @@ import java.time.Period
 
 data class MyTravelListResponse(
     @Schema(description = "여행지의 PK")
-    val id: Long?,
+    val id: Long,
 
     @Schema(description = "여행지의 이름")
     val title: String,
@@ -25,7 +25,7 @@ data class MyTravelListResponse(
     companion object {
         fun from(travel: Travel): MyTravelListResponse {
             return MyTravelListResponse(
-                travel?.id,
+                travel.id!!,
                 travel.title,
                 DateUtils.parse(travel.startAt),
                 DateUtils.parse(travel.endAt),
