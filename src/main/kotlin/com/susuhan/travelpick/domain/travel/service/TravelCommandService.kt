@@ -51,7 +51,7 @@ class TravelCommandService(
     }
 
     @Transactional
-    fun deleteTravel(userId: Long, travelId: Long) {
+    fun softDeleteTravel(userId: Long, travelId: Long) {
         val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId)
             ?: throw TravelIdNotFoundException()
 

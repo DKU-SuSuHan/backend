@@ -7,6 +7,7 @@ import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Repository
 class TravelMateRepositoryQCustomImpl(
@@ -69,9 +70,10 @@ class TravelMateRepositoryQCustomImpl(
             .fetch()
     }
 
-    override fun deleteAll(travelId: Long) {
+    override fun softDeleteAll(travelId: Long) {
         jpaQueryFactory
-            .delete(travelMate)
+            .update(travelMate)
+            .set(travelMate.deleteAt, LocalDateTime.now())
             .where(travelMate.travel.id.eq(travelId))
             .execute()
     }

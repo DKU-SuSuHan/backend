@@ -8,6 +8,4 @@ interface TravelMateRepository : Repository<TravelMate, Long>, TravelMateReposit
     fun save(entity: TravelMate): TravelMate
 
     fun findById(travelMateId: Long): TravelMate?
-
-    fun delete(entity: TravelMate)
 }

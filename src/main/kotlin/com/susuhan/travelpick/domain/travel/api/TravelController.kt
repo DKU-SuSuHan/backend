@@ -83,13 +83,13 @@ class TravelController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}")
-    fun deleteTravel(
+    fun softDeleteTravel(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelCommandService.deleteTravel(
+            .body(travelCommandService.softDeleteTravel(
                 customUserDetails.getUserId(), travelId
             ))
     }

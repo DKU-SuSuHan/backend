@@ -5,6 +5,7 @@ import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import com.susuhan.travelpick.domain.user.entity.User
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Table(name = "travel_mates")
 @Entity
@@ -32,11 +33,19 @@ class TravelMate(
     var groupRole: GroupRole = groupRole
         protected set
 
+    @Column(name = "delete_at")
+    var deleteAt: LocalDateTime? = null
+        protected set
+
     fun updateToLeaderRole() {
         this.groupRole = GroupRole.LEADER
     }
 
     fun updateToParticipantRole() {
         this.groupRole = GroupRole.PARTICIPANT
+    }
+
+    fun softDelete() {
+        this.deleteAt = LocalDateTime.now()
     }
 }

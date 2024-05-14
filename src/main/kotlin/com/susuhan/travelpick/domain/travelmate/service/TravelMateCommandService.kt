@@ -56,7 +56,7 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun deleteTravelMate(userId: Long, travelId: Long, travelMateId: Long) {
+    fun softDeleteTravelMate(userId: Long, travelId: Long, travelMateId: Long) {
         if (!travelRepository.existsByIdAndDeleteAtIsNull(travelId)) {
             throw TravelIdNotFoundException()
         }
@@ -68,12 +68,12 @@ class TravelMateCommandService(
 
         TravelPolicy.isTravelLeaderDeletion(travelMate)
 
-        travelMateRepository.delete(travelMate)
+        travelMate.softDelete()
     }
 
     @Transactional
     fun deleteAll(travelId: Long) {
-        travelMateRepository.deleteAll(travelId)
+        travelMateRepository.softDeleteAll(travelId)
     }
 
     @Transactional

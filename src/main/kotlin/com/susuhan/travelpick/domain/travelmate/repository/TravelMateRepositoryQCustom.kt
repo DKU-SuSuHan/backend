@@ -16,5 +16,5 @@ interface TravelMateRepositoryQCustom {
 
     fun findEndedTravel(userId: Long): List<Travel>
 
-    fun deleteAll(travelId: Long)
+    fun softDeleteAll(travelId: Long)
 }
