@@ -21,7 +21,7 @@ class User(
     @Column(name = "user_id", nullable = false)
     val id: Long? = null
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, updatable = false)
     var email: String? = email
         protected set
 
@@ -33,7 +33,7 @@ class User(
     var nickname: String? = nickname
         protected set
 
-    @Column(name = "social_id", unique = true)
+    @Column(name = "social_id", unique = true, updatable = false)
     val socialId: String? = socialId
 
     @Column(name = "profile_image_url", nullable = false)
@@ -45,7 +45,7 @@ class User(
     var role: Role = Role.USER
         protected set
 
-    @Column(name = "login_type", nullable = false)
+    @Column(name = "login_type", nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     val loginType: LoginType = loginType
 
