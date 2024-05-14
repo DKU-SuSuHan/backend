@@ -6,6 +6,4 @@ import org.springframework.data.repository.Repository
 interface TravelMateRepository : Repository<TravelMate, Long>, TravelMateRepositoryQCustom {
 
     fun save(entity: TravelMate): TravelMate
-
-    fun findById(travelMateId: Long): TravelMate?
 }
