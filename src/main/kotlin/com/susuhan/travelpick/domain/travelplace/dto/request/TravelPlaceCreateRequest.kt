@@ -4,10 +4,13 @@ import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.travelplace.entity.TravelPlace
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
+import org.springframework.format.annotation.DateTimeFormat
+import java.time.LocalDate
 
 data class TravelPlaceCreateRequest(
-    @Schema(description = "여행지 장소의 몇 일째 날짜")
-    val travelDay: Int,
+    @Schema(description = "여행지 장소에 방문할 날짜")
+    @field:DateTimeFormat(pattern = "yyyy-MM-dd")
+    val travelDate: LocalDate,
 
     @Schema(description = "여행지 장소의 이름")
     @field:NotBlank
@@ -28,9 +31,9 @@ data class TravelPlaceCreateRequest(
     val urlLink: String?
 ) {
 
-    fun toEntity(travel: Travel, sequence: Long) = TravelPlace(
+    fun toEntity(travel: Travel, travelDay: Int, sequence: Long) = TravelPlace(
         travel = travel,
-        travelDay = this.travelDay,
+        travelDay = travelDay,
         name = this.name,
         postcode = this.postcode,
         address = this.address,
