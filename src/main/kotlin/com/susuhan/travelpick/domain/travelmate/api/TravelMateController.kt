@@ -27,7 +27,10 @@ class TravelMateController(
 
     @Operation(
         summary = "여행 메이트 추가",
-        description = "여행지에 새로운 여행 메이트를 추가합니다.",
+        description = """
+            여행지에 새로운 여행 메이트를 추가합니다.
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @PostMapping("/{travelId}/mates")
@@ -36,18 +39,19 @@ class TravelMateController(
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelMateCreateRequest: TravelMateCreateRequest
     ): ResponseEntity<TravelMateCreateResponse> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(travelMateCommandService.createTravelParticipant(
-                userId, travelId, travelMateCreateRequest
+                customUserDetails.getUserId(), travelId, travelMateCreateRequest
             ))
     }
 
     @Operation(
         summary = "여행 메이트 삭제",
-        description = "여행지의 기존 여행 메이트를 삭제합니다.",
+        description = """
+            여행지의 기존 여행 메이트를 삭제합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}/mates/{travelMateId}")
@@ -56,16 +60,19 @@ class TravelMateController(
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelMateId") travelMateId: Long
     ): ResponseEntity<Unit> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelMateCommandService.deleteTravelMate(userId, travelId, travelMateId))
+            .body(travelMateCommandService.deleteTravelMate(
+                customUserDetails.getUserId(), travelId, travelMateId
+            ))
     }
 
     @Operation(
         summary = "참여자 역할의 여행 메이트 목록 조회",
-        description = "여행의 참여자 역할을 가진 여행 메이트 목록 조회합니다.",
+        description = """
+            여행의 참여자 역할을 가진 여행 메이트 목록 조회합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @GetMapping("/{travelId}/mates")
@@ -73,16 +80,19 @@ class TravelMateController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
     ): ResponseEntity<List<ParticipantMateListResponse>> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelMateQueryService.getParticipantMateList(userId, travelId))
+            .body(travelMateQueryService.getParticipantMateList(
+                customUserDetails.getUserId(), travelId
+            ))
     }
 
     @Operation(
         summary = "여행의 Leader 권한 위임",
-        description = "여행마다 한 명씩 존재하는 Leader 권한을 다른 여행 메이트에게 위임합니다.",
+        description = """
+            여행마다 한 명씩 존재하는 Leader 권한을 다른 여행 메이트에게 위임합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @PutMapping("/{travelId}/mates/{travelMateId}/delegation/role")
@@ -92,12 +102,10 @@ class TravelMateController(
         @PathVariable(name = "travelMateId") travelMateId: Long,
         @Valid @RequestBody leaderDelegateRequest: LeaderDelegateRequest
     ): ResponseEntity<LeaderDelegateResponse> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelMateCommandService.delegateLeaderRole(
-                userId, travelId, travelMateId, leaderDelegateRequest
+                customUserDetails.getUserId(), travelId, travelMateId, leaderDelegateRequest
             ))
     }
 }

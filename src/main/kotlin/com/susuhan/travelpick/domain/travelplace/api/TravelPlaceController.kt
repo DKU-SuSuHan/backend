@@ -34,12 +34,10 @@ class TravelPlaceController(
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelPlaceCreateRequest: TravelPlaceCreateRequest
     ): ResponseEntity<TravelPlaceCreateResponse> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(travelPlaceCommandService.createTravelPlace(
-                userId, travelId, travelPlaceCreateRequest
+                customUserDetails.getUserId(), travelId, travelPlaceCreateRequest
             ))
     }
 }
