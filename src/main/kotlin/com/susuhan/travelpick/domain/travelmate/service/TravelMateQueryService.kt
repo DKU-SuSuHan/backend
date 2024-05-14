@@ -17,7 +17,7 @@ class TravelMateQueryService(
 ) {
 
     fun getParticipantMateList(userId: Long, travelId: Long): List<ParticipantMateListResponse> {
-        if (!travelRepository.existNotDeletedTravel(travelId)) {
+        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 

@@ -43,6 +43,7 @@ class Travel(
         protected set
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     var status: Status = Status.PLANNED
         protected set
 

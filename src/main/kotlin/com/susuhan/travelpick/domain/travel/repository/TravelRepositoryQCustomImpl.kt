@@ -11,12 +11,13 @@ class TravelRepositoryQCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ): TravelRepositoryQCustom {
 
-    override fun existNotDeletedTravel(id: Long): Boolean {
+    override fun existNotDeletedPlannedTravel(id: Long): Boolean {
         return jpaQueryFactory
             .selectOne()
             .from(travel)
             .where(
                 travel.id.eq(id),
+                travel.status.eq(Status.PLANNED),
                 travel.deleteAt.isNull
             )
             .fetchFirst() != null

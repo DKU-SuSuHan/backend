@@ -24,14 +24,14 @@ class TravelPlaceCommandService(
     fun createTravelPlace(
         userId: Long, travelId: Long, request: TravelPlaceCreateRequest
     ): TravelPlaceCreateResponse {
-        val travel = travelRepository.findByIdAndDeleteAtIsNull(travelId)
+        val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
         checkUserIsTravelLeader(userId, travelId)
 
         val travelDay = calculateTravelDay(travel, request.travelDate)
 
-        val placeTotalNum = travelPlaceRepository.countPlaceTotalNum(travelId, travelDay)
+        val placeTotalNum = travelPlaceRepository.countPlaceTotalNumber(travelId, travelDay)
 
         travelPlaceRepository.save(
             request.toEntity(travel, travelDay, placeTotalNum + 1)

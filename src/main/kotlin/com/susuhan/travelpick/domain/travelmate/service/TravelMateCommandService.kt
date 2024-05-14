@@ -57,7 +57,7 @@ class TravelMateCommandService(
 
     @Transactional
     fun softDeleteTravelMate(userId: Long, travelId: Long, travelMateId: Long) {
-        if (!travelRepository.existNotDeletedTravel(travelId)) {
+        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 
@@ -80,7 +80,7 @@ class TravelMateCommandService(
     fun delegateLeaderRole(
         userId: Long, travelId: Long, travelMateId: Long, request: LeaderDelegateRequest
     ): LeaderDelegateResponse {
-        if (!travelRepository.existNotDeletedTravel(travelId)) {
+        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 
