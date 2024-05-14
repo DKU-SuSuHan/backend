@@ -1,8 +1,10 @@
 package com.susuhan.travelpick.domain.travelplace.api
 
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRequest
+import com.susuhan.travelpick.domain.travelplace.dto.response.ConfirmTravelPlaceListResponse
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceCreateResponse
 import com.susuhan.travelpick.domain.travelplace.service.TravelPlaceCommandService
+import com.susuhan.travelpick.domain.travelplace.service.TravelPlaceQueryService
 import com.susuhan.travelpick.global.security.CustomUserDetails
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -17,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @Tag(name = "여행 장소 관련 API")
 class TravelPlaceController(
-    private val travelPlaceCommandService: TravelPlaceCommandService
+    private val travelPlaceCommandService: TravelPlaceCommandService,
+    private val travelPlaceQueryService: TravelPlaceQueryService
 ) {
 
     @Operation(
@@ -38,6 +41,24 @@ class TravelPlaceController(
             .status(HttpStatus.CREATED)
             .body(travelPlaceCommandService.createTravelPlace(
                 customUserDetails.getUserId(), travelId, travelPlaceCreateRequest
+            ))
+    }
+
+    @Operation(
+        summary = "특정 여행 날짜의 확정된 여행 장소 목록 조회",
+        description = "진행 중인 특정 여행 날짜를 전달 받아 확정된 여행 장소 목록 조회합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @GetMapping("/{travelId}/places")
+    fun getConfirmPlaceList(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+        @RequestParam(name = "travelDay") travelDay: Int
+    ): ResponseEntity<ConfirmTravelPlaceListResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelPlaceQueryService.getConfirmPlaceList(
+                customUserDetails.getUserId(), travelId, travelDay
             ))
     }
 }
