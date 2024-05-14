@@ -14,6 +14,8 @@ class CustomUserDetails(
         return Collections.singleton(SimpleGrantedAuthority(this.role))
     }
 
+    fun getUserId() = this.userId.toLong()
+
     override fun getPassword(): String? {
         return null
     }

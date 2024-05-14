@@ -43,11 +43,11 @@ class UserController(
         @Parameter(hidden = true) @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody nicknameUpdateRequest: NicknameUpdateRequest
     ): ResponseEntity<NicknameUpdateResponse> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userCommandService.updateNickname(userId, nicknameUpdateRequest))
+            .body(userCommandService.updateNickname(
+                customUserDetails.getUserId(), nicknameUpdateRequest
+            ))
     }
 
     @Operation(

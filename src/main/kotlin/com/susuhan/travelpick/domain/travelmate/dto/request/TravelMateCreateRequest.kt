@@ -11,11 +11,9 @@ data class TravelMateCreateRequest(
     val userId: Long
 ) {
 
-    fun toEntity(user: User, travel: Travel): TravelMate {
-        return TravelMate(
-            user = user,
-            travel = travel,
-            groupRole = GroupRole.PARTICIPANT
-        )
-    }
+    fun toEntity(user: User, travel: Travel) = TravelMate(
+        user = user,
+        travel = travel,
+        groupRole = GroupRole.PARTICIPANT
+    )
 }

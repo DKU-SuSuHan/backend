@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestHeader
 )
 interface KakaoApiClient {
 
-    @GetMapping("/v2/user/me")
+    @GetMapping(
+        value = ["/v2/user/me"],
+        headers = ["Content-type=application/x-www-form-urlencoded;charset=utf-8"]
+    )
     fun getUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) accessToken: String): KakaoUserInfo
 }

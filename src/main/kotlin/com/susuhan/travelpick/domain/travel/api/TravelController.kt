@@ -46,18 +46,18 @@ class TravelController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody travelCreateRequest: TravelCreateRequest
     ): ResponseEntity<TravelCreateResponse> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelCommandService.createTravel(userId, travelCreateRequest))
+            .body(travelCommandService.createTravel(
+                customUserDetails.getUserId(), travelCreateRequest
+            ))
     }
 
     @Operation(
         summary = "여행지 수정",
         description = """
             여행지에 대한 데이터를 받아 여행지의 데이터를 수정합니다. 
-            단, 여행지 데이터 수정은 여행지 생성자만 가능합니다.
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")]
     )
@@ -67,16 +67,19 @@ class TravelController(
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelUpdateRequest: TravelUpdateRequest
     ): ResponseEntity<TravelUpdateResponse> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelCommandService.updateTravel(userId, travelId, travelUpdateRequest))
+            .body(travelCommandService.updateTravel(
+                customUserDetails.getUserId(), travelId, travelUpdateRequest
+            ))
     }
 
     @Operation(
         summary = "여행지 삭제",
-        description = "여행지의 PK를 전달받아 해당 여행지를 삭제합니다.",
+        description = """
+            여행지의 PK를 전달받아 해당 여행지를 삭제합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}")
@@ -84,11 +87,11 @@ class TravelController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long
     ): ResponseEntity<Unit> {
-        val userId = customUserDetails.userId.toLong()
-
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelCommandService.deleteTravel(userId, travelId))
+            .body(travelCommandService.deleteTravel(
+                customUserDetails.getUserId(), travelId
+            ))
     }
 
     @Operation(
@@ -103,7 +106,9 @@ class TravelController(
     ): ResponseEntity<MyTravelResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelQueryService.getTravel(customUserDetails.userId.toLong(), travelId))
+            .body(travelQueryService.getTravel(
+                customUserDetails.getUserId(), travelId
+            ))
     }
 
 
@@ -121,7 +126,7 @@ class TravelController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestParam @EnumValid(enumClass = Status::class) status: String
     ): ResponseEntity<List<MyTravelListResponse>> {
-        val userId = customUserDetails.userId.toLong()
+        val userId = customUserDetails.getUserId()
 
         val response = when (enumValueOf<Status>(status.uppercase())) {
             Status.PLANNED -> travelQueryService.getPlannedTravelList(userId)

@@ -32,13 +32,11 @@ data class TravelCreateRequest(
     val endAt: LocalDate,
 ) {
 
-    fun toEntity(): Travel {
-        return Travel(
-            templateNum = this.templateNum,
-            address = Address(this.sido, this.sgg),
-            title = this.title,
-            startAt = this.startAt,
-            endAt = this.endAt
-        )
-    }
+    fun toEntity() = Travel(
+        templateNum = this.templateNum,
+        address = Address(this.sido, this.sgg),
+        title = this.title,
+        startAt = this.startAt,
+        endAt = this.endAt
+    )
 }
