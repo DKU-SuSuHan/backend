@@ -36,7 +36,7 @@ class TravelCommandService(
     fun updateTravel(
         userId: Long, travelId: Long, request: TravelUpdateRequest
     ): TravelUpdateResponse {
-        val travel = travelRepository.findNotDeletedTravel(travelId)
+        val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
         checkUserIsTravelLeader(userId, travelId)
@@ -52,7 +52,7 @@ class TravelCommandService(
 
     @Transactional
     fun softDeleteTravel(userId: Long, travelId: Long) {
-        val travel = travelRepository.findNotDeletedTravel(travelId)
+        val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
         checkUserIsTravelLeader(userId, travelId)

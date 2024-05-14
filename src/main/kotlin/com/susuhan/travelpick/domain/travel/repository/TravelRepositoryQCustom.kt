@@ -6,5 +6,5 @@ interface TravelRepositoryQCustom {
 
     fun existNotDeletedTravel(id: Long): Boolean
 
-    fun findNotDeletedTravel(id: Long): Travel?
+    fun findNotDeletedPlannedTravel(id: Long): Travel?
 }

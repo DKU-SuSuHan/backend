@@ -40,7 +40,7 @@ class TravelMateCommandService(
     fun createTravelParticipant(
         userId: Long, travelId: Long, request: TravelMateCreateRequest
     ): TravelMateCreateResponse {
-        val travel = travelRepository.findNotDeletedTravel(travelId)
+        val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
         val user = userRepository.findById(request.userId)
