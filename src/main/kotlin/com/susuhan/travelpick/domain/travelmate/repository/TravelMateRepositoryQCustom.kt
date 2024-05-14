@@ -6,6 +6,10 @@ import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 
 interface TravelMateRepositoryQCustom {
 
+    fun existNotDeletedMate(userId: Long, travelId: Long): Boolean
+
+    fun findNotDeletedMate(id: Long): TravelMate?
+
     fun findGroupRole(userId: Long, travelId: Long): GroupRole?
 
     fun findAllParticipantMate(travelId: Long): List<TravelMate>
@@ -16,5 +20,5 @@ interface TravelMateRepositoryQCustom {
 
     fun findEndedTravel(userId: Long): List<Travel>
 
-    fun deleteAll(travelId: Long)
+    fun softDeleteAll(travelId: Long)
 }

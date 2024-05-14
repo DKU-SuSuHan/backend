@@ -55,14 +55,14 @@ class TravelMateController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}/mates/{travelMateId}")
-    fun deleteTravelMate(
+    fun softDeleteTravelMate(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelMateId") travelMateId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelMateCommandService.deleteTravelMate(
+            .body(travelMateCommandService.softDeleteTravelMate(
                 customUserDetails.getUserId(), travelId, travelMateId
             ))
     }

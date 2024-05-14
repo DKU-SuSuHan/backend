@@ -7,11 +7,35 @@ import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Repository
 class TravelMateRepositoryQCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ): TravelMateRepositoryQCustom {
+
+    override fun existNotDeletedMate(userId: Long, travelId: Long): Boolean {
+        return jpaQueryFactory
+            .selectOne()
+            .from(travelMate)
+            .where(
+                travelMate.user.id.eq(userId),
+                travelMate.travel.id.eq(travelId),
+                travelMate.deleteAt.isNull
+            )
+            .fetchFirst() != null
+    }
+
+    override fun findNotDeletedMate(id: Long): TravelMate? {
+        return jpaQueryFactory
+            .select(travelMate)
+            .from(travelMate)
+            .where(
+                travelMate.id.eq(id),
+                travelMate.deleteAt.isNull
+            )
+            .fetchOne()
+    }
 
     override fun findGroupRole(userId: Long, travelId: Long): GroupRole? {
         return jpaQueryFactory
@@ -19,7 +43,8 @@ class TravelMateRepositoryQCustomImpl(
             .from(travelMate)
             .where(
                 travelMate.user.id.eq(userId),
-                travelMate.travel.id.eq(travelId)
+                travelMate.travel.id.eq(travelId),
+                travelMate.deleteAt.isNull
             )
             .fetchOne()
     }
@@ -31,7 +56,8 @@ class TravelMateRepositoryQCustomImpl(
             .innerJoin(travelMate.user).fetchJoin()
             .where(
                 travelMate.groupRole.eq(GroupRole.PARTICIPANT),
-                travelMate.travel.id.eq(travelId)
+                travelMate.travel.id.eq(travelId),
+                travelMate.deleteAt.isNull
             )
             .fetch()
     }
@@ -42,7 +68,8 @@ class TravelMateRepositoryQCustomImpl(
             .from(travelMate)
             .where(
                 travelMate.user.id.eq(userId),
-                travelMate.travel.id.eq(travelId)
+                travelMate.travel.id.eq(travelId),
+                travelMate.deleteAt.isNull
             )
             .fetchOne()
     }
@@ -53,7 +80,8 @@ class TravelMateRepositoryQCustomImpl(
             .from(travelMate)
             .where(
                 travelMate.user.id.eq(userId),
-                travelMate.travel.startAt.goe(LocalDate.now())
+                travelMate.travel.startAt.goe(LocalDate.now()),
+                travelMate.deleteAt.isNull
             )
             .fetch()
     }
@@ -64,15 +92,20 @@ class TravelMateRepositoryQCustomImpl(
             .from(travelMate)
             .where(
                 travelMate.user.id.eq(userId),
-                travelMate.travel.startAt.lt(LocalDate.now())
+                travelMate.travel.startAt.lt(LocalDate.now()),
+                travelMate.deleteAt.isNull
             )
             .fetch()
     }
 
-    override fun deleteAll(travelId: Long) {
+    override fun softDeleteAll(travelId: Long) {
         jpaQueryFactory
-            .delete(travelMate)
-            .where(travelMate.travel.id.eq(travelId))
+            .update(travelMate)
+            .set(travelMate.deleteAt, LocalDateTime.now())
+            .where(
+                travelMate.travel.id.eq(travelId),
+                travelMate.deleteAt.isNull
+            )
             .execute()
     }
 }

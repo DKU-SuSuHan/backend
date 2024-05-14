@@ -3,6 +3,7 @@ package com.susuhan.travelpick.domain.travelplace.entity
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.global.common.entity.BaseEntity
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Table(name = "travel_places")
 @Entity
@@ -52,5 +53,9 @@ class TravelPlace(
 
     @Column(name = "url_link")
     var urlLink: String? = urlLink
+        protected set
+
+    @Column(name = "delete_at")
+    var deleteAt: LocalDateTime? = null
         protected set
 }

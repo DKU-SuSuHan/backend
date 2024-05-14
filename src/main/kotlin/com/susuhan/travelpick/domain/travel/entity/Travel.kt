@@ -1,5 +1,6 @@
 package com.susuhan.travelpick.domain.travel.entity
 
+import com.susuhan.travelpick.domain.travel.entity.constant.Status
 import com.susuhan.travelpick.global.common.entity.BaseEntity
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -39,6 +40,11 @@ class Travel(
 
     @Column(name = "template_num", nullable = false)
     var templateNum: Long = templateNum
+        protected set
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    var status: Status = Status.PLANNED
         protected set
 
     @Column(name = "is_private", nullable = false)

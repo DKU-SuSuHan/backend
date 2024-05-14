@@ -58,4 +58,5 @@ enum class ErrorCode(
      */
     TRAVEL_MATE_ID_NOT_FOUND(1600, "해당 PK를 가진 TravelMate 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     TRAVEL_LEADER_DELETION(1601, "Leader인 TravelMate 엔티티는 삭제가 불가능합니다.", HttpStatus.FORBIDDEN),
+    TRAVEL_DATE_NOT_VALID(1602, "입력 날짜는 여행 시작 날짜와 종료 날짜 사이의 값이여야 합니다.", HttpStatus.BAD_REQUEST),
 }
