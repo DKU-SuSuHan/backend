@@ -3,8 +3,10 @@ package com.susuhan.travelpick.domain.travelplace.entity
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.global.common.entity.BaseEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 
+@DynamicUpdate
 @Table(name = "travel_places")
 @Entity
 class TravelPlace(
@@ -58,4 +60,28 @@ class TravelPlace(
     @Column(name = "delete_at")
     var deleteAt: LocalDateTime? = null
         protected set
+
+    fun updateTravelDay(travelDay: Int) {
+        this.travelDay = travelDay
+    }
+
+    fun updateName(name: String) {
+        this.name = name
+    }
+
+    fun updatePostcode(postcode: String) {
+        this.postcode = postcode
+    }
+
+    fun updateAddress(address: String) {
+        this.address = address
+    }
+
+    fun updateBudget(budget: Long) {
+        this.budget = budget
+    }
+
+    fun updateUrlLink(urlLink: String) {
+        this.urlLink = urlLink
+    }
 }

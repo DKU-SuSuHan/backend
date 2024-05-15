@@ -22,6 +22,17 @@ class TravelPlaceRepositoryQCustomImpl(
             .fetchOne() ?: 0
     }
 
+    override fun findNotDeletedTravelPlace(id: Long): TravelPlace? {
+        return jpaQueryFactory
+            .select(travelPlace)
+            .from(travelPlace)
+            .where(
+                travelPlace.id.eq(id),
+                travelPlace.deleteAt.isNull
+            )
+            .fetchOne()
+    }
+
     override fun findConfirmPlaceListForDay(travelId: Long, travelDay: Int): List<TravelPlace> {
         return jpaQueryFactory
             .select(travelPlace)

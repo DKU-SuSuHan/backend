@@ -1,8 +1,10 @@
 package com.susuhan.travelpick.domain.travelplace.api
 
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRequest
+import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceUpdateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.response.ConfirmTravelPlaceListResponse
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceCreateResponse
+import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceUpdateResponse
 import com.susuhan.travelpick.domain.travelplace.service.TravelPlaceCommandService
 import com.susuhan.travelpick.domain.travelplace.service.TravelPlaceQueryService
 import com.susuhan.travelpick.global.security.CustomUserDetails
@@ -24,7 +26,7 @@ class TravelPlaceController(
 ) {
 
     @Operation(
-        summary = "여행지 장소 수기 추가",
+        summary = "여행 장소 수기 추가",
         description = """
             진행 중인 여행지에 대해 확정된 장소를 수기로 작성 받아 추가합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
@@ -41,6 +43,28 @@ class TravelPlaceController(
             .status(HttpStatus.CREATED)
             .body(travelPlaceCommandService.createTravelPlace(
                 customUserDetails.getUserId(), travelId, travelPlaceCreateRequest
+            ))
+    }
+
+    @Operation(
+        summary = "여행 장소 수정",
+        description = """
+            여행지 장소에 대한 데이터를 받아 여행지 장소의 데이터를 수정합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @PutMapping("/{travelId}/places/{travelPlaceId}")
+    fun updateTravelPlace(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
+        @Valid @RequestBody travelPlaceUpdateRequest: TravelPlaceUpdateRequest
+    ): ResponseEntity<TravelPlaceUpdateResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelPlaceCommandService.updateTravelPlace(
+                customUserDetails.getUserId(), travelId, travelPlaceId, travelPlaceUpdateRequest
             ))
     }
 
