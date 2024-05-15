@@ -23,7 +23,9 @@ class AuthCommandService(
 
     @Transactional
     fun createJwtTokens(userId: Long, role: Role): TokenResponse {
-        val user = userRepository.findById(userId) ?: throw UserIdNotFoundException()
+        val user = userRepository.findNotDeletedUser(userId)
+            ?: throw UserIdNotFoundException()
+
         val accessToken = jwtTokenProvider.createAccessToken(userId, role)
         val refreshToken = jwtTokenProvider.createRefreshToken(userId, role)
 

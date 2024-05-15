@@ -4,7 +4,7 @@ import com.susuhan.travelpick.domain.travel.entity.Travel
 
 interface TravelRepositoryQCustom {
 
-    fun existNotDeletedPlannedTravel(id: Long): Boolean
+    fun existsNotDeletedPlannedTravel(id: Long): Boolean
 
     fun findNotDeletedPlannedTravel(id: Long): Travel?
 }
