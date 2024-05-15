@@ -14,8 +14,8 @@ data class ConfirmTravelPlaceListResponse(
         fun from(
             travelId: Long,
             travelDate: LocalDate,
-            travelPlaceList:
-            List<TravelPlaceDto>, oneDayBudget: Long
+            travelPlaceList: List<TravelPlaceDto>,
+            oneDayBudget: Long
         ) = ConfirmTravelPlaceListResponse(
             travelId,
             travelDate,
