@@ -37,6 +37,17 @@ class TravelMateRepositoryQCustomImpl(
             .fetchOne()
     }
 
+    override fun findNotDeletedMateByUser(userId: Long): TravelMate? {
+        return jpaQueryFactory
+            .select(travelMate)
+            .from(travelMate)
+            .where(
+                travelMate.user.id.eq(userId),
+                travelMate.deleteAt.isNull
+            )
+            .fetchOne()
+    }
+
     override fun findGroupRole(userId: Long, travelId: Long): GroupRole? {
         return jpaQueryFactory
             .select(travelMate.groupRole)

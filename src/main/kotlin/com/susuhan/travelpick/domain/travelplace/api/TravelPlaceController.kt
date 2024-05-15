@@ -34,14 +34,14 @@ class TravelPlaceController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @PostMapping("/{travelId}/places")
-    fun createTravelPlace(
+    fun createByHand(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelPlaceCreateRequest: TravelPlaceCreateRequest
     ): ResponseEntity<TravelPlaceCreateResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelPlaceCommandService.createTravelPlace(
+            .body(travelPlaceCommandService.createByHand(
                 customUserDetails.getUserId(), travelId, travelPlaceCreateRequest
             ))
     }
@@ -55,7 +55,7 @@ class TravelPlaceController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @PutMapping("/{travelId}/places/{travelPlaceId}")
-    fun updateTravelPlace(
+    fun update(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
@@ -63,8 +63,29 @@ class TravelPlaceController(
     ): ResponseEntity<TravelPlaceUpdateResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelPlaceCommandService.updateTravelPlace(
+            .body(travelPlaceCommandService.update(
                 customUserDetails.getUserId(), travelId, travelPlaceId, travelPlaceUpdateRequest
+            ))
+    }
+
+    @Operation(
+        summary = "여행 장소 삭제",
+        description = """
+            여행 장소의 PK를 전달받아 해당 여행지를 삭제합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @DeleteMapping("/{travelId}/places/{travelPlaceId}")
+    fun softDelete(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelPlaceId") travelPlaceId: Long
+    ): ResponseEntity<Unit> {
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body(travelPlaceCommandService.softDelete(
+                customUserDetails.getUserId(), travelId, travelPlaceId
             ))
     }
 

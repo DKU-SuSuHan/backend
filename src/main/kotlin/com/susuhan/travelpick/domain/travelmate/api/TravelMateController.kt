@@ -3,7 +3,7 @@ package com.susuhan.travelpick.domain.travelmate.api
 import com.susuhan.travelpick.domain.travelmate.dto.request.LeaderDelegateRequest
 import com.susuhan.travelpick.domain.travelmate.dto.request.TravelMateCreateRequest
 import com.susuhan.travelpick.domain.travelmate.dto.response.LeaderDelegateResponse
-import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateListResponse
+import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateInfoResponse
 import com.susuhan.travelpick.domain.travelmate.dto.response.TravelMateCreateResponse
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateQueryService
@@ -28,13 +28,13 @@ class TravelMateController(
     @Operation(
         summary = "여행 메이트 추가",
         description = """
-            여행지에 새로운 여행 메이트를 추가합니다.
+            여행지에 참여자 역할을 가지는 새로운 여행 메이트를 추가합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @PostMapping("/{travelId}/mates")
-    fun createTravelMate(
+    fun create(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelMateCreateRequest: TravelMateCreateRequest
@@ -55,14 +55,14 @@ class TravelMateController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}/mates/{travelMateId}")
-    fun softDeleteTravelMate(
+    fun softDelete(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelMateId") travelMateId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(travelMateCommandService.softDeleteTravelMate(
+            .status(HttpStatus.NO_CONTENT)
+            .body(travelMateCommandService.softDelete(
                 customUserDetails.getUserId(), travelId, travelMateId
             ))
     }
@@ -79,7 +79,7 @@ class TravelMateController(
     fun getParticipantMateList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-    ): ResponseEntity<List<ParticipantMateListResponse>> {
+    ): ResponseEntity<List<ParticipantMateInfoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelMateQueryService.getParticipantMateList(
@@ -95,17 +95,16 @@ class TravelMateController(
         """,
         security = [SecurityRequirement(name = "access-token")]
     )
-    @PutMapping("/{travelId}/mates/{travelMateId}/delegation/role")
+    @PutMapping("/{travelId}/mates/delegation/role")
     fun delegateLeaderRole(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-        @PathVariable(name = "travelMateId") travelMateId: Long,
         @Valid @RequestBody leaderDelegateRequest: LeaderDelegateRequest
     ): ResponseEntity<LeaderDelegateResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelMateCommandService.delegateLeaderRole(
-                customUserDetails.getUserId(), travelId, travelMateId, leaderDelegateRequest
+                customUserDetails.getUserId(), travelId, leaderDelegateRequest
             ))
     }
 }

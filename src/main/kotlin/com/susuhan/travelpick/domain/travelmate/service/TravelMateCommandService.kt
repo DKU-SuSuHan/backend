@@ -56,7 +56,7 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun softDeleteTravelMate(userId: Long, travelId: Long, travelMateId: Long) {
+    fun softDelete(userId: Long, travelId: Long, travelMateId: Long) {
         if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
@@ -72,19 +72,19 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun deleteAll(travelId: Long) {
+    fun softDeleteAll(travelId: Long) {
         travelMateRepository.softDeleteAll(travelId)
     }
 
     @Transactional
     fun delegateLeaderRole(
-        userId: Long, travelId: Long, travelMateId: Long, request: LeaderDelegateRequest
+        userId: Long, travelId: Long, request: LeaderDelegateRequest
     ): LeaderDelegateResponse {
         if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 
-        val leader = travelMateRepository.findNotDeletedMate(travelMateId)
+        val leader = travelMateRepository.findNotDeletedMateByUser(userId)
             ?: throw TravelMateIdNotFoundException()
 
         TravelPolicy.isTravelLeader(userId, leader.groupRole)

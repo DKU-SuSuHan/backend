@@ -2,7 +2,7 @@ package com.susuhan.travelpick.domain.travelmate.service
 
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
-import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateListResponse
+import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateInfoResponse
 import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.global.common.policy.TravelPolicy
@@ -16,7 +16,7 @@ class TravelMateQueryService(
     private val travelRepository: TravelRepository
 ) {
 
-    fun getParticipantMateList(userId: Long, travelId: Long): List<ParticipantMateListResponse> {
+    fun getParticipantMateList(userId: Long, travelId: Long): List<ParticipantMateInfoResponse> {
         if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
@@ -24,7 +24,7 @@ class TravelMateQueryService(
         checkUserIsTravelLeader(userId, travelId)
 
         return travelMateRepository.findAllParticipantMate(travelId)
-            .map { travelMate ->  ParticipantMateListResponse.from(travelMate)}
+            .map { travelMate ->  ParticipantMateInfoResponse.from(travelMate)}
             .toList()
     }
 

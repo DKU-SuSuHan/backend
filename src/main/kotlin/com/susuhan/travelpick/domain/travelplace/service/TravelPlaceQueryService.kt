@@ -19,9 +19,8 @@ class TravelPlaceQueryService(
 ) {
 
     fun getConfirmPlaceList(userId: Long, travelId: Long, travelDay: Int): ConfirmTravelPlaceListResponse {
-        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
-            throw TravelIdNotFoundException()
-        }
+        val travel = (travelRepository.findNotDeletedPlannedTravel(travelId)
+            ?: throw TravelIdNotFoundException())
 
         if (!travelMateRepository.existNotDeletedMate(userId, travelId)) {
             throw TravelMateIdNotFoundException()
@@ -34,7 +33,10 @@ class TravelPlaceQueryService(
         val oneDayBudget = travelPlaceRepository.findOneDayBudget(travelId, travelDay)
 
         return ConfirmTravelPlaceListResponse.from(
-            travelId, travelPlaceList, oneDayBudget
+            travelId,
+            travel.startAt.plusDays(travelDay.toLong() - 1),
+            travelPlaceList,
+            oneDayBudget
         )
     }
 }
