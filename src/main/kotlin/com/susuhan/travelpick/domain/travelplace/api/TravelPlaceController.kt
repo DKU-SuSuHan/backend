@@ -54,17 +54,17 @@ class TravelPlaceController(
         """,
         security = [SecurityRequirement(name = "access-token")]
     )
-    @PutMapping("/{travelId}/places/{travelMateId}")
+    @PutMapping("/{travelId}/places/{travelPlaceId}")
     fun updateTravelPlace(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-        @PathVariable(name = "travelMateId") travelMateId: Long,
+        @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
         @Valid @RequestBody travelPlaceUpdateRequest: TravelPlaceUpdateRequest
     ): ResponseEntity<TravelPlaceUpdateResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelPlaceCommandService.updateTravelPlace(
-                customUserDetails.getUserId(), travelId, travelMateId, travelPlaceUpdateRequest
+                customUserDetails.getUserId(), travelId, travelPlaceId, travelPlaceUpdateRequest
             ))
     }
 

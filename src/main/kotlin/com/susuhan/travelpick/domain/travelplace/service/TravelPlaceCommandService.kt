@@ -47,12 +47,12 @@ class TravelPlaceCommandService(
 
     @Transactional
     fun updateTravelPlace(
-        userId: Long, travelId: Long, travelMateId: Long, request: TravelPlaceUpdateRequest
+        userId: Long, travelId: Long, travelPlaceId: Long, request: TravelPlaceUpdateRequest
     ): TravelPlaceUpdateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
-        val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelMateId)
+        val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
             ?: throw TravelPlaceIdNotFoundException())
 
         travelPlace.updateTravelDay(calculateTravelDay(travel, request.travelDate))
