@@ -3,7 +3,7 @@ package com.susuhan.travelpick.domain.travelmate.dto.response
 import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import io.swagger.v3.oas.annotations.media.Schema
 
-data class ParticipantMateListResponse(
+data class ParticipantMateInfoResponse(
     @Schema(description = "여행 메이트의 PK")
     val id: Long,
 
@@ -12,7 +12,7 @@ data class ParticipantMateListResponse(
 ) {
 
     companion object {
-        fun from(travelMate: TravelMate) = ParticipantMateListResponse(
+        fun from(travelMate: TravelMate) = ParticipantMateInfoResponse(
             travelMate.id!!,
             travelMate.user?.nickname
         )

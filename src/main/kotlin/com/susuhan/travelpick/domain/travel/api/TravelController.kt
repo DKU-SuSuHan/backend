@@ -2,8 +2,8 @@ package com.susuhan.travelpick.domain.travel.api
 
 import com.susuhan.travelpick.domain.travel.dto.request.TravelCreateRequest
 import com.susuhan.travelpick.domain.travel.dto.request.TravelUpdateRequest
-import com.susuhan.travelpick.domain.travel.dto.response.MyTravelListResponse
 import com.susuhan.travelpick.domain.travel.dto.response.MyTravelResponse
+import com.susuhan.travelpick.domain.travel.dto.response.MyTravelInfoResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelCreateResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelUpdateResponse
 import com.susuhan.travelpick.domain.travel.entity.constant.Status
@@ -103,7 +103,7 @@ class TravelController(
     fun getTravel(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long
-    ): ResponseEntity<MyTravelResponse> {
+    ): ResponseEntity<MyTravelInfoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelQueryService.getTravel(
@@ -125,7 +125,7 @@ class TravelController(
     fun getTravelList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestParam @EnumValid(enumClass = Status::class) status: String
-    ): ResponseEntity<List<MyTravelListResponse>> {
+    ): ResponseEntity<List<MyTravelResponse>> {
         val userId = customUserDetails.getUserId()
 
         val response = when (enumValueOf<Status>(status.uppercase())) {

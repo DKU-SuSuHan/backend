@@ -1,26 +1,19 @@
 package com.susuhan.travelpick.domain.travel.dto.response
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
-import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
-import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import com.susuhan.travelpick.global.common.util.DateUtils
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.Period
 
 data class MyTravelResponse(
     @Schema(description = "여행지의 PK")
-    val travelId: Long,
+    val id: Long,
 
-    @Schema(description = "여행을 조회한 사용자의 여행지 메이트 PK")
-    val travelMateId: Long,
+    @Schema(description = "여행지의 템플릿 이미지 번호")
+    val templateNum: Long,
 
     @Schema(description = "여행지의 이름")
     val title: String,
-
-    @Schema(description = "행정 구역의 시, 도")
-    val sido: String,
-
-    @Schema(description = "행정 구역의 시, 군, 구")
-    val sgg: String,
 
     @Schema(description = "여행 시작 날짜")
     val startAt: String,
@@ -28,24 +21,18 @@ data class MyTravelResponse(
     @Schema(description = "여행 종료 날짜")
     val endAt: String,
 
-    @Schema(description = "여행지의 권한")
-    val groupRole: GroupRole,
-
-    @Schema(description = "여행지의 총 예산")
-    val totalBudget: Long
+    @Schema(description = "여행 시작과 종료 날짜의 차이")
+    val dateDiff: Int,
 ) {
 
     companion object {
-        fun from(travel: Travel, travelMate: TravelMate, totalBudget: Long) = MyTravelResponse(
+        fun from(travel: Travel) = MyTravelResponse(
             travel.id!!,
-            travelMate.id!!,
+            travel.templateNum,
             travel.title,
-            travel.address.sido,
-            travel.address.sgg,
             DateUtils.parse(travel.startAt),
             DateUtils.parse(travel.endAt),
-            travelMate.groupRole,
-            totalBudget
+            Period.between(travel.startAt, travel.endAt).days
         )
     }
 }

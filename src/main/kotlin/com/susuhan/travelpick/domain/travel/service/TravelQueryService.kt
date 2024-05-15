@@ -1,7 +1,7 @@
 package com.susuhan.travelpick.domain.travel.service
 
-import com.susuhan.travelpick.domain.travel.dto.response.MyTravelListResponse
 import com.susuhan.travelpick.domain.travel.dto.response.MyTravelResponse
+import com.susuhan.travelpick.domain.travel.dto.response.MyTravelInfoResponse
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
@@ -16,7 +16,7 @@ class TravelQueryService (
     private val travelPlaceRepository: TravelPlaceRepository
 ) {
 
-    fun getTravel(userId: Long, travelId: Long): MyTravelResponse {
+    fun getTravel(userId: Long, travelId: Long): MyTravelInfoResponse {
         val travel = travelMateRepository.findTravel(userId, travelId)
             ?: throw TravelIdNotFoundException()
         
@@ -25,18 +25,18 @@ class TravelQueryService (
 
         val totalBudget = travelPlaceRepository.findTotalBudget(travelId)
 
-        return MyTravelResponse.from(travel, travelMate, totalBudget)
+        return MyTravelInfoResponse.from(travel, travelMate, totalBudget)
     }
 
-    fun getPlannedTravelList(userId: Long): List<MyTravelListResponse> {
+    fun getPlannedTravelList(userId: Long): List<MyTravelResponse> {
         return travelMateRepository.findPlannedTravel(userId)
-            .map { travel -> MyTravelListResponse.from(travel) }
+            .map { travel -> MyTravelResponse.from(travel) }
             .toList()
     }
 
-    fun getEndedTravelList(userId: Long): List<MyTravelListResponse> {
+    fun getEndedTravelList(userId: Long): List<MyTravelResponse> {
         return travelMateRepository.findEndedTravel(userId)
-            .map { travel -> MyTravelListResponse.from(travel) }
+            .map { travel -> MyTravelResponse.from(travel) }
             .toList()
     }
 }

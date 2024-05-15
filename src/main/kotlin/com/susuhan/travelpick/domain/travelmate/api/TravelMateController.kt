@@ -3,7 +3,7 @@ package com.susuhan.travelpick.domain.travelmate.api
 import com.susuhan.travelpick.domain.travelmate.dto.request.LeaderDelegateRequest
 import com.susuhan.travelpick.domain.travelmate.dto.request.TravelMateCreateRequest
 import com.susuhan.travelpick.domain.travelmate.dto.response.LeaderDelegateResponse
-import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateListResponse
+import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateInfoResponse
 import com.susuhan.travelpick.domain.travelmate.dto.response.TravelMateCreateResponse
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateQueryService
@@ -79,7 +79,7 @@ class TravelMateController(
     fun getParticipantMateList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-    ): ResponseEntity<List<ParticipantMateListResponse>> {
+    ): ResponseEntity<List<ParticipantMateInfoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelMateQueryService.getParticipantMateList(
