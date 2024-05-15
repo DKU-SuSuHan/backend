@@ -5,23 +5,27 @@ import com.susuhan.travelpick.domain.travel.dto.response.MyTravelResponse
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
+import com.susuhan.travelpick.domain.travelplace.repository.TravelPlaceRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional(readOnly = true)
 @Service
 class TravelQueryService (
-    private val travelMateRepository: TravelMateRepository
+    private val travelMateRepository: TravelMateRepository,
+    private val travelPlaceRepository: TravelPlaceRepository
 ) {
 
     fun getTravel(userId: Long, travelId: Long): MyTravelResponse {
         val travel = travelMateRepository.findTravel(userId, travelId)
             ?: throw TravelIdNotFoundException()
         
-        val travelMate = travelMateRepository.findNotDeletedMate(userId)
+        val travelMate = travelMateRepository.findNotDeletedMateByUser(userId)
             ?: throw  TravelMateIdNotFoundException()
 
-        return MyTravelResponse.from(travel, travelMate)
+        val totalBudget = travelPlaceRepository.findTotalBudget(travelId)
+
+        return MyTravelResponse.from(travel, travelMate, totalBudget)
     }
 
     fun getPlannedTravelList(userId: Long): List<MyTravelListResponse> {

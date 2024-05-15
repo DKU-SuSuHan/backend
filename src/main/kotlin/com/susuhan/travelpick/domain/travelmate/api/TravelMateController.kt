@@ -95,17 +95,16 @@ class TravelMateController(
         """,
         security = [SecurityRequirement(name = "access-token")]
     )
-    @PutMapping("/{travelId}/mates/{travelMateId}/delegation/role")
+    @PutMapping("/{travelId}/mates/delegation/role")
     fun delegateLeaderRole(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-        @PathVariable(name = "travelMateId") travelMateId: Long,
         @Valid @RequestBody leaderDelegateRequest: LeaderDelegateRequest
     ): ResponseEntity<LeaderDelegateResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(travelMateCommandService.delegateLeaderRole(
-                customUserDetails.getUserId(), travelId, travelMateId, leaderDelegateRequest
+                customUserDetails.getUserId(), travelId, leaderDelegateRequest
             ))
     }
 }

@@ -56,4 +56,15 @@ class TravelPlaceRepositoryQCustomImpl(
             )
             .fetchOne() ?: 0
     }
+
+    override fun findTotalBudget(travelId: Long): Long {
+        return jpaQueryFactory
+            .select(travelPlace.budget.sum())
+            .from(travelPlace)
+            .where(
+                travelPlace.travel.id.eq(travelId),
+                travelPlace.deleteAt.isNull
+            )
+            .fetchOne() ?: 0
+    }
 }

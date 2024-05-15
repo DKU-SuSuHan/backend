@@ -11,4 +11,6 @@ interface TravelPlaceRepositoryQCustom {
     fun findConfirmPlaceListForDay(travelId: Long, travelDay: Int): List<TravelPlace>
 
     fun findOneDayBudget(travelId: Long, travelDay: Int): Long
+
+    fun findTotalBudget(travelId: Long): Long
 }

@@ -29,12 +29,14 @@ data class MyTravelResponse(
     val endAt: String,
 
     @Schema(description = "여행지의 권한")
-    val groupRole: GroupRole
-    // TODO: 총 예산 필드 추가
+    val groupRole: GroupRole,
+
+    @Schema(description = "여행지의 총 예산")
+    val totalBudget: Long
 ) {
 
     companion object {
-        fun from(travel: Travel, travelMate: TravelMate) = MyTravelResponse(
+        fun from(travel: Travel, travelMate: TravelMate, totalBudget: Long) = MyTravelResponse(
             travel.id!!,
             travelMate.id!!,
             travel.title,
@@ -42,7 +44,8 @@ data class MyTravelResponse(
             travel.address.sgg,
             DateUtils.parse(travel.startAt),
             DateUtils.parse(travel.endAt),
-            travelMate.groupRole
+            travelMate.groupRole,
+            totalBudget
         )
     }
 }
