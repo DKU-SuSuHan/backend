@@ -5,6 +5,7 @@ import com.susuhan.travelpick.domain.user.constant.Role
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import com.susuhan.travelpick.global.common.util.ConstantUtils
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Table(name = "users")
 @Entity
@@ -52,6 +53,10 @@ class User(
     // TODO: redis로 관리할 예정
     @Column(name = "refresh_token")
     var refreshToken: String? = null
+
+    @Column(name = "delete_at")
+    var deleteAt: LocalDateTime? = null
+        protected set
 
     /**
      * 편의 메서드 시작

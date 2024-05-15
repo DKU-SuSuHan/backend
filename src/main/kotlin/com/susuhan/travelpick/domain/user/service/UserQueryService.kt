@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.domain.user.service
 
 import com.susuhan.travelpick.domain.user.dto.response.NicknameCheckResponse
+import com.susuhan.travelpick.domain.user.dto.response.UserSearchResponse
 import com.susuhan.travelpick.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,5 +15,10 @@ class UserQueryService(
     fun checkNicknameDuplicated(nickname: String): NicknameCheckResponse {
         val isDuplicated = userRepository.existsByNickname(nickname)
         return NicknameCheckResponse.of(isDuplicated)
+    }
+
+    fun search(nickname: String): UserSearchResponse {
+        val user = userRepository.findByNickname(nickname)
+        return UserSearchResponse.from(user)
     }
 }

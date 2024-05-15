@@ -3,6 +3,7 @@ package com.susuhan.travelpick.domain.user.api
 import com.susuhan.travelpick.domain.user.dto.request.NicknameUpdateRequest
 import com.susuhan.travelpick.domain.user.dto.response.NicknameCheckResponse
 import com.susuhan.travelpick.domain.user.dto.response.NicknameUpdateResponse
+import com.susuhan.travelpick.domain.user.dto.response.UserSearchResponse
 import com.susuhan.travelpick.domain.user.service.UserCommandService
 import com.susuhan.travelpick.domain.user.service.UserQueryService
 import com.susuhan.travelpick.global.security.CustomUserDetails
@@ -62,5 +63,19 @@ class UserController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(userQueryService.checkNicknameDuplicated(nickname))
+    }
+
+    @Operation(
+        summary = "여행 메이트로 추가할 회원 정보 조회",
+        description = "전달 받은 회원의 닉네임이 존재한다면 회원의 정보를 반환하고 존재하지 않으면 null로 반환합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @GetMapping("/search")
+    fun search(
+        @NotBlank @Size(max = 10) @RequestParam nickname: String
+    ): ResponseEntity<UserSearchResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userQueryService.search(nickname))
     }
 }
