@@ -3,9 +3,11 @@ package com.susuhan.travelpick.domain.travel.entity
 import com.susuhan.travelpick.domain.travel.entity.constant.Status
 import com.susuhan.travelpick.global.common.entity.BaseEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@DynamicUpdate
 @Table(name = "travels")
 @Entity
 class Travel(

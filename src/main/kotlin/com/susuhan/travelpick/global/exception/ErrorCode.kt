@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus
  *     <li>14XX: 사용자 관련 에러</li>
  *     <li>15XX: 여행지 관련 에러</li>
  *     <li>16XX: 여행지 메이트 관련 에러</li>
+ *     <li>17XX: 여행지 장소 관련 에러</li>
  * </ul>
  */
 enum class ErrorCode(
@@ -59,4 +60,9 @@ enum class ErrorCode(
     TRAVEL_MATE_ID_NOT_FOUND(1600, "해당 PK를 가진 TravelMate 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     TRAVEL_LEADER_DELETION(1601, "Leader인 TravelMate 엔티티는 삭제가 불가능합니다.", HttpStatus.FORBIDDEN),
     TRAVEL_DATE_NOT_VALID(1602, "입력 날짜는 여행 시작 날짜와 종료 날짜 사이의 값이여야 합니다.", HttpStatus.BAD_REQUEST),
+
+    /**
+     * TravelPlace Exception
+     */
+    TRAVEL_PLACE_ID_NOT_FOUND(1700, "해당 PK를 가진 TravelPlace 엔티티가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
 }
