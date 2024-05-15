@@ -26,7 +26,7 @@ class TravelPlaceCommandService(
 ) {
 
     @Transactional
-    fun createTravelPlace(
+    fun createByHand(
         userId: Long, travelId: Long, request: TravelPlaceCreateRequest
     ): TravelPlaceCreateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
@@ -46,7 +46,7 @@ class TravelPlaceCommandService(
     }
 
     @Transactional
-    fun updateTravelPlace(
+    fun update(
         userId: Long, travelId: Long, travelPlaceId: Long, request: TravelPlaceUpdateRequest
     ): TravelPlaceUpdateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
@@ -68,7 +68,7 @@ class TravelPlaceCommandService(
     }
 
     @Transactional
-    fun softDeleteTravelPlace(userId: Long, travelId: Long, travelPlaceId: Long) {
+    fun softDelete(userId: Long, travelId: Long, travelPlaceId: Long) {
         if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }

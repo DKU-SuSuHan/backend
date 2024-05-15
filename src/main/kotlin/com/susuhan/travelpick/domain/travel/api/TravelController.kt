@@ -42,13 +42,13 @@ class TravelController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @PostMapping
-    fun createTravel(
+    fun create(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody travelCreateRequest: TravelCreateRequest
     ): ResponseEntity<TravelCreateResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelCommandService.createTravel(
+            .body(travelCommandService.create(
                 customUserDetails.getUserId(), travelCreateRequest
             ))
     }
@@ -62,14 +62,14 @@ class TravelController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @PutMapping("/{travelId}")
-    fun updateTravel(
+    fun update(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelUpdateRequest: TravelUpdateRequest
     ): ResponseEntity<TravelUpdateResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelCommandService.updateTravel(
+            .body(travelCommandService.update(
                 customUserDetails.getUserId(), travelId, travelUpdateRequest
             ))
     }
@@ -83,13 +83,13 @@ class TravelController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}")
-    fun softDeleteTravel(
+    fun softDelete(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
-            .body(travelCommandService.softDeleteTravel(
+            .body(travelCommandService.softDelete(
                 customUserDetails.getUserId(), travelId
             ))
     }
@@ -100,13 +100,13 @@ class TravelController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @GetMapping("/{travelId}")
-    fun getTravel(
+    fun getMyTravel(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long
     ): ResponseEntity<MyTravelInfoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelQueryService.getTravel(
+            .body(travelQueryService.getMyTravel(
                 customUserDetails.getUserId(), travelId
             ))
     }
@@ -122,7 +122,7 @@ class TravelController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @GetMapping
-    fun getTravelList(
+    fun getMyTravelList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestParam @EnumValid(enumClass = Status::class) status: String
     ): ResponseEntity<List<MyTravelResponse>> {

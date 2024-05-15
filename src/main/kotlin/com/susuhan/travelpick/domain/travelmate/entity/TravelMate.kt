@@ -37,6 +37,9 @@ class TravelMate(
     var deleteAt: LocalDateTime? = null
         protected set
 
+    /**
+     * 편의 메서드 시작
+     */
     fun updateToLeaderRole() {
         this.groupRole = GroupRole.LEADER
     }

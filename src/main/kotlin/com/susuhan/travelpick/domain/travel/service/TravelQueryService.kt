@@ -16,7 +16,7 @@ class TravelQueryService (
     private val travelPlaceRepository: TravelPlaceRepository
 ) {
 
-    fun getTravel(userId: Long, travelId: Long): MyTravelInfoResponse {
+    fun getMyTravel(userId: Long, travelId: Long): MyTravelInfoResponse {
         val travel = travelMateRepository.findTravel(userId, travelId)
             ?: throw TravelIdNotFoundException()
         

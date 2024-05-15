@@ -22,7 +22,7 @@ class TravelCommandService(
 ) {
 
     @Transactional
-    fun createTravel(userId: Long, request: TravelCreateRequest): TravelCreateResponse {
+    fun create(userId: Long, request: TravelCreateRequest): TravelCreateResponse {
         val savedTravel = travelRepository.save(
             request.toEntity()
         )
@@ -33,7 +33,7 @@ class TravelCommandService(
     }
 
     @Transactional
-    fun updateTravel(
+    fun update(
         userId: Long, travelId: Long, request: TravelUpdateRequest
     ): TravelUpdateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
@@ -51,14 +51,14 @@ class TravelCommandService(
     }
 
     @Transactional
-    fun softDeleteTravel(userId: Long, travelId: Long) {
+    fun softDelete(userId: Long, travelId: Long) {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
         checkUserIsTravelLeader(userId, travelId)
 
         // 여행지 삭제 전, 여행 메이트 전체 삭제
-        travelMateCommandService.deleteAll(travelId)
+        travelMateCommandService.softDeleteAll(travelId)
 
         travel.softDelete()
     }

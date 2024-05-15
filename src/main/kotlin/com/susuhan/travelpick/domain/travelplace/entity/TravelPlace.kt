@@ -61,6 +61,9 @@ class TravelPlace(
     var deleteAt: LocalDateTime? = null
         protected set
 
+    /**
+     * 편의 메서드 시작
+     */
     fun updateTravelDay(travelDay: Int) {
         this.travelDay = travelDay
     }

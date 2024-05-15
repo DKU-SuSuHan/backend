@@ -28,13 +28,13 @@ class TravelMateController(
     @Operation(
         summary = "여행 메이트 추가",
         description = """
-            여행지에 새로운 여행 메이트를 추가합니다.
+            여행지에 참여자 역할을 가지는 새로운 여행 메이트를 추가합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")]
     )
     @PostMapping("/{travelId}/mates")
-    fun createTravelMate(
+    fun create(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelMateCreateRequest: TravelMateCreateRequest
@@ -55,14 +55,14 @@ class TravelMateController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}/mates/{travelMateId}")
-    fun softDeleteTravelMate(
+    fun softDelete(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelMateId") travelMateId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
-            .body(travelMateCommandService.softDeleteTravelMate(
+            .body(travelMateCommandService.softDelete(
                 customUserDetails.getUserId(), travelId, travelMateId
             ))
     }

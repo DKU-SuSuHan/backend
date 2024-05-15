@@ -57,6 +57,9 @@ class Travel(
     var deleteAt: LocalDateTime? = null
         protected set
 
+    /**
+     * 편의 메서드 시작
+     */
     fun updateTitle(title: String) {
         this.title = title
     }

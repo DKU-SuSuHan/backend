@@ -34,14 +34,14 @@ class TravelPlaceController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @PostMapping("/{travelId}/places")
-    fun createTravelPlace(
+    fun createByHand(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelPlaceCreateRequest: TravelPlaceCreateRequest
     ): ResponseEntity<TravelPlaceCreateResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelPlaceCommandService.createTravelPlace(
+            .body(travelPlaceCommandService.createByHand(
                 customUserDetails.getUserId(), travelId, travelPlaceCreateRequest
             ))
     }
@@ -55,7 +55,7 @@ class TravelPlaceController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @PutMapping("/{travelId}/places/{travelPlaceId}")
-    fun updateTravelPlace(
+    fun update(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
@@ -63,7 +63,7 @@ class TravelPlaceController(
     ): ResponseEntity<TravelPlaceUpdateResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(travelPlaceCommandService.updateTravelPlace(
+            .body(travelPlaceCommandService.update(
                 customUserDetails.getUserId(), travelId, travelPlaceId, travelPlaceUpdateRequest
             ))
     }
@@ -77,14 +77,14 @@ class TravelPlaceController(
         security = [SecurityRequirement(name = "access-token")]
     )
     @DeleteMapping("/{travelId}/places/{travelPlaceId}")
-    fun softDeleteTravelPlace(
+    fun softDelete(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelPlaceId") travelPlaceId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
-            .body(travelPlaceCommandService.softDeleteTravelPlace(
+            .body(travelPlaceCommandService.softDelete(
                 customUserDetails.getUserId(), travelId, travelPlaceId
             ))
     }
