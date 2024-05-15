@@ -61,7 +61,7 @@ class TravelMateController(
         @PathVariable(name = "travelMateId") travelMateId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
-            .status(HttpStatus.OK)
+            .status(HttpStatus.NO_CONTENT)
             .body(travelMateCommandService.softDeleteTravelMate(
                 customUserDetails.getUserId(), travelId, travelMateId
             ))

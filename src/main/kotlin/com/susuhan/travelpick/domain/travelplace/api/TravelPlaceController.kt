@@ -69,6 +69,27 @@ class TravelPlaceController(
     }
 
     @Operation(
+        summary = "여행 장소 삭제",
+        description = """
+            여행 장소의 PK를 전달받아 해당 여행지를 삭제합니다. 
+            단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
+        """,
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @DeleteMapping("/{travelId}/places/{travelPlaceId}")
+    fun softDeleteTravelPlace(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelPlaceId") travelPlaceId: Long
+    ): ResponseEntity<Unit> {
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body(travelPlaceCommandService.softDeleteTravelPlace(
+                customUserDetails.getUserId(), travelId, travelPlaceId
+            ))
+    }
+
+    @Operation(
         summary = "특정 여행 날짜의 확정된 여행 장소 목록 조회",
         description = "진행 중인 특정 여행 날짜를 전달 받아 확정된 여행 장소 목록 조회합니다.",
         security = [SecurityRequirement(name = "access-token")]

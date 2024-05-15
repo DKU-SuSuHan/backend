@@ -52,6 +52,8 @@ class TravelPlaceCommandService(
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
+        checkUserIsTravelLeader(userId, travelId)
+
         val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
             ?: throw TravelPlaceIdNotFoundException())
 
@@ -63,6 +65,20 @@ class TravelPlaceCommandService(
         request.urlLink?.let { urlLink -> travelPlace.updateUrlLink(urlLink) }
 
         return TravelPlaceUpdateResponse.of(travelId, travelPlace.travelDay)
+    }
+
+    @Transactional
+    fun softDeleteTravelPlace(userId: Long, travelId: Long, travelPlaceId: Long) {
+        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
+            throw TravelIdNotFoundException()
+        }
+
+        checkUserIsTravelLeader(userId, travelId)
+
+        val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
+            ?: throw TravelPlaceIdNotFoundException())
+
+        travelPlace.softDelete()
     }
 
     private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {

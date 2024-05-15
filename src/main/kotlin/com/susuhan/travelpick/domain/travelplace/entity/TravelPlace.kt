@@ -84,4 +84,8 @@ class TravelPlace(
     fun updateUrlLink(urlLink: String) {
         this.urlLink = urlLink
     }
+
+    fun softDelete() {
+        this.deleteAt = LocalDateTime.now()
+    }
 }

@@ -88,7 +88,7 @@ class TravelController(
         @PathVariable(name = "travelId") travelId: Long
     ): ResponseEntity<Unit> {
         return ResponseEntity
-            .status(HttpStatus.OK)
+            .status(HttpStatus.NO_CONTENT)
             .body(travelCommandService.softDeleteTravel(
                 customUserDetails.getUserId(), travelId
             ))
