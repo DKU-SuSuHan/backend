@@ -1,5 +1,6 @@
 package com.susuhan.travelpick.domain.travelplace.repository
 
+import com.susuhan.travelpick.domain.travelplace.dto.AddressInfo
 import com.susuhan.travelpick.domain.travelplace.entity.TravelPlace
 
 interface TravelPlaceRepositoryQCustom {
@@ -13,4 +14,6 @@ interface TravelPlaceRepositoryQCustom {
     fun findOneDayBudget(travelId: Long, travelDay: Int): Long
 
     fun findTotalBudget(travelId: Long): Long
+
+    fun findPostcodeAndAddress(travelId: Long): List<AddressInfo>
 }
