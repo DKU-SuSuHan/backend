@@ -8,8 +8,8 @@ import com.susuhan.travelpick.domain.travelmate.exception.TravelLeaderDeletionEx
 class TravelPolicy {
 
     companion object {
-        fun isTravelLeader(userId: Long, groupRole: GroupRole) {
-            if (groupRole != GroupRole.LEADER) {
+        fun isTravelLeader(userId: Long, leaderId: Long) {
+            if (userId != leaderId) {
                 throw TravelLeaderRequiredException(userId)
             }
         }

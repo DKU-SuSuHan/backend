@@ -45,7 +45,7 @@ class TravelMateCommandService(
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
-        checkUserIsTravelLeader(userId, travelId)
+        TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
         val travelMateList = userRepository.findAllNotDeletedUserById(request.userIds)
             .map { user -> request.toEntity(user, travel) }
@@ -56,11 +56,9 @@ class TravelMateCommandService(
 
     @Transactional
     fun softDelete(userId: Long, travelId: Long, travelMateId: Long) {
-        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
-            throw TravelIdNotFoundException()
-        }
+        val leaderId = travelRepository.findLeaderId(travelId)
 
-        checkUserIsTravelLeader(userId, travelId)
+        TravelPolicy.isTravelLeader(userId, leaderId)
 
         val travelMate = travelMateRepository.findNotDeletedMate(travelMateId)
             ?: throw TravelMateIdNotFoundException()
@@ -79,28 +77,22 @@ class TravelMateCommandService(
     fun delegateLeaderRole(
         userId: Long, travelId: Long, request: LeaderDelegateRequest
     ): LeaderDelegateResponse {
-        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
-            throw TravelIdNotFoundException()
-        }
+        val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
+            ?: throw TravelIdNotFoundException()
+
+        TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
         val leader = travelMateRepository.findNotDeletedMateByUser(userId)
             ?: throw TravelMateIdNotFoundException()
 
-        TravelPolicy.isTravelLeader(userId, leader.groupRole)
-
         val participant = travelMateRepository.findNotDeletedMate(request.travelMateId)
             ?: throw TravelMateIdNotFoundException()
+
+        travel.updateLeaderId(request.travelMateId)
 
         leader.updateToParticipantRole()
         participant.updateToLeaderRole()
 
         return LeaderDelegateResponse.of(travelId)
-    }
-
-    private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
-        val groupRole = travelMateRepository.findGroupRole(userId, travelId)
-            ?: throw TravelMateIdNotFoundException()
-
-        TravelPolicy.isTravelLeader(userId, groupRole)
     }
 }

@@ -7,4 +7,6 @@ interface TravelRepositoryQCustom {
     fun existsNotDeletedPlannedTravel(id: Long): Boolean
 
     fun findNotDeletedPlannedTravel(id: Long): Travel?
+
+    fun findLeaderId(id: Long): Long
 }

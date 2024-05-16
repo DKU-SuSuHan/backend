@@ -3,8 +3,6 @@ package com.susuhan.travelpick.domain.travelplace.service
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
-import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
-import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceUpdateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceCreateResponse
@@ -22,7 +20,6 @@ import java.time.Period
 class TravelPlaceCommandService(
     private val travelPlaceRepository: TravelPlaceRepository,
     private val travelRepository: TravelRepository,
-    private val travelMateRepository: TravelMateRepository
 ) {
 
     @Transactional
@@ -32,7 +29,7 @@ class TravelPlaceCommandService(
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
-        checkUserIsTravelLeader(userId, travelId)
+        TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
         val travelDay = calculateTravelDay(travel, request.travelDate)
 
@@ -52,7 +49,7 @@ class TravelPlaceCommandService(
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
-        checkUserIsTravelLeader(userId, travelId)
+        TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
         val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
             ?: throw TravelPlaceIdNotFoundException())
@@ -69,23 +66,14 @@ class TravelPlaceCommandService(
 
     @Transactional
     fun softDelete(userId: Long, travelId: Long, travelPlaceId: Long) {
-        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
-            throw TravelIdNotFoundException()
-        }
+        val leaderId = travelRepository.findLeaderId(travelId)
 
-        checkUserIsTravelLeader(userId, travelId)
+        TravelPolicy.isTravelLeader(userId, leaderId)
 
         val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
             ?: throw TravelPlaceIdNotFoundException())
 
         travelPlace.softDelete()
-    }
-
-    private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
-        val groupRole = travelMateRepository.findGroupRole(userId, travelId)
-            ?: throw TravelMateIdNotFoundException()
-
-        TravelPolicy.isTravelLeader(userId, groupRole)
     }
 
     /**
