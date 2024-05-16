@@ -26,7 +26,9 @@ class TravelMateCommandService(
 
     @Transactional
     fun createTravelLeader(userId: Long, travel: Travel) {
-        val user = userRepository.findById(userId) ?: throw UserIdNotFoundException()
+        val user = userRepository.findNotDeletedUser(userId)
+            ?: throw UserIdNotFoundException()
+
         val travelMate = TravelMate(
             user = user,
             travel = travel,
@@ -37,27 +39,26 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun createTravelParticipant(
+    fun createTravelParticipants(
         userId: Long, travelId: Long, request: TravelMateCreateRequest
-    ): TravelMateCreateResponse {
+    ): List<TravelMateCreateResponse> {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
-        val user = userRepository.findById(request.userId)
-            ?: throw UserIdNotFoundException()
-
         checkUserIsTravelLeader(userId, travelId)
 
-        val savedTravelMate = travelMateRepository.save(
-            request.toEntity(user, travel)
-        )
+        val travelMateList = userRepository.findAllNotDeletedUserById(request.userIds)
+            .map { user -> request.toEntity(user, travel) }
+            .toList()
 
-        return TravelMateCreateResponse.from(savedTravelMate)
+        return travelMateRepository.saveAll(travelMateList)
+            .map { TravelMateCreateResponse.from(it) }
+            .toList()
     }
 
     @Transactional
     fun softDelete(userId: Long, travelId: Long, travelMateId: Long) {
-        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
+        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 
@@ -80,7 +81,7 @@ class TravelMateCommandService(
     fun delegateLeaderRole(
         userId: Long, travelId: Long, request: LeaderDelegateRequest
     ): LeaderDelegateResponse {
-        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
+        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 

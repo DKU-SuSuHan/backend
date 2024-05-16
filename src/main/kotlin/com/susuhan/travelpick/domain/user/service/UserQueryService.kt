@@ -13,12 +13,12 @@ class UserQueryService(
 ) {
 
     fun checkNicknameDuplicated(nickname: String): NicknameCheckResponse {
-        val isDuplicated = userRepository.existsByNickname(nickname)
+        val isDuplicated = userRepository.existsNotDeletedUserByNickname(nickname)
         return NicknameCheckResponse.of(isDuplicated)
     }
 
     fun search(nickname: String): UserSearchResponse {
-        val user = userRepository.findByNickname(nickname)
+        val user = userRepository.findNotDeletedUserByNickname(nickname)
         return UserSearchResponse.from(user)
     }
 }

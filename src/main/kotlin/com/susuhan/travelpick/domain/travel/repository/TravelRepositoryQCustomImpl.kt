@@ -11,7 +11,7 @@ class TravelRepositoryQCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ): TravelRepositoryQCustom {
 
-    override fun existNotDeletedPlannedTravel(id: Long): Boolean {
+    override fun existsNotDeletedPlannedTravel(id: Long): Boolean {
         return jpaQueryFactory
             .selectOne()
             .from(travel)

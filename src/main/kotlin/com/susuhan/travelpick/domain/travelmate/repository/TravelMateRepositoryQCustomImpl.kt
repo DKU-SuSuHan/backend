@@ -14,7 +14,7 @@ class TravelMateRepositoryQCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ): TravelMateRepositoryQCustom {
 
-    override fun existNotDeletedMate(userId: Long, travelId: Long): Boolean {
+    override fun existsNotDeletedMate(userId: Long, travelId: Long): Boolean {
         return jpaQueryFactory
             .selectOne()
             .from(travelMate)

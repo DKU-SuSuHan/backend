@@ -69,7 +69,7 @@ class TravelPlaceCommandService(
 
     @Transactional
     fun softDelete(userId: Long, travelId: Long, travelPlaceId: Long) {
-        if (!travelRepository.existNotDeletedPlannedTravel(travelId)) {
+        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
         }
 

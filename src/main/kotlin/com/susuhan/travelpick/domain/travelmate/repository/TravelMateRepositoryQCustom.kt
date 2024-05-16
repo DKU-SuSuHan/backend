@@ -6,7 +6,7 @@ import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 
 interface TravelMateRepositoryQCustom {
 
-    fun existNotDeletedMate(userId: Long, travelId: Long): Boolean
+    fun existsNotDeletedMate(userId: Long, travelId: Long): Boolean
 
     fun findNotDeletedMate(id: Long): TravelMate?
 

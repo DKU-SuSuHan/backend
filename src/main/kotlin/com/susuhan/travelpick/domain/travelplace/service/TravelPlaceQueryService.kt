@@ -22,7 +22,7 @@ class TravelPlaceQueryService(
         val travel = (travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException())
 
-        if (!travelMateRepository.existNotDeletedMate(userId, travelId)) {
+        if (!travelMateRepository.existsNotDeletedMate(userId, travelId)) {
             throw TravelMateIdNotFoundException()
         }
 

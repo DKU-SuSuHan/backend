@@ -12,6 +12,7 @@ class AuthQueryService(
 ) {
 
     fun findBySocialId(socialId: String): UserDto? {
-        return userRepository.findBySocialId(socialId)?.let { user -> UserDto.from(user) }
+        return userRepository.findNotDeletedUserBySocialId(socialId)
+            ?.let { user -> UserDto.from(user) }
     }
 }
