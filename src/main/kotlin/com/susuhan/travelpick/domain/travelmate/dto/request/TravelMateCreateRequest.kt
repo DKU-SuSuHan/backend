@@ -7,8 +7,8 @@ import com.susuhan.travelpick.domain.user.entity.User
 import io.swagger.v3.oas.annotations.media.Schema
 
 data class TravelMateCreateRequest(
-    @Schema(description = "여행 메이트로 추가할 회원의 PK")
-    val userId: Long
+    @Schema(description = "여행 메이트로 추가할 회원의 PK 리스트")
+    val userIds: Set<Long>
 ) {
 
     fun toEntity(user: User, travel: Travel) = TravelMate(

@@ -53,4 +53,15 @@ class UserRepositoryQCustomImpl(
             )
             .fetchOne()
     }
+
+    override fun findAllNotDeletedUserById(ids: Set<Long>): List<User> {
+        return jpaQueryFactory
+            .select(user)
+            .from(user)
+            .where(
+                user.id.`in`(ids),
+                user.deleteAt.isNull
+            )
+            .fetch()
+    }
 }

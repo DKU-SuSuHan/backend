@@ -11,4 +11,6 @@ interface UserRepositoryQCustom {
     fun findNotDeletedUserByNickname(nickname: String): User?
 
     fun findNotDeletedUserBySocialId(socialId: String): User?
+
+    fun findAllNotDeletedUserById(ids: Set<Long>): List<User>
 }

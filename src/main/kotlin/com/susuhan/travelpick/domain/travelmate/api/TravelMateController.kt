@@ -28,7 +28,7 @@ class TravelMateController(
     @Operation(
         summary = "여행 메이트 추가",
         description = """
-            여행지에 참여자 역할을 가지는 새로운 여행 메이트를 추가합니다.
+            여행지에 참여자 역할을 가지는 새로운 여행 메이트를 한 명 이상 추가합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")]
@@ -38,10 +38,10 @@ class TravelMateController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelMateCreateRequest: TravelMateCreateRequest
-    ): ResponseEntity<TravelMateCreateResponse> {
+    ): ResponseEntity<List<TravelMateCreateResponse>> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelMateCommandService.createTravelParticipant(
+            .body(travelMateCommandService.createTravelParticipants(
                 customUserDetails.getUserId(), travelId, travelMateCreateRequest
             ))
     }
