@@ -3,7 +3,7 @@ package com.susuhan.travelpick.domain.user.api
 import com.susuhan.travelpick.domain.user.dto.request.NicknameUpdateRequest
 import com.susuhan.travelpick.domain.user.dto.response.NicknameCheckResponse
 import com.susuhan.travelpick.domain.user.dto.response.NicknameUpdateResponse
-import com.susuhan.travelpick.domain.user.dto.response.UserSearchResponse
+import com.susuhan.travelpick.domain.user.dto.response.UserSearchByNicknameResponse
 import com.susuhan.travelpick.domain.user.service.UserCommandService
 import com.susuhan.travelpick.domain.user.service.UserQueryService
 import com.susuhan.travelpick.global.security.CustomUserDetails
@@ -73,9 +73,9 @@ class UserController(
     @GetMapping("/search")
     fun search(
         @NotBlank @Size(max = 10) @RequestParam nickname: String
-    ): ResponseEntity<UserSearchResponse> {
+    ): ResponseEntity<UserSearchByNicknameResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userQueryService.search(nickname))
+            .body(userQueryService.searchByNickname(nickname))
     }
 }
