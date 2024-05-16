@@ -49,11 +49,9 @@ class TravelMateCommandService(
 
         val travelMateList = userRepository.findAllNotDeletedUserById(request.userIds)
             .map { user -> request.toEntity(user, travel) }
-            .toList()
 
         return travelMateRepository.saveAll(travelMateList)
             .map { TravelMateCreateResponse.from(it) }
-            .toList()
     }
 
     @Transactional

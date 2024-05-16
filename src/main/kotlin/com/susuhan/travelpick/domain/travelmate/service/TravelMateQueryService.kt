@@ -25,7 +25,6 @@ class TravelMateQueryService(
 
         return travelMateRepository.findAllParticipantMate(travelId)
             .map { travelMate ->  ParticipantMateInfoResponse.from(travelMate)}
-            .toList()
     }
 
     private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {

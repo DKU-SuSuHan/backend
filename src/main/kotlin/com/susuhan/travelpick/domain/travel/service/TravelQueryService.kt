@@ -31,12 +31,10 @@ class TravelQueryService (
     fun getPlannedTravelList(userId: Long): List<MyTravelResponse> {
         return travelMateRepository.findPlannedTravel(userId)
             .map { travel -> MyTravelResponse.from(travel) }
-            .toList()
     }
 
     fun getEndedTravelList(userId: Long): List<MyTravelResponse> {
         return travelMateRepository.findEndedTravel(userId)
             .map { travel -> MyTravelResponse.from(travel) }
-            .toList()
     }
 }

@@ -28,7 +28,6 @@ class TravelPlaceQueryService(
 
         val travelPlaceList = travelPlaceRepository.findConfirmPlaceListForDay(travelId, travelDay)
             .map { travelPlace -> TravelPlaceDto.from(travelPlace) }
-            .toList()
 
         val oneDayBudget = travelPlaceRepository.findOneDayBudget(travelId, travelDay)
 
