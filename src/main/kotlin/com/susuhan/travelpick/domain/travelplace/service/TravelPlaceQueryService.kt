@@ -2,8 +2,9 @@ package com.susuhan.travelpick.domain.travelplace.service
 
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
-import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
+import com.susuhan.travelpick.domain.travelmate.exception.TravelMateNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
+import com.susuhan.travelpick.domain.travelplace.dto.AddressInfo
 import com.susuhan.travelpick.domain.travelplace.dto.TravelPlaceDto
 import com.susuhan.travelpick.domain.travelplace.dto.response.ConfirmTravelPlaceListResponse
 import com.susuhan.travelpick.domain.travelplace.repository.TravelPlaceRepository
@@ -18,12 +19,14 @@ class TravelPlaceQueryService(
     private val travelMateRepository: TravelMateRepository
 ) {
 
-    fun getConfirmPlaceList(userId: Long, travelId: Long, travelDay: Int): ConfirmTravelPlaceListResponse {
+    fun getConfirmPlaceList(
+        userId: Long, travelId: Long, travelDay: Int
+    ): ConfirmTravelPlaceListResponse {
         val travel = (travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException())
 
         if (!travelMateRepository.existsNotDeletedMate(userId, travelId)) {
-            throw TravelMateIdNotFoundException()
+            throw TravelMateNotFoundException(userId)
         }
 
         val travelPlaceList = travelPlaceRepository.findConfirmPlaceListForDay(travelId, travelDay)
@@ -37,5 +40,17 @@ class TravelPlaceQueryService(
             travelPlaceList,
             oneDayBudget
         )
+    }
+
+    fun getAllConfirmPlaceAddressList(userId: Long, travelId: Long): List<AddressInfo> {
+        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
+            throw TravelIdNotFoundException()
+        }
+
+        if (!travelMateRepository.existsNotDeletedMate(userId, travelId)) {
+            throw TravelMateNotFoundException(userId)
+        }
+
+        return travelPlaceRepository.findPostcodeAndAddress(travelId)
     }
 }

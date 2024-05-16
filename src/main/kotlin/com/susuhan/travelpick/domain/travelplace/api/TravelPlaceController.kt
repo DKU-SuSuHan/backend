@@ -1,5 +1,6 @@
 package com.susuhan.travelpick.domain.travelplace.api
 
+import com.susuhan.travelpick.domain.travelplace.dto.AddressInfo
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceUpdateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.response.ConfirmTravelPlaceListResponse
@@ -104,6 +105,23 @@ class TravelPlaceController(
             .status(HttpStatus.OK)
             .body(travelPlaceQueryService.getConfirmPlaceList(
                 customUserDetails.getUserId(), travelId, travelDay
+            ))
+    }
+
+    @Operation(
+        summary = "모든 일정의 도로명 주소 조회",
+        description = "진행 중인 여행에 대해 확정된 모든 일정의 도로명 주소를 조회합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @GetMapping("/{travelId}/places/addresses")
+    fun getAllConfirmPlaceAddressList(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable(name = "travelId") travelId: Long
+    ): ResponseEntity<List<AddressInfo>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelPlaceQueryService.getAllConfirmPlaceAddressList(
+                customUserDetails.getUserId(), travelId
             ))
     }
 }
