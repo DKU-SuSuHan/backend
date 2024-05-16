@@ -1,9 +1,7 @@
 package com.susuhan.travelpick.domain.travelmate.service
 
-import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelmate.dto.response.ParticipantMateInfoResponse
-import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.global.common.policy.TravelPolicy
 import org.springframework.stereotype.Service
@@ -17,20 +15,11 @@ class TravelMateQueryService(
 ) {
 
     fun getParticipantMateList(userId: Long, travelId: Long): List<ParticipantMateInfoResponse> {
-        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
-            throw TravelIdNotFoundException()
-        }
+        val leaderId = travelRepository.findLeaderId(travelId)
 
-        checkUserIsTravelLeader(userId, travelId)
+        TravelPolicy.isTravelLeader(userId, leaderId)
 
         return travelMateRepository.findAllParticipantMate(travelId)
             .map { travelMate ->  ParticipantMateInfoResponse.from(travelMate)}
-    }
-
-    private fun checkUserIsTravelLeader(userId: Long, travelId: Long) {
-        val groupRole = travelMateRepository.findGroupRole(userId, travelId)
-            ?: throw TravelMateIdNotFoundException()
-
-        TravelPolicy.isTravelLeader(userId, groupRole)
     }
 }

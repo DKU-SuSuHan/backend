@@ -32,13 +32,11 @@ class TravelPlaceQueryService(
         val travelPlaceList = travelPlaceRepository.findConfirmPlaceListForDay(travelId, travelDay)
             .map { travelPlace -> TravelPlaceDto.from(travelPlace) }
 
-        val oneDayBudget = travelPlaceRepository.findOneDayBudget(travelId, travelDay)
-
         return ConfirmTravelPlaceListResponse.from(
             travelId,
             travel.startAt.plusDays(travelDay.toLong() - 1),
             travelPlaceList,
-            oneDayBudget
+            oneDayBudget = travelPlaceRepository.findOneDayBudget(travelId, travelDay)
         )
     }
 
