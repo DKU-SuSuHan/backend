@@ -1,7 +1,7 @@
 package com.susuhan.travelpick.domain.travel.entity
 
 import com.susuhan.travelpick.domain.travel.entity.constant.Status
-import com.susuhan.travelpick.global.common.entity.BaseEntity
+import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
@@ -15,8 +15,9 @@ class Travel(
     startAt: LocalDate,
     endAt: LocalDate,
     address: Address,
-    templateNum: Long
-) : BaseEntity() {
+    templateNum: Long,
+    leaderId: Long
+) : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +50,10 @@ class Travel(
     var status: Status = Status.PLANNED
         protected set
 
+    @Column(name = "leader_id", nullable = false)
+    var leaderId: Long = leaderId
+        protected set
+
     @Column(name = "is_private", nullable = false)
     var isPrivate: Boolean = false
         protected set
@@ -78,6 +83,10 @@ class Travel(
 
     fun updateTemplateNum(templateNum: Long) {
         this.templateNum = templateNum
+    }
+
+    fun updateLeaderId(leaderId: Long) {
+        this.leaderId = leaderId
     }
 
     fun softDelete() {
