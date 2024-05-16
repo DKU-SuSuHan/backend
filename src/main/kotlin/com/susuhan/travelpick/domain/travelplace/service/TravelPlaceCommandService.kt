@@ -85,9 +85,7 @@ class TravelPlaceCommandService(
     }
 
     private fun updateTravelPlace(
-        travelPlace: TravelPlace,
-        travel: Travel,
-        request: TravelPlaceUpdateRequest
+        travelPlace: TravelPlace, travel: Travel, request: TravelPlaceUpdateRequest
     ) {
         travelPlace.updateTravelDay(calculateTravelDay(travel, request.travelDate))
         travelPlace.updateName(request.name)
