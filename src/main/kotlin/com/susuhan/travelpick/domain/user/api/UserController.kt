@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.domain.user.api
 
 import com.susuhan.travelpick.domain.user.dto.request.NicknameUpdateRequest
+import com.susuhan.travelpick.domain.user.dto.response.LoginUserInfoResponse
 import com.susuhan.travelpick.domain.user.dto.response.NicknameCheckResponse
 import com.susuhan.travelpick.domain.user.dto.response.NicknameUpdateResponse
 import com.susuhan.travelpick.domain.user.dto.response.UserSearchByNicknameResponse
@@ -77,5 +78,19 @@ class UserController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(userQueryService.searchByNickname(nickname))
+    }
+
+    @Operation(
+        summary = "로그인한 회원 정보 조회",
+        description = "로그인한 회원의 정보를 조회해 반환합니다.",
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @GetMapping("/login")
+    fun getLoginUserInfo(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+    ): ResponseEntity<LoginUserInfoResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userQueryService.getLoginUserInfo(customUserDetails.getUserId()))
     }
 }
