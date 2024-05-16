@@ -7,6 +7,7 @@ import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRe
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceUpdateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceCreateResponse
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceUpdateResponse
+import com.susuhan.travelpick.domain.travelplace.entity.TravelPlace
 import com.susuhan.travelpick.domain.travelplace.exception.TravelDateNotValidException
 import com.susuhan.travelpick.domain.travelplace.exception.TravelPlaceIdNotFoundException
 import com.susuhan.travelpick.domain.travelplace.repository.TravelPlaceRepository
@@ -33,11 +34,13 @@ class TravelPlaceCommandService(
 
         val travelDay = calculateTravelDay(travel, request.travelDate)
 
-        val placeTotalNum = travelPlaceRepository.countPlaceTotalNumber(travelId, travelDay)
-
-        travelPlaceRepository.save(
-            request.toEntity(travel, travelDay, placeTotalNum + 1)
+        val travelPlace = request.toEntity(
+            travel,
+            travelDay,
+            sequence = travelPlaceRepository.countPlaceTotalNumber(travelId, travelDay) + 1
         )
+
+        travelPlaceRepository.save(travelPlace)
 
         return TravelPlaceCreateResponse.of(travelId)
     }
@@ -54,12 +57,7 @@ class TravelPlaceCommandService(
         val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
             ?: throw TravelPlaceIdNotFoundException())
 
-        travelPlace.updateTravelDay(calculateTravelDay(travel, request.travelDate))
-        travelPlace.updateName(request.name)
-        travelPlace.updatePostcode(request.postcode)
-        travelPlace.updateAddress(request.address)
-        travelPlace.updateBudget(request.budget)
-        request.urlLink?.let { urlLink -> travelPlace.updateUrlLink(urlLink) }
+        updateTravelPlace(travelPlace, travel, request)
 
         return TravelPlaceUpdateResponse.of(travelId, travelPlace.travelDay)
     }
@@ -70,8 +68,8 @@ class TravelPlaceCommandService(
 
         TravelPolicy.isTravelLeader(userId, leaderId)
 
-        val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
-            ?: throw TravelPlaceIdNotFoundException())
+        val travelPlace = travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
+            ?: throw TravelPlaceIdNotFoundException()
 
         travelPlace.softDelete()
     }
@@ -84,5 +82,18 @@ class TravelPlaceCommandService(
             throw TravelDateNotValidException()
         }
         return Period.between(travel.startAt, travelDate).days + 1
+    }
+
+    private fun updateTravelPlace(
+        travelPlace: TravelPlace,
+        travel: Travel,
+        request: TravelPlaceUpdateRequest
+    ) {
+        travelPlace.updateTravelDay(calculateTravelDay(travel, request.travelDate))
+        travelPlace.updateName(request.name)
+        travelPlace.updatePostcode(request.postcode)
+        travelPlace.updateAddress(request.address)
+        travelPlace.updateBudget(request.budget)
+        request.urlLink?.let { urlLink -> travelPlace.updateUrlLink(urlLink) }
     }
 }

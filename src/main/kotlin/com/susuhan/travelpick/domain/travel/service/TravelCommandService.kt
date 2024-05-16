@@ -5,6 +5,7 @@ import com.susuhan.travelpick.domain.travel.dto.request.TravelUpdateRequest
 import com.susuhan.travelpick.domain.travel.dto.response.TravelCreateResponse
 import com.susuhan.travelpick.domain.travel.dto.response.TravelUpdateResponse
 import com.susuhan.travelpick.domain.travel.entity.Address
+import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelmate.service.TravelMateCommandService
@@ -38,11 +39,7 @@ class TravelCommandService(
 
         TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
-        travel.updateTitle(request.title)
-        travel.updateStartAt(request.startAt)
-        travel.updateEndAt(request.endAt)
-        travel.updateAddress(Address(request.sido, request.sgg))
-        travel.updateTemplateNum(request.templateNum)
+        updateTravel(travel, request)
 
         return TravelUpdateResponse.from(travel)
     }
@@ -58,5 +55,13 @@ class TravelCommandService(
         travelMateCommandService.softDeleteAll(travelId)
 
         travel.softDelete()
+    }
+
+    private fun updateTravel(travel: Travel, request: TravelUpdateRequest) {
+        travel.updateTitle(request.title)
+        travel.updateStartAt(request.startAt)
+        travel.updateEndAt(request.endAt)
+        travel.updateAddress(Address(request.sido, request.sgg))
+        travel.updateTemplateNum(request.templateNum)
     }
 }

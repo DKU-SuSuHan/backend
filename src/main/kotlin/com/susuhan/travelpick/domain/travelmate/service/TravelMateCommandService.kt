@@ -82,17 +82,23 @@ class TravelMateCommandService(
 
         TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
+        updateTravelMateRole(userId, request.travelMateId, travel)
+
+        return LeaderDelegateResponse.of(travelId)
+    }
+
+    private fun updateTravelMateRole(
+        userId: Long, travelMateId: Long, travel: Travel
+    ) {
         val leader = travelMateRepository.findNotDeletedMateByUser(userId)
             ?: throw TravelMateIdNotFoundException()
 
-        val participant = travelMateRepository.findNotDeletedMate(request.travelMateId)
+        val participant = travelMateRepository.findNotDeletedMate(travelMateId)
             ?: throw TravelMateIdNotFoundException()
 
-        travel.updateLeaderId(request.travelMateId)
+        travel.updateLeaderId(travelMateId)
 
         leader.updateToParticipantRole()
         participant.updateToLeaderRole()
-
-        return LeaderDelegateResponse.of(travelId)
     }
 }

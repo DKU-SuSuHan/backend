@@ -23,9 +23,11 @@ class TravelQueryService (
         val travelMate = travelMateRepository.findNotDeletedMateByUser(userId)
             ?: throw  TravelMateIdNotFoundException()
 
-        val totalBudget = travelPlaceRepository.findTotalBudget(travelId)
-
-        return MyTravelInfoResponse.from(travel, travelMate, totalBudget)
+        return MyTravelInfoResponse.from(
+            travel,
+            travelMate,
+            totalBudget = travelPlaceRepository.findTotalBudget(travelId)
+        )
     }
 
     fun getPlannedTravelList(userId: Long): List<MyTravelResponse> {
