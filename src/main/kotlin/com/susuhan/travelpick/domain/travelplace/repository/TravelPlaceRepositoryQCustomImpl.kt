@@ -84,4 +84,36 @@ class TravelPlaceRepositoryQCustomImpl(
             )
             .fetch()
     }
+
+    override fun incrementSequence(sequence: Long) {
+        jpaQueryFactory
+            .update(travelPlace)
+            .set(travelPlace.sequence, travelPlace.sequence.add(1))
+            .where(travelPlace.sequence.eq(sequence))
+            .execute()
+    }
+
+    override fun decrementSequence(sequence: Long) {
+        jpaQueryFactory
+            .update(travelPlace)
+            .set(travelPlace.sequence, travelPlace.sequence.subtract(1))
+            .where(travelPlace.sequence.eq(sequence))
+            .execute()
+    }
+
+    override fun incrementAllSequence(sequence: Long) {
+        jpaQueryFactory
+            .update(travelPlace)
+            .set(travelPlace.sequence, travelPlace.sequence.add(1))
+            .where(travelPlace.sequence.lt(sequence))
+            .execute()
+    }
+
+    override fun decrementAllSequence(sequence: Long) {
+        jpaQueryFactory
+            .update(travelPlace)
+            .set(travelPlace.sequence, travelPlace.sequence.subtract(1))
+            .where(travelPlace.sequence.gt(sequence))
+            .execute()
+    }
 }

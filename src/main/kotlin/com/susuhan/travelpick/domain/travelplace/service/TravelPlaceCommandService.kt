@@ -6,6 +6,7 @@ import com.susuhan.travelpick.domain.travel.repository.TravelRepository
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceUpdateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceCreateResponse
+import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceSequenceUpdateResponse
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceUpdateResponse
 import com.susuhan.travelpick.domain.travelplace.entity.TravelPlace
 import com.susuhan.travelpick.domain.travelplace.exception.TravelDateNotValidException
@@ -74,6 +75,29 @@ class TravelPlaceCommandService(
         travelPlace.softDelete()
     }
 
+    @Transactional
+    fun updateTravelPlaceSequence(
+        travelId: Long, travelPlaceId: Long, travelDay: Int, location: String
+    ): TravelPlaceSequenceUpdateResponse? {
+        if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
+            throw TravelIdNotFoundException()
+        }
+
+        val travelPlace = travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
+            ?: throw TravelPlaceIdNotFoundException()
+
+        val placeTotalNumber = travelPlaceRepository.countPlaceTotalNumber(travelId, travelDay)
+
+        // 유효한 요청이 아니라고 판단된다면 null 반환
+        if (!isValidSequenceRequest(travelPlace.sequence, placeTotalNumber, location)) {
+            return null
+        }
+
+        updateSequence(location, travelPlace, placeTotalNumber)
+
+        return TravelPlaceSequenceUpdateResponse.of(travelId, travelPlace.travelDay)
+    }
+
     /**
      * 여행 시작 날짜와 특정 여행 장소를 방문할 날짜의 차이를 구해 D-day 계산
      */
@@ -93,5 +117,39 @@ class TravelPlaceCommandService(
         travelPlace.updateAddress(request.address)
         travelPlace.updateBudget(request.budget)
         request.urlLink?.let { urlLink -> travelPlace.updateUrlLink(urlLink) }
+    }
+
+    /**
+     * 이미 최상단에 존재하는 여행지를 한 칸 위 또는 최상단으로 이동시키려고 하거나
+     * 이미 최하단에 존재하는 여행지를 한 칸 아래 또는 최하단으로 이동시키려고 하는 요청라면 유효한 요청이 아니라고 판단
+     */
+    private fun isValidSequenceRequest(sequence: Long, placeTotalNumber: Long, location: String): Boolean {
+        return !((sequence == 1L && (location == "upper" || location == "top")) ||
+                (sequence == placeTotalNumber && (location == "lower" || location == "bottom")))
+    }
+
+    private fun updateSequence(
+        location: String, travelPlace: TravelPlace, placeTotalNumber: Long
+    ) {
+        val sequence = travelPlace.sequence
+
+        when (location) {
+            "upper" -> {
+                travelPlaceRepository.incrementSequence(sequence - 1)
+                travelPlace.updateSequence(sequence - 1)
+            }
+            "lower" -> {
+                travelPlaceRepository.decrementSequence(sequence + 1)
+                travelPlace.updateSequence(sequence + 1)
+            }
+            "top" -> {
+                travelPlaceRepository.incrementAllSequence(sequence)
+                travelPlace.updateSequence(1)
+            }
+            "bottom" -> {
+                travelPlaceRepository.decrementAllSequence(sequence)
+                travelPlace.updateSequence(placeTotalNumber)
+            }
+        }
     }
 }
