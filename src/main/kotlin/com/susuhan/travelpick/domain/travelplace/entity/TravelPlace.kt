@@ -88,6 +88,10 @@ class TravelPlace(
         this.urlLink = urlLink
     }
 
+    fun updateSequence(sequence: Long) {
+        this.sequence = sequence
+    }
+
     fun softDelete() {
         this.deleteAt = LocalDateTime.now()
     }

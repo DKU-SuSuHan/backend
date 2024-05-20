@@ -16,4 +16,12 @@ interface TravelPlaceRepositoryQCustom {
     fun findTotalBudget(travelId: Long): Long
 
     fun findPostcodeAndAddress(travelId: Long): List<AddressInfo>
+
+    fun incrementSequence(sequence: Long)
+
+    fun decrementSequence(sequence: Long)
+
+    fun incrementAllSequence(sequence: Long)
+
+    fun decrementAllSequence(sequence: Long)
 }

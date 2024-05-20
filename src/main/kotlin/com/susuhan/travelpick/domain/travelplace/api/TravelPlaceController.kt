@@ -5,6 +5,7 @@ import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceCreateRe
 import com.susuhan.travelpick.domain.travelplace.dto.request.TravelPlaceUpdateRequest
 import com.susuhan.travelpick.domain.travelplace.dto.response.ConfirmTravelPlaceListResponse
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceCreateResponse
+import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceSequenceUpdateResponse
 import com.susuhan.travelpick.domain.travelplace.dto.response.TravelPlaceUpdateResponse
 import com.susuhan.travelpick.domain.travelplace.service.TravelPlaceCommandService
 import com.susuhan.travelpick.domain.travelplace.service.TravelPlaceQueryService
@@ -122,6 +123,33 @@ class TravelPlaceController(
             .status(HttpStatus.OK)
             .body(travelPlaceQueryService.getAllConfirmPlaceAddressList(
                 customUserDetails.getUserId(), travelId
+            ))
+    }
+
+    @Operation(
+        summary = "여행지 순서 변경 API",
+        description = """
+            여행지의 순서를 한 칸 위 / 한 칸 아래 / 최상단 / 최하위로 변경합니다.
+            [1] 한 칸 위로 이동: ?location=upper
+            [2] 한 칸 아래로 이동: ?location=lower
+            [3] 최상단으로 이동: ?location=top
+            [4] 최하단으로 이동: ?location=bottom
+            만약, 이미 최상단에 위치하는 여행지를 한 칸 위나 최상단으로 이동시키려고 하거나
+            이미 최하단에 위치하는 여행지를 한 칸 아래나 최하단으로 이동시키려고 하는 요청이라면 null을 반환합니다.
+        """,
+        security = [SecurityRequirement(name = "access-token")]
+    )
+    @PutMapping("/{travelId}/places/{travelPlaceId}/sequence")
+    fun updateTravelPlaceSequence(
+        @PathVariable(name = "travelId") travelId: Long,
+        @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
+        @RequestParam(name = "travelDay") travelDay: Int,
+        @RequestParam(name = "location") location: String
+    ): ResponseEntity<TravelPlaceSequenceUpdateResponse?> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(travelPlaceCommandService.updateTravelPlaceSequence(
+                travelId, travelPlaceId, travelDay, location
             ))
     }
 }
