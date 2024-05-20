@@ -6,7 +6,7 @@ data class TravelPlaceSequenceUpdateResponse(
     @Schema(description = "여행지의 PK")
     val travelId: Long,
 
-    @Schema(description = "여행지의 여행 날짜")
+    @Schema(description = "여행 장소의 여행 날짜")
     val travelDay: Int
 ) {
 
