@@ -2,10 +2,14 @@ package com.susuhan.travelpick.domain.travelvote.service
 
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travel.repository.TravelRepository
-import com.susuhan.travelpick.domain.travelvote.dto.request.VoteCreateRequest
-import com.susuhan.travelpick.domain.travelvote.dto.response.VoteCreateResponse
-import com.susuhan.travelpick.domain.travelvote.entity.Vote
+import com.susuhan.travelpick.domain.travelmate.exception.TravelMateNotFoundException
+import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
+import com.susuhan.travelpick.domain.travelvote.dto.request.TravelVoteCreateRequest
+import com.susuhan.travelpick.domain.travelvote.dto.response.TravelVoteCreateResponse
+import com.susuhan.travelpick.domain.travelvote.entity.TravelVote
 import com.susuhan.travelpick.domain.travelvote.repository.TravelVoteRepository
+import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
+import com.susuhan.travelpick.domain.user.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -13,23 +17,30 @@ import org.springframework.stereotype.Service
 class TravelVoteCommandService(
     private val travelRepository: TravelRepository,
     private val travelVoteRepository: TravelVoteRepository,
+    private val travelMateRepository: TravelMateRepository,
+    private val userRepository: UserRepository,
 ) {
 
     @Transactional
     fun createVote(
-        travelId: Long, request: VoteCreateRequest): VoteCreateResponse {
+        userId: Long, travelId: Long, request: TravelVoteCreateRequest
+    ): TravelVoteCreateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
-        val vote = Vote(
-            travel = travel,
-            title = request.title,
-            expiredAt = request.expiredAt,
-            isSingle = request.isSingle,
+
+        if(!travelMateRepository.existsNotDeletedMate(userId, travelId)) {
+            throw TravelMateNotFoundException(userId)
+        }
+
+        val user = userRepository.findNotDeletedUser(userId)
+            ?: throw UserIdNotFoundException()
+
+        val savedVote = travelVoteRepository.save(
+            request.toEntity(user, travel)
         )
-        val savedVote = travelVoteRepository.save(vote)
 
-        // 추가 : 항목 생성 기능
+        // TODO : 항목 추가
 
-        return VoteCreateResponse.from(savedVote)
+        return TravelVoteCreateResponse.from(savedVote)
     }
 }

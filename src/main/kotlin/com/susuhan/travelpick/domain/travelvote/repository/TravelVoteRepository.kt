@@ -1,11 +1,10 @@
 package com.susuhan.travelpick.domain.travelvote.repository
 
-import com.susuhan.travelpick.domain.travel.entity.Travel
-import com.susuhan.travelpick.domain.travelvote.entity.Vote
+import com.susuhan.travelpick.domain.travelvote.entity.TravelVote
 import org.springframework.data.repository.Repository
 
 
-interface TravelVoteRepository : Repository<Vote, Long> {
+interface TravelVoteRepository : Repository<TravelVote, Long> {
 
-    fun save(entity: Vote): Vote
+    fun save(entity: TravelVote): TravelVote
 }

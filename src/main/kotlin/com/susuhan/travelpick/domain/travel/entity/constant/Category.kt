@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.domain.travelvote.entity.constant
+package com.susuhan.travelpick.domain.travel.entity.constant
 
 enum class Category {
 
