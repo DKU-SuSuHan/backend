@@ -73,6 +73,8 @@ class TravelPlaceCommandService(
             ?: throw TravelPlaceIdNotFoundException()
 
         travelPlace.softDelete()
+        
+        travelPlaceRepository.decrementAllSequence(travelPlace.sequence)
     }
 
     @Transactional
