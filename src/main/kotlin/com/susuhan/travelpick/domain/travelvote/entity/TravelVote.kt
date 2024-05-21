@@ -1,7 +1,7 @@
 package com.susuhan.travelpick.domain.travelvote.entity
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
-import com.susuhan.travelpick.domain.travel.entity.constant.Category
+import com.susuhan.travelpick.domain.travel.entity.Category
 import com.susuhan.travelpick.domain.user.entity.User
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import jakarta.persistence.*
@@ -12,10 +12,10 @@ import java.time.LocalDate
 class TravelVote(
     user: User,
     travel: Travel,
+    category: Category,
     title: String,
     expiredAt: LocalDate,
     isSingle: Boolean,
-    category: Category
 ) : BaseTimeEntity() {
 
     @Id
@@ -31,8 +31,8 @@ class TravelVote(
     @JoinColumn(name = "travel_id", nullable = false)
     val travel: Travel = travel
 
-    @Column(name = "category", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
     val category: Category = category
 
     @Column(name = "title", nullable = false)

@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.domain.travelvote.dto.response
 
-import com.susuhan.travelpick.domain.travel.entity.constant.Category
+
+import com.susuhan.travelpick.domain.travel.entity.Category
 import com.susuhan.travelpick.domain.travelvote.entity.TravelVote
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
@@ -9,8 +10,8 @@ data class TravelVoteCreateResponse(
     @Schema(description = "투표 PK")
     val id: Long?,
 
-    @Schema(description="단일 투표 여부")
-    var category: Category,
+    @Schema(description = "투표가 속한 카테고리 PK")
+    val categoryId: Long?,
 
     @Schema(description="투표 제목")
     val title: String,
@@ -23,10 +24,10 @@ data class TravelVoteCreateResponse(
 ) {
 
     companion object {
-        fun from(travelVote: TravelVote): TravelVoteCreateResponse {
+        fun from(travelVote: TravelVote, category: Category): TravelVoteCreateResponse {
             return TravelVoteCreateResponse(
                 travelVote.id!!,
-                travelVote.category,
+                category.id!!,
                 travelVote.title,
                 travelVote.expiredAt,
                 travelVote.isSingle,

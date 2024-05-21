@@ -1,8 +1,7 @@
 package com.susuhan.travelpick.domain.travelvote.dto.request
 
-import com.susuhan.travelpick.domain.travel.entity.QTravel.travel
+import com.susuhan.travelpick.domain.travel.entity.Category
 import com.susuhan.travelpick.domain.travel.entity.Travel
-import com.susuhan.travelpick.domain.travel.entity.constant.Category
 import com.susuhan.travelpick.domain.travelvote.entity.TravelVote
 import com.susuhan.travelpick.domain.user.entity.User
 import io.swagger.v3.oas.annotations.media.Schema
@@ -12,10 +11,9 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
 data class TravelVoteCreateRequest (
-
-    @Schema(description="카테고리")
+    @Schema(description = "카테고리 ID")
     @field:NotNull
-    var category: Category,
+    val categoryId: Long,
 
     @Schema(description="투표 제목")
     @field:NotBlank
@@ -28,10 +26,11 @@ data class TravelVoteCreateRequest (
     @Schema(description="단일 투표 여부")
     var isSingle: Boolean,
 ) {
-    fun toEntity(user: User, travel: Travel) = TravelVote(
+
+    fun toEntity(user: User, travel: Travel, category: Category) = TravelVote(
         user = user,
         travel = travel,
-        category = this.category,
+        category = category,
         title = this.title,
         expiredAt = this.expiredAt,
         isSingle = this.isSingle,
