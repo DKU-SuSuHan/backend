@@ -49,7 +49,7 @@ class TravelPlace(
     var budget: Long = budget // 1인당 예산
         protected set
 
-    @Column(name = "sequence", unique = true, nullable = false)
+    @Column(name = "sequence", nullable = false)
     var sequence: Long = sequence
         protected set
 
