@@ -28,22 +28,32 @@ class TravelEventListener(
     }
 
     private fun handleCreatePlace(userId: Long, travelId: Long, travelPlace: TravelPlace) {
-        notificationCommandService.sendCreatePlaceNotification(userId, travelId, travelPlace)
+        notificationCommandService.createNotification(
+            userId, travelId, TravelAction.CREATE_PLACE, travelPlace = travelPlace
+        )
     }
 
     private fun handleDeletePlace(userId: Long, travelId: Long, travelPlace: TravelPlace) {
-        notificationCommandService.sendDeletePlaceNotification(userId, travelId, travelPlace)
+        notificationCommandService.createNotification(
+            userId, travelId, TravelAction.DELETE_PLACE, travelPlace = travelPlace
+        )
     }
 
     private fun handleAddMate(userId: Long, travelId: Long, travelMate: TravelMate) {
-        notificationCommandService.sendAddMateNotification(userId, travelId, travelMate)
+        notificationCommandService.createNotification(
+            userId, travelId, TravelAction.ADD_MATE, travelMate = travelMate
+        )
     }
 
     private fun handleDeleteMate(userId: Long, travelId: Long, travelMate: TravelMate) {
-        notificationCommandService.sendDeleteMateNotification(userId, travelId, travelMate)
+        notificationCommandService.createNotification(
+            userId, travelId, TravelAction.DELETE_MATE, travelMate = travelMate
+        )
     }
 
     private fun handleChangeLeader(userId: Long, travelId: Long, travelMate: TravelMate) {
-        notificationCommandService.sendChangeLeaderNotification(userId, travelId, travelMate)
+        notificationCommandService.createNotification(
+            userId, travelId, TravelAction.CHANGE_LEADER, travelMate = travelMate
+        )
     }
 }

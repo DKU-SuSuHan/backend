@@ -19,7 +19,13 @@ class NotificationCommandService(
 ) {
 
     @Transactional
-    fun sendCreatePlaceNotification(userId: Long, travelId: Long, travelPlace: TravelPlace) {
+    fun createNotification(
+        userId: Long,
+        travelId: Long,
+        travelAction: TravelAction,
+        travelPlace: TravelPlace? = null,
+        travelMate: TravelMate? = null
+    ) {
         val sendUser = userRepository.findNotDeletedUser(userId)
             ?: throw UserIdNotFoundException()
 
@@ -28,75 +34,9 @@ class NotificationCommandService(
                 sendUser = sendUser,
                 travelId = travelId,
                 travelPlace = travelPlace,
-                receiveUserId = mateUserId,
-                travelAction = TravelAction.CREATE_PLACE
-            ) }
-
-        notificationRepository.saveAll(notificationList)
-    }
-
-    @Transactional
-    fun sendDeletePlaceNotification(userId: Long, travelId: Long, travelPlace: TravelPlace) {
-        val sendUser = userRepository.findNotDeletedUser(userId)
-            ?: throw UserIdNotFoundException()
-
-        val notificationList = travelMateRepository.findAllUserId(travelId)
-            .map { mateUserId -> Notification(
-                sendUser = sendUser,
-                travelId = travelId,
-                travelPlace = travelPlace,
-                receiveUserId = mateUserId,
-                travelAction = TravelAction.DELETE_PLACE
-            ) }
-
-        notificationRepository.saveAll(notificationList)
-    }
-
-    @Transactional
-    fun sendAddMateNotification(userId: Long, travelId: Long, travelMate: TravelMate) {
-        val sendUser = userRepository.findNotDeletedUser(userId)
-            ?: throw UserIdNotFoundException()
-
-        val notificationList = travelMateRepository.findAllUserId(travelId)
-            .map { mateUserId -> Notification(
-                sendUser = sendUser,
-                travelId = travelId,
                 travelMate = travelMate,
                 receiveUserId = mateUserId,
-                travelAction = TravelAction.ADD_MATE
-            ) }
-
-        notificationRepository.saveAll(notificationList)
-    }
-
-    @Transactional
-    fun sendDeleteMateNotification(userId: Long, travelId: Long, travelMate: TravelMate) {
-        val sendUser = userRepository.findNotDeletedUser(userId)
-            ?: throw UserIdNotFoundException()
-
-        val notificationList = travelMateRepository.findAllUserId(travelId)
-            .map { mateUserId -> Notification(
-                sendUser = sendUser,
-                travelId = travelId,
-                travelMate = travelMate,
-                receiveUserId = mateUserId,
-                travelAction = TravelAction.DELETE_MATE
-            ) }
-
-        notificationRepository.saveAll(notificationList)
-    }
-
-    fun sendChangeLeaderNotification(userId: Long, travelId: Long, travelMate: TravelMate) {
-        val sendUser = userRepository.findNotDeletedUser(userId)
-            ?: throw UserIdNotFoundException()
-
-        val notificationList = travelMateRepository.findAllUserId(travelId)
-            .map { mateUserId -> Notification(
-                sendUser = sendUser,
-                travelId = travelId,
-                travelMate = travelMate,
-                receiveUserId = mateUserId,
-                travelAction = TravelAction.CHANGE_LEADER
+                travelAction = travelAction
             ) }
 
         notificationRepository.saveAll(notificationList)
