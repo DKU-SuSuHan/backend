@@ -13,6 +13,9 @@ import com.susuhan.travelpick.domain.travelplace.exception.TravelDateNotValidExc
 import com.susuhan.travelpick.domain.travelplace.exception.TravelPlaceIdNotFoundException
 import com.susuhan.travelpick.domain.travelplace.repository.TravelPlaceRepository
 import com.susuhan.travelpick.global.common.policy.TravelPolicy
+import com.susuhan.travelpick.global.event.TravelAction
+import com.susuhan.travelpick.global.event.TravelEvent
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -22,10 +25,11 @@ import java.time.Period
 class TravelPlaceCommandService(
     private val travelPlaceRepository: TravelPlaceRepository,
     private val travelRepository: TravelRepository,
+    private val eventListener: ApplicationEventPublisher
 ) {
 
     @Transactional
-    fun createByHand(
+    fun create(
         userId: Long, travelId: Long, request: TravelPlaceCreateRequest
     ): TravelPlaceCreateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
@@ -42,6 +46,10 @@ class TravelPlaceCommandService(
         )
 
         travelPlaceRepository.save(travelPlace)
+
+        eventListener.publishEvent(TravelEvent(
+            TravelAction.CREATE_PLACE, userId, travelId, travelPlace
+        ))
 
         return TravelPlaceCreateResponse.of(travelId)
     }
@@ -75,6 +83,10 @@ class TravelPlaceCommandService(
         travelPlace.softDelete()
         
         travelPlaceRepository.decrementAllSequence(travelPlace.sequence)
+
+        eventListener.publishEvent(TravelEvent(
+            TravelAction.DELETE_PLACE, userId, travelId, travelPlace
+        ))
     }
 
     @Transactional

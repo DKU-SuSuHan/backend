@@ -60,6 +60,17 @@ class TravelMateRepositoryQCustomImpl(
             .fetchOne()
     }
 
+    override fun findAllUserId(travelId: Long): List<Long> {
+        return jpaQueryFactory
+            .select(travelMate.user.id)
+            .from(travelMate)
+            .where(
+                travelMate.travel.id.eq(travelId),
+                travelMate.deleteAt.isNull
+            )
+            .fetch()
+    }
+
     override fun findAllParticipantMate(travelId: Long): List<TravelMate> {
         return jpaQueryFactory
             .select(travelMate)

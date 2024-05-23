@@ -26,7 +26,7 @@ class TravelMate(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val  user: User = user
+    val user: User = user
 
     @Column(name = "group_role", nullable = false)
     @Enumerated(EnumType.STRING)

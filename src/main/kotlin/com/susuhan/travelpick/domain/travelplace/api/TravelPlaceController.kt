@@ -28,9 +28,9 @@ class TravelPlaceController(
 ) {
 
     @Operation(
-        summary = "여행 장소 수기 추가",
+        summary = "여행 장소 추가",
         description = """
-            진행 중인 여행지에 대해 확정된 장소를 수기로 작성 받아 추가합니다.
+            진행 중인 여행지에 대해 확정된 장소를 작성 받아 추가합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")]
@@ -43,7 +43,7 @@ class TravelPlaceController(
     ): ResponseEntity<TravelPlaceCreateResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(travelPlaceCommandService.createByHand(
+            .body(travelPlaceCommandService.create(
                 customUserDetails.getUserId(), travelId, travelPlaceCreateRequest
             ))
     }
