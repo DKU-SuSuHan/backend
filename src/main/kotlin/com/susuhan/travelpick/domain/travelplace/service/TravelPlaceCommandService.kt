@@ -47,6 +47,7 @@ class TravelPlaceCommandService(
 
         travelPlaceRepository.save(travelPlace)
 
+        // 그룹 알림방의 자동 메시지 생성 이벤트 발행
         eventListener.publishEvent(TravelEvent(
             TravelAction.CREATE_PLACE, userId, travelId, travelPlace
         ))
@@ -84,6 +85,7 @@ class TravelPlaceCommandService(
         
         travelPlaceRepository.decrementAllSequence(travelPlace.sequence)
 
+        // 그룹 알림방의 자동 메시지 생성 이벤트 발행
         eventListener.publishEvent(TravelEvent(
             TravelAction.DELETE_PLACE, userId, travelId, travelPlace
         ))
