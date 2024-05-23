@@ -115,5 +115,10 @@ class TravelMateCommandService(
 
         leader.updateToParticipantRole()
         participant.updateToLeaderRole()
+
+        // 그룹 알림방의 자동 메시지 생성 이벤트 발행
+        eventListener.publishEvent(TravelEvent(
+            TravelAction.CHANGE_LEADER, userId, travel.id!!, participant
+        ))
     }
 }

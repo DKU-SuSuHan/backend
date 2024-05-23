@@ -85,4 +85,20 @@ class NotificationCommandService(
 
         notificationRepository.saveAll(notificationList)
     }
+
+    fun sendChangeLeaderNotification(userId: Long, travelId: Long, travelMate: TravelMate) {
+        val sendUser = userRepository.findNotDeletedUser(userId)
+            ?: throw UserIdNotFoundException()
+
+        val notificationList = travelMateRepository.findAllUserId(travelId)
+            .map { mateUserId -> Notification(
+                sendUser = sendUser,
+                travelId = travelId,
+                travelMate = travelMate,
+                receiveUserId = mateUserId,
+                travelAction = TravelAction.CHANGE_LEADER
+            ) }
+
+        notificationRepository.saveAll(notificationList)
+    }
 }

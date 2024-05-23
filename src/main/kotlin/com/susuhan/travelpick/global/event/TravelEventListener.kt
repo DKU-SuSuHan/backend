@@ -23,7 +23,7 @@ class TravelEventListener(
             TravelAction.CLOSE_VOTE -> TODO()
             TravelAction.ADD_MATE -> handleAddMate(event.userId, event.travelId, event.travelMate!!)
             TravelAction.DELETE_MATE -> handleDeleteMate(event.userId, event.travelId, event.travelMate!!)
-            TravelAction.CHANGE_LEADER -> TODO()
+            TravelAction.CHANGE_LEADER -> handleChangeLeader(event.userId, event.travelId, event.travelMate!!)
         }
     }
 
@@ -41,5 +41,9 @@ class TravelEventListener(
 
     private fun handleDeleteMate(userId: Long, travelId: Long, travelMate: TravelMate) {
         notificationCommandService.sendDeleteMateNotification(userId, travelId, travelMate)
+    }
+
+    private fun handleChangeLeader(userId: Long, travelId: Long, travelMate: TravelMate) {
+        notificationCommandService.sendChangeLeaderNotification(userId, travelId, travelMate)
     }
 }
