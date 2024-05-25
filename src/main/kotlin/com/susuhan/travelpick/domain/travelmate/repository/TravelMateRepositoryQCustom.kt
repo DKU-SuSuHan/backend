@@ -14,6 +14,8 @@ interface TravelMateRepositoryQCustom {
 
     fun findGroupRole(userId: Long, travelId: Long): GroupRole?
 
+    fun findAllUserId(travelId: Long): List<Long>
+
     fun findAllParticipantMate(travelId: Long): List<TravelMate>
 
     fun findTravel(userId: Long, travelId: Long): Travel?

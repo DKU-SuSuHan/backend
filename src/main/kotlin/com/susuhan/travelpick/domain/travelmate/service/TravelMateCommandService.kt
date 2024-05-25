@@ -14,6 +14,9 @@ import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
 import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
 import com.susuhan.travelpick.domain.user.repository.UserRepository
 import com.susuhan.travelpick.global.common.policy.TravelPolicy
+import com.susuhan.travelpick.global.event.TravelAction
+import com.susuhan.travelpick.global.event.TravelEvent
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,7 +24,8 @@ import org.springframework.transaction.annotation.Transactional
 class TravelMateCommandService(
     private val travelMateRepository: TravelMateRepository,
     private val travelRepository: TravelRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val eventListener: ApplicationEventPublisher
 ) {
 
     @Transactional
@@ -51,7 +55,13 @@ class TravelMateCommandService(
             .map { user -> request.toEntity(user, travel) }
 
         return travelMateRepository.saveAll(travelMateList)
-            .map { TravelMateCreateResponse.from(it) }
+            .map { travelMate ->
+                // 그룹 알림방의 자동 메시지 생성 이벤트 발행
+                eventListener.publishEvent(TravelEvent(
+                    TravelAction.ADD_MATE, userId, travelId, travelMate
+                ))
+                TravelMateCreateResponse.from(travelMate)
+            }
     }
 
     @Transactional
@@ -66,6 +76,11 @@ class TravelMateCommandService(
         TravelPolicy.isTravelLeaderDeletion(travelMate)
 
         travelMate.softDelete()
+
+        // 그룹 알림방의 자동 메시지 생성 이벤트 발행
+        eventListener.publishEvent(TravelEvent(
+            TravelAction.DELETE_MATE, userId, travelId, travelMate
+        ))
     }
 
     @Transactional
@@ -100,5 +115,10 @@ class TravelMateCommandService(
 
         leader.updateToParticipantRole()
         participant.updateToLeaderRole()
+
+        // 그룹 알림방의 자동 메시지 생성 이벤트 발행
+        eventListener.publishEvent(TravelEvent(
+            TravelAction.CHANGE_LEADER, userId, travel.id!!, participant
+        ))
     }
 }
