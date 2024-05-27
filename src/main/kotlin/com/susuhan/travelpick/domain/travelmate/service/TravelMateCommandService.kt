@@ -52,6 +52,7 @@ class TravelMateCommandService(
         TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
         val travelMateList = userRepository.findAllNotDeletedUserById(request.userIds)
+            .filter { user -> !travelMateRepository.existsNotDeletedMate(user.id!!, travelId) }
             .map { user -> request.toEntity(user, travel) }
 
         return travelMateRepository.saveAll(travelMateList)
