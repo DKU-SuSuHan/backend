@@ -61,6 +61,9 @@ class TravelPlace(
     var deleteAt: LocalDateTime? = null
         protected set
 
+    // TODO: 추가된 경로에 대한 필드 추가
+    // TODO: 카테고리 필드 추가
+
     /**
      * 편의 메서드 시작
      */
