@@ -32,6 +32,7 @@ class SecurityConfig(
             .sessionManagement {
                 configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeHttpRequests { authorize -> authorize
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
