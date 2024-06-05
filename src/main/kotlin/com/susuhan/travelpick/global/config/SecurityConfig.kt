@@ -38,6 +38,7 @@ class SecurityConfig(
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/test/**").permitAll() // TODO: 테스트를 위한 url 허용 (제거)
                 .requestMatchers("/api/v1/auth/login/**").permitAll()
+                .requestMatchers("/api/v1/travels/1/**").permitAll() // TODO: 테스트를 위한 url 허용2 (제거)
                 .anyRequest().authenticated()
             }
             .exceptionHandling { exception -> exception
