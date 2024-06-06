@@ -5,6 +5,7 @@ import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import com.susuhan.travelpick.global.common.util.DateUtils
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.temporal.ChronoUnit
 
 data class MyTravelInfoResponse(
     @Schema(description = "여행지의 PK")
@@ -31,6 +32,9 @@ data class MyTravelInfoResponse(
     @Schema(description = "여행지의 권한")
     val groupRole: GroupRole,
 
+    @Schema(description = "여행 총 날짜")
+    val totalDay: Long,
+
     @Schema(description = "여행지의 총 예산")
     val totalBudget: Long
 ) {
@@ -45,6 +49,7 @@ data class MyTravelInfoResponse(
             DateUtils.parse(travel.startAt),
             DateUtils.parse(travel.endAt),
             travelMate.groupRole,
+            ChronoUnit.DAYS.between(travel.startAt, travel.endAt) + 1,
             totalBudget
         )
     }

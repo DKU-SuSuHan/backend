@@ -37,11 +37,12 @@ class TravelMateRepositoryQCustomImpl(
             .fetchOne()
     }
 
-    override fun findNotDeletedMateByUser(userId: Long): TravelMate? {
+    override fun findNotDeletedMateByUser(travelId: Long, userId: Long): TravelMate? {
         return jpaQueryFactory
             .select(travelMate)
             .from(travelMate)
             .where(
+                travelMate.travel.id.eq(travelId),
                 travelMate.user.id.eq(userId),
                 travelMate.deleteAt.isNull
             )

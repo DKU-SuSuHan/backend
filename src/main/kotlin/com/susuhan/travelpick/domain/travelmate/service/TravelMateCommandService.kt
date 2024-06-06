@@ -106,7 +106,7 @@ class TravelMateCommandService(
     private fun updateTravelMateRole(
         userId: Long, travelMateId: Long, travel: Travel
     ) {
-        val leader = travelMateRepository.findNotDeletedMateByUser(userId)
+        val leader = travelMateRepository.findNotDeletedMateByUser(travel.id!!, userId)
             ?: throw TravelMateIdNotFoundException()
 
         val participant = travelMateRepository.findNotDeletedMate(travelMateId)

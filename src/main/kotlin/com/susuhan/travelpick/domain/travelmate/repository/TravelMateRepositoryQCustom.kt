@@ -10,7 +10,7 @@ interface TravelMateRepositoryQCustom {
 
     fun findNotDeletedMate(id: Long): TravelMate?
 
-    fun findNotDeletedMateByUser(userId: Long): TravelMate?
+    fun findNotDeletedMateByUser(travelId: Long, userId: Long): TravelMate?
 
     fun findGroupRole(userId: Long, travelId: Long): GroupRole?
 
