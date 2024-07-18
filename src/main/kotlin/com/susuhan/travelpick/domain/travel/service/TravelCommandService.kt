@@ -21,9 +21,8 @@ class TravelCommandService(
 
     @Transactional
     fun create(userId: Long, request: TravelCreateRequest): TravelCreateResponse {
-        val savedTravel = travelRepository.save(
-            request.toEntity(userId)
-        )
+        val travel = request.toEntity(userId)
+        val savedTravel = travelRepository.save(travel)
 
         travelMateCommandService.createTravelLeader(userId, savedTravel)
 
@@ -59,6 +58,7 @@ class TravelCommandService(
 
     private fun updateTravel(travel: Travel, request: TravelUpdateRequest) {
         travel.updateTitle(request.title)
+        travel.updateTheme(request.theme)
         travel.updateStartAt(request.startAt)
         travel.updateEndAt(request.endAt)
         travel.updateAddress(Address(request.sido, request.sgg))

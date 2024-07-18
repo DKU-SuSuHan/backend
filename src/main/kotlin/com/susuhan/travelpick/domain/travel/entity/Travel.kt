@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.domain.travel.entity
 
 import com.susuhan.travelpick.domain.travel.entity.constant.Status
+import com.susuhan.travelpick.domain.travel.entity.constant.Theme
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.DynamicUpdate
@@ -11,6 +12,7 @@ import java.time.LocalDateTime
 @Table(name = "travels")
 @Entity
 class Travel(
+    theme: Theme,
     title: String,
     startAt: LocalDate,
     endAt: LocalDate,
@@ -23,6 +25,11 @@ class Travel(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "travel_id", nullable = false)
     val id: Long? = null
+
+    @Column(name = "theme", nullable = false)
+    @Enumerated(EnumType.STRING)
+    var theme: Theme = theme
+        protected set
 
     @Column(name = "title", nullable = false)
     var title: String = title
@@ -67,6 +74,10 @@ class Travel(
      */
     fun updateTitle(title: String) {
         this.title = title
+    }
+
+    fun updateTheme(theme: Theme) {
+        this.theme = theme
     }
 
     fun updateStartAt(startAt: LocalDate) {
