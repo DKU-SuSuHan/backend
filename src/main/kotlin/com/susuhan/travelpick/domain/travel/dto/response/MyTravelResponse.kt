@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.domain.travel.dto.response
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
+import com.susuhan.travelpick.domain.travel.entity.constant.Theme
 import com.susuhan.travelpick.global.common.util.DateUtils
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.Period
@@ -14,6 +15,9 @@ data class MyTravelResponse(
 
     @Schema(description = "여행지의 이름")
     val title: String,
+
+    @Schema(description = "여행지의 테마")
+    val theme: Theme,
 
     @Schema(description = "여행 시작 날짜")
     val startAt: String,
@@ -30,6 +34,7 @@ data class MyTravelResponse(
             travel.id!!,
             travel.templateNum,
             travel.title,
+            travel.theme,
             DateUtils.parse(travel.startAt),
             DateUtils.parse(travel.endAt),
             Period.between(travel.startAt, travel.endAt).days

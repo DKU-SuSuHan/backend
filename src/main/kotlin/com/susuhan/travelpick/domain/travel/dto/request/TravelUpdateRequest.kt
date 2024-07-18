@@ -1,5 +1,6 @@
 package com.susuhan.travelpick.domain.travel.dto.request
 
+import com.susuhan.travelpick.domain.travel.entity.constant.Theme
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import org.springframework.format.annotation.DateTimeFormat
@@ -8,6 +9,9 @@ import java.time.LocalDate
 data class TravelUpdateRequest(
     @Schema(description = "여행지의 템플릿 이미지 번호")
     val templateNum: Long,
+
+    @Schema(description = "여행지의 테마")
+    val theme: Theme,
 
     @Schema(description = "여행지의 이름")
     @field:NotBlank

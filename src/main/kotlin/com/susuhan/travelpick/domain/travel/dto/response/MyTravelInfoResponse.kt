@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.domain.travel.dto.response
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
+import com.susuhan.travelpick.domain.travel.entity.constant.Theme
 import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelmate.entity.constant.GroupRole
 import com.susuhan.travelpick.global.common.util.DateUtils
@@ -16,6 +17,9 @@ data class MyTravelInfoResponse(
 
     @Schema(description = "여행지의 이름")
     val title: String,
+
+    @Schema(description = "여행지의 테마")
+    val theme: Theme,
 
     @Schema(description = "행정 구역의 시, 도")
     val sido: String,
@@ -44,6 +48,7 @@ data class MyTravelInfoResponse(
             travel.id!!,
             travelMate.id!!,
             travel.title,
+            travel.theme,
             travel.address.sido,
             travel.address.sgg,
             DateUtils.parse(travel.startAt),
