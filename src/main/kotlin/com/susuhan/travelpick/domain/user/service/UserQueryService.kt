@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 @Service
 class UserQueryService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
     fun checkNicknameDuplicated(nickname: String): NicknameCheckResponse {

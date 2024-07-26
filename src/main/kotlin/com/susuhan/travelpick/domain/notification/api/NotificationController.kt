@@ -18,23 +18,26 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Tag(name = "여행 그룹 메시지 관련 API")
 class NotificationController(
-    private val notificationCommandService: NotificationCommandService
+    private val notificationCommandService: NotificationCommandService,
 ) {
 
     @Operation(
         summary = "그룹 메시지 목록 조회",
         description = "여행지 그룹의 자동 생성 메시지 목록을 조회합니다.",
-        security = [SecurityRequirement(name = "access-token")]
+        security = [SecurityRequirement(name = "access-token")],
     )
     @PutMapping("/travels/{travelId}")
     fun getGroupMessageList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @PathVariable("travelId") travelId: Long
+        @PathVariable("travelId") travelId: Long,
     ): ResponseEntity<List<GroupMessageInfoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(notificationCommandService.getGroupMessageList(
-                customUserDetails.getUserId(), travelId
-            ))
+            .body(
+                notificationCommandService.getGroupMessageList(
+                    customUserDetails.getUserId(),
+                    travelId,
+                ),
+            )
     }
 }

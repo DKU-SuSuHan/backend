@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class TravelCommandService(
     private val travelRepository: TravelRepository,
-    private val travelMateCommandService: TravelMateCommandService
+    private val travelMateCommandService: TravelMateCommandService,
 ) {
 
     @Transactional
@@ -30,9 +30,7 @@ class TravelCommandService(
     }
 
     @Transactional
-    fun update(
-        userId: Long, travelId: Long, request: TravelUpdateRequest
-    ): TravelUpdateResponse {
+    fun update(userId: Long, travelId: Long, request: TravelUpdateRequest): TravelUpdateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 

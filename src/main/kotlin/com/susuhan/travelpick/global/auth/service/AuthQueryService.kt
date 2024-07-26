@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 @Service
 class AuthQueryService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
     fun findBySocialId(socialId: String): UserDto? {

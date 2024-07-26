@@ -28,7 +28,7 @@ data class TravelPlaceCreateRequest(
     val budget: Long,
 
     @Schema(description = "여행지 장소의 참고 링크")
-    val urlLink: String?
+    val urlLink: String?,
 ) {
 
     fun toEntity(travel: Travel, travelDay: Int, sequence: Long) = TravelPlace(
@@ -39,6 +39,6 @@ data class TravelPlaceCreateRequest(
         address = this.address,
         budget = this.budget,
         sequence = sequence,
-        urlLink = this.urlLink
+        urlLink = this.urlLink,
     )
 }

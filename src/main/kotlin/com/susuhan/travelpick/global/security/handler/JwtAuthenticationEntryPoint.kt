@@ -15,15 +15,15 @@ import java.io.IOException
 import kotlin.jvm.Throws
 
 @Component
-class JwtAuthenticationEntryPoint : AuthenticationEntryPoint{
+class JwtAuthenticationEntryPoint : AuthenticationEntryPoint {
 
     @Throws(IOException::class)
     override fun commence(
         request: HttpServletRequest?,
         response: HttpServletResponse?,
-        authException: AuthenticationException?
+        authException: AuthenticationException?,
     ) {
-        logger().error("[Authentication_Entry_Point]: 사용자가 유효한 자격증명을 제공하지 않고 접근을 시도했습니다.");
+        logger().error("[Authentication_Entry_Point]: 사용자가 유효한 자격증명을 제공하지 않고 접근을 시도했습니다.")
 
         response?.status = HttpStatus.UNAUTHORIZED.value()
         response?.contentType = MediaType.APPLICATION_JSON_VALUE
@@ -31,7 +31,7 @@ class JwtAuthenticationEntryPoint : AuthenticationEntryPoint{
 
         val errorResponse = ErrorResponse(
             ErrorCode.UNAUTHORIZED.code,
-            ErrorCode.UNAUTHORIZED.errorMessage
+            ErrorCode.UNAUTHORIZED.errorMessage,
         )
 
         ObjectMapper().writeValue(response?.writer, errorResponse)

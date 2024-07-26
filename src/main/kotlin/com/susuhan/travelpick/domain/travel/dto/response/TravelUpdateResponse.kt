@@ -36,7 +36,7 @@ data class TravelUpdateResponse(
             travel.address.sido,
             travel.address.sgg,
             travel.startAt,
-            travel.endAt
+            travel.endAt,
         )
     }
 }

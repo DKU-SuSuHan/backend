@@ -23,14 +23,14 @@ class JwtExceptionFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         try {
             filterChain.doFilter(request, response)
         } catch (ex: TokenExpiredException) {
-            setErrorResponse(response, ex.errorMessage);
+            setErrorResponse(response, ex.errorMessage)
         } catch (ex: TokenNotValidException) {
-            setErrorResponse(response, ex.errorMessage);
+            setErrorResponse(response, ex.errorMessage)
         }
     }
 
@@ -44,7 +44,7 @@ class JwtExceptionFilter : OncePerRequestFilter() {
 
         val errorResponse = ErrorResponse(
             ErrorCode.UNAUTHORIZED.code,
-            errorMessage
+            errorMessage,
         )
 
         ObjectMapper().writeValue(response.writer, errorResponse)

@@ -2,7 +2,15 @@ package com.susuhan.travelpick.domain.travelplace.entity
 
 import com.susuhan.travelpick.domain.travel.entity.Travel
 import com.susuhan.travelpick.global.common.entity.BaseEntity
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 
@@ -17,7 +25,7 @@ class TravelPlace(
     address: String,
     budget: Long,
     sequence: Long,
-    urlLink: String?
+    urlLink: String?,
 ) : BaseEntity() {
 
     @Id

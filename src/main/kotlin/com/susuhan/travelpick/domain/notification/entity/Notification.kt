@@ -1,11 +1,21 @@
 package com.susuhan.travelpick.domain.notification.entity
 
-import com.susuhan.travelpick.global.event.TravelAction
 import com.susuhan.travelpick.domain.travelmate.entity.TravelMate
 import com.susuhan.travelpick.domain.travelplace.entity.TravelPlace
 import com.susuhan.travelpick.domain.user.entity.User
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
-import jakarta.persistence.*
+import com.susuhan.travelpick.global.event.TravelAction
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 
 @Table(name = "notifications")
 @Entity
@@ -15,7 +25,7 @@ class Notification(
     travelMate: TravelMate? = null,
     travelId: Long,
     receiveUserId: Long,
-    travelAction: TravelAction
+    travelAction: TravelAction,
 ) : BaseTimeEntity() {
 
     @Id

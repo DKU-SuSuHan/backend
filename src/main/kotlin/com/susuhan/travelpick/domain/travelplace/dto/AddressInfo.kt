@@ -10,5 +10,5 @@ data class AddressInfo(
     val postcode: String,
 
     @Schema(description = "여행 장소의 도로명 주소")
-    val address: String
+    val address: String,
 )

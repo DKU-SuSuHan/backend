@@ -8,5 +8,5 @@ data class NicknameUpdateRequest(
     @Schema(description = "수정할 회원의 닉네임")
     @field:NotBlank
     @field:Size(max = 10, message = "닉네임은 10자 이하여야 합니다.")
-    val nickname: String
+    val nickname: String,
 )

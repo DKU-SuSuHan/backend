@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class KakaoService(
     private val kakaoApiClient: KakaoApiClient,
     private val authQueryService: AuthQueryService,
-    private val authCommandService: AuthCommandService
+    private val authCommandService: AuthCommandService,
 ) {
 
     @Transactional

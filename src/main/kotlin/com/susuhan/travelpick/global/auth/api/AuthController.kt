@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Tag(name = "소셜 로그인 관련 API")
 class AuthController(
-    private val kakaoService: KakaoService
+    private val kakaoService: KakaoService,
 ) {
 
     @Operation(
         summary = "카카오 소셜 로그인 API",
-        description = "카카오 액세스 토큰을 전달 받아 카카오 소셜 로그인을 진행합니다."
+        description = "카카오 액세스 토큰을 전달 받아 카카오 소셜 로그인을 진행합니다.",
     )
     @PostMapping("/login/kakao")
     fun kakaoLogin(@Valid @RequestBody request: KakaoLoginRequest): ResponseEntity<TokenResponse> {

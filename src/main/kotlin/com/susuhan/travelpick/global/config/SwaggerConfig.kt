@@ -15,20 +15,22 @@ class SwaggerConfig {
     @Bean
     fun openAPI(@Value("\${springdoc.version}") appVersion: String): OpenAPI {
         return OpenAPI()
-            .info(Info()
-                .title("Travel-Pick API Docs")
-                .description("Travel-Pick API 명세서")
-                .contact(Contact().name("LEE-SUJEONG").email("qalzm7351@gmail.com"))
-                .version(appVersion)
+            .info(
+                Info()
+                    .title("Travel-Pick API Docs")
+                    .description("Travel-Pick API 명세서")
+                    .contact(Contact().name("LEE-SUJEONG").email("qalzm7351@gmail.com"))
+                    .version(appVersion),
             )
-            .components(Components()
-                .addSecuritySchemes(
-                    "access-token",
-                    SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("Bearer")
-                        .bearerFormat("JWT")
-                )
+            .components(
+                Components()
+                    .addSecuritySchemes(
+                        "access-token",
+                        SecurityScheme()
+                            .type(SecurityScheme.Type.HTTP)
+                            .scheme("Bearer")
+                            .bearerFormat("JWT"),
+                    ),
             )
     }
 }

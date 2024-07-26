@@ -5,5 +5,4 @@ import org.springframework.context.annotation.Configuration
 
 @EnableFeignClients(basePackages = ["com.susuhan.travelpick"])
 @Configuration
-class FeignConfig {
-}
+class FeignConfig

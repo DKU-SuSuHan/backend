@@ -6,6 +6,7 @@ package com.susuhan.travelpick.global.common.util
 class ConstantUtils {
 
     companion object {
-        const val DEFAULT_PROFILE_IMAGE_URL = "https://susuhan-bucket.s3.ap-northeast-2.amazonaws.com/default-profile-image.png"
+        const val DEFAULT_PROFILE_IMAGE_URL =
+            "https://susuhan-bucket.s3.ap-northeast-2.amazonaws.com/default-profile-image.png"
     }
 }

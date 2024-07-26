@@ -15,20 +15,16 @@ data class ConfirmTravelPlaceListResponse(
     val travelPlaceList: List<TravelPlaceDto>,
 
     @Schema(description = "여행 장소 목록의 하루 총 예산")
-    val oneDayBudget: Long
+    val oneDayBudget: Long,
 ) {
 
     companion object {
-        fun from(
-            travelId: Long,
-            travelDate: LocalDate,
-            travelPlaceList: List<TravelPlaceDto>,
-            oneDayBudget: Long
-        ) = ConfirmTravelPlaceListResponse(
-            travelId,
-            travelDate,
-            travelPlaceList,
-            oneDayBudget
-        )
+        fun from(travelId: Long, travelDate: LocalDate, travelPlaceList: List<TravelPlaceDto>, oneDayBudget: Long) =
+            ConfirmTravelPlaceListResponse(
+                travelId,
+                travelDate,
+                travelPlaceList,
+                oneDayBudget,
+            )
     }
 }

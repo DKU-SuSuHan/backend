@@ -16,14 +16,12 @@ import org.springframework.transaction.annotation.Transactional
 class TravelPlaceQueryService(
     private val travelPlaceRepository: TravelPlaceRepository,
     private val travelRepository: TravelRepository,
-    private val travelMateRepository: TravelMateRepository
+    private val travelMateRepository: TravelMateRepository,
 ) {
 
-    fun getConfirmPlaceList(
-        userId: Long, travelId: Long, travelDay: Int
-    ): ConfirmTravelPlaceListResponse {
-        val travel = (travelRepository.findNotDeletedPlannedTravel(travelId)
-            ?: throw TravelIdNotFoundException())
+    fun getConfirmPlaceList(userId: Long, travelId: Long, travelDay: Int): ConfirmTravelPlaceListResponse {
+        val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
+            ?: throw TravelIdNotFoundException()
 
         if (!travelMateRepository.existsNotDeletedMate(userId, travelId)) {
             throw TravelMateNotFoundException(userId)
@@ -36,7 +34,7 @@ class TravelPlaceQueryService(
             travelId,
             travel.startAt.plusDays(travelDay.toLong() - 1),
             travelPlaceList,
-            oneDayBudget = travelPlaceRepository.findOneDayBudget(travelId, travelDay)
+            oneDayBudget = travelPlaceRepository.findOneDayBudget(travelId, travelDay),
         )
     }
 

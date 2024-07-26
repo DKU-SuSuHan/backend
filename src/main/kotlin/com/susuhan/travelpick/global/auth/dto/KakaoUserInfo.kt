@@ -14,13 +14,13 @@ data class KakaoUserInfo(
     val id: String,
     val connectedAt: Any?,
     val kakaoAccount: Any?,
-    val properties: Any?
+    val properties: Any?,
 ) {
 
     fun toUserDto(): UserDto {
         return UserDto(
             socialId = this.id,
-            loginType = LoginType.KAKAO
+            loginType = LoginType.KAKAO,
         )
     }
 }

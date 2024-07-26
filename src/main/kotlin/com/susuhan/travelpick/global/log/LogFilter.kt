@@ -23,7 +23,7 @@ class LogFilter : OncePerRequestFilter() {
             MediaType.APPLICATION_FORM_URLENCODED,
             MediaType.APPLICATION_JSON,
             MediaType.APPLICATION_XML,
-            MediaType.MULTIPART_FORM_DATA
+            MediaType.MULTIPART_FORM_DATA,
         )
     }
 
@@ -31,7 +31,7 @@ class LogFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         MDC.put(MDC_LOG_TRACED_ID_KEY, UUID.randomUUID().toString().substring(0, 12))
 
@@ -54,15 +54,17 @@ class LogFilter : OncePerRequestFilter() {
     private fun logRequestAndResponse(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val isLog = !NO_LOG_URL_LIST.any { request.requestURI.contains(it) }
         val responseWrapper = ResponseWrapper(response)
 
         try {
             if (isMultipartFormData(request.contentType)) {
-                logger.info("[${MDC.get(MDC_LOG_TRACED_ID_KEY)}] Request - [${request.method}]" +
-                        ": uri=${request.requestURI}, payload=multipart/form-data")
+                logger.info(
+                    "[${MDC.get(MDC_LOG_TRACED_ID_KEY)}] Request - [${request.method}]" +
+                        ": uri=${request.requestURI}, payload=multipart/form-data",
+                )
                 filterChain.doFilter(request, responseWrapper)
             } else {
                 val requestWrapper = RequestWrapper(request)
@@ -82,7 +84,7 @@ class LogFilter : OncePerRequestFilter() {
         val queryString = request.queryString
         val content = request.inputStream.use { it.readBytes() }
 
-        queryString?.let { uri += "?$queryString"}
+        queryString?.let { uri += "?$queryString" }
 
         val payloadInfo = when {
             content.isEmpty() -> "NO_CONTENT"

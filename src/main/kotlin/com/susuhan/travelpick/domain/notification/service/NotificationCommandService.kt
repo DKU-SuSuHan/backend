@@ -29,20 +29,22 @@ class NotificationCommandService(
         travelId: Long,
         travelAction: TravelAction,
         travelPlace: TravelPlace? = null,
-        travelMate: TravelMate? = null
+        travelMate: TravelMate? = null,
     ) {
         val sendUser = userRepository.findNotDeletedUser(userId)
             ?: throw UserIdNotFoundException()
 
         val notificationList = travelMateRepository.findAllUserId(travelId)
-            .map { mateUserId -> Notification(
-                sendUser = sendUser,
-                travelId = travelId,
-                travelPlace = travelPlace,
-                travelMate = travelMate,
-                receiveUserId = mateUserId,
-                travelAction = travelAction
-            ) }
+            .map { mateUserId ->
+                Notification(
+                    sendUser = sendUser,
+                    travelId = travelId,
+                    travelPlace = travelPlace,
+                    travelMate = travelMate,
+                    receiveUserId = mateUserId,
+                    travelAction = travelAction,
+                )
+            }
 
         notificationRepository.saveAll(notificationList)
     }

@@ -10,7 +10,7 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class TravelEventListener(
-    private val notificationCommandService: NotificationCommandService
+    private val notificationCommandService: NotificationCommandService,
 ) {
 
     @Async
@@ -29,31 +29,46 @@ class TravelEventListener(
 
     private fun handleCreatePlace(userId: Long, travelId: Long, travelPlace: TravelPlace) {
         notificationCommandService.createNotification(
-            userId, travelId, TravelAction.CREATE_PLACE, travelPlace = travelPlace
+            userId,
+            travelId,
+            TravelAction.CREATE_PLACE,
+            travelPlace = travelPlace,
         )
     }
 
     private fun handleDeletePlace(userId: Long, travelId: Long, travelPlace: TravelPlace) {
         notificationCommandService.createNotification(
-            userId, travelId, TravelAction.DELETE_PLACE, travelPlace = travelPlace
+            userId,
+            travelId,
+            TravelAction.DELETE_PLACE,
+            travelPlace = travelPlace,
         )
     }
 
     private fun handleAddMate(userId: Long, travelId: Long, travelMate: TravelMate) {
         notificationCommandService.createNotification(
-            userId, travelId, TravelAction.ADD_MATE, travelMate = travelMate
+            userId,
+            travelId,
+            TravelAction.ADD_MATE,
+            travelMate = travelMate,
         )
     }
 
     private fun handleDeleteMate(userId: Long, travelId: Long, travelMate: TravelMate) {
         notificationCommandService.createNotification(
-            userId, travelId, TravelAction.DELETE_MATE, travelMate = travelMate
+            userId,
+            travelId,
+            TravelAction.DELETE_MATE,
+            travelMate = travelMate,
         )
     }
 
     private fun handleChangeLeader(userId: Long, travelId: Long, travelMate: TravelMate) {
         notificationCommandService.createNotification(
-            userId, travelId, TravelAction.CHANGE_LEADER, travelMate = travelMate
+            userId,
+            travelId,
+            TravelAction.CHANGE_LEADER,
+            travelMate = travelMate,
         )
     }
 }

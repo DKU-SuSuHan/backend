@@ -1,7 +1,7 @@
 package com.susuhan.travelpick.domain.travel.service
 
-import com.susuhan.travelpick.domain.travel.dto.response.MyTravelResponse
 import com.susuhan.travelpick.domain.travel.dto.response.MyTravelInfoResponse
+import com.susuhan.travelpick.domain.travel.dto.response.MyTravelResponse
 import com.susuhan.travelpick.domain.travel.exception.TravelIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.exception.TravelMateIdNotFoundException
 import com.susuhan.travelpick.domain.travelmate.repository.TravelMateRepository
@@ -11,22 +11,22 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional(readOnly = true)
 @Service
-class TravelQueryService (
+class TravelQueryService(
     private val travelMateRepository: TravelMateRepository,
-    private val travelPlaceRepository: TravelPlaceRepository
+    private val travelPlaceRepository: TravelPlaceRepository,
 ) {
 
     fun getMyTravel(userId: Long, travelId: Long): MyTravelInfoResponse {
         val travel = travelMateRepository.findTravel(userId, travelId)
             ?: throw TravelIdNotFoundException()
-        
+
         val travelMate = travelMateRepository.findNotDeletedMateByUser(travelId, userId)
-            ?: throw  TravelMateIdNotFoundException()
+            ?: throw TravelMateIdNotFoundException()
 
         return MyTravelInfoResponse.from(
             travel,
             travelMate,
-            totalBudget = travelPlaceRepository.findTotalBudget(travelId)
+            totalBudget = travelPlaceRepository.findTotalBudget(travelId),
         )
     }
 
