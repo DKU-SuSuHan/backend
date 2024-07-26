@@ -13,7 +13,7 @@ import kotlin.jvm.Throws
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -24,13 +24,13 @@ class JwtAuthenticationFilter(
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val token = getToken(request)
 
         if (token != null) {
             jwtTokenProvider.validateToken(token)
-            val authentication =jwtTokenProvider.getAuthentication(token)
+            val authentication = jwtTokenProvider.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
         }
 

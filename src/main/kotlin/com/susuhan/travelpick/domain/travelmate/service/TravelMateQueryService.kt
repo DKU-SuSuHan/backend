@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class TravelMateQueryService(
     private val travelMateRepository: TravelMateRepository,
-    private val travelRepository: TravelRepository
+    private val travelRepository: TravelRepository,
 ) {
 
     fun getParticipantMateList(userId: Long, travelId: Long): List<ParticipantMateInfoResponse> {
@@ -20,6 +20,6 @@ class TravelMateQueryService(
         TravelPolicy.isTravelLeader(userId, leaderId)
 
         return travelMateRepository.findAllParticipantMate(travelId)
-            .map { travelMate ->  ParticipantMateInfoResponse.from(travelMate)}
+            .map { travelMate -> ParticipantMateInfoResponse.from(travelMate) }
     }
 }

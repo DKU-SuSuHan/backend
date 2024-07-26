@@ -37,7 +37,7 @@ data class MyTravelResponse(
             travel.theme,
             DateUtils.parse(travel.startAt),
             DateUtils.parse(travel.endAt),
-            Period.between(travel.startAt, travel.endAt).days
+            Period.between(travel.startAt, travel.endAt).days,
         )
     }
 }

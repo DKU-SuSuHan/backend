@@ -26,7 +26,7 @@ data class TravelPlaceDto(
     val sequence: Long,
 
     @Schema(description = "여행 장소의 참고 링크")
-    val urlLink: String?
+    val urlLink: String?,
 ) {
 
     companion object {
@@ -38,7 +38,7 @@ data class TravelPlaceDto(
             travelPlace.address,
             travelPlace.budget,
             travelPlace.sequence,
-            travelPlace.urlLink
+            travelPlace.urlLink,
         )
     }
 }

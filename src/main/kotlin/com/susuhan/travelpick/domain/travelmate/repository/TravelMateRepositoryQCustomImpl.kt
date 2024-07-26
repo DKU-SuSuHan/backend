@@ -11,8 +11,8 @@ import java.time.LocalDateTime
 
 @Repository
 class TravelMateRepositoryQCustomImpl(
-    private val jpaQueryFactory: JPAQueryFactory
-): TravelMateRepositoryQCustom {
+    private val jpaQueryFactory: JPAQueryFactory,
+) : TravelMateRepositoryQCustom {
 
     override fun existsNotDeletedMate(userId: Long, travelId: Long): Boolean {
         return jpaQueryFactory
@@ -21,7 +21,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.user.id.eq(userId),
                 travelMate.travel.id.eq(travelId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetchFirst() != null
     }
@@ -32,7 +32,7 @@ class TravelMateRepositoryQCustomImpl(
             .from(travelMate)
             .where(
                 travelMate.id.eq(id),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -44,7 +44,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.travel.id.eq(travelId),
                 travelMate.user.id.eq(userId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -56,7 +56,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.user.id.eq(userId),
                 travelMate.travel.id.eq(travelId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -67,7 +67,7 @@ class TravelMateRepositoryQCustomImpl(
             .from(travelMate)
             .where(
                 travelMate.travel.id.eq(travelId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetch()
     }
@@ -80,7 +80,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.groupRole.eq(GroupRole.PARTICIPANT),
                 travelMate.travel.id.eq(travelId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetch()
     }
@@ -92,7 +92,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.user.id.eq(userId),
                 travelMate.travel.id.eq(travelId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -104,7 +104,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.user.id.eq(userId),
                 travelMate.travel.startAt.goe(LocalDate.now()),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetch()
     }
@@ -116,7 +116,7 @@ class TravelMateRepositoryQCustomImpl(
             .where(
                 travelMate.user.id.eq(userId),
                 travelMate.travel.startAt.lt(LocalDate.now()),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .fetch()
     }
@@ -127,7 +127,7 @@ class TravelMateRepositoryQCustomImpl(
             .set(travelMate.deleteAt, LocalDateTime.now())
             .where(
                 travelMate.travel.id.eq(travelId),
-                travelMate.deleteAt.isNull
+                travelMate.deleteAt.isNull,
             )
             .execute()
     }

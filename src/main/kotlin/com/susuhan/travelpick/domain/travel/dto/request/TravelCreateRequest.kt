@@ -43,6 +43,6 @@ data class TravelCreateRequest(
         theme = this.theme,
         startAt = this.startAt,
         endAt = this.endAt,
-        leaderId = userId
+        leaderId = userId,
     )
 }

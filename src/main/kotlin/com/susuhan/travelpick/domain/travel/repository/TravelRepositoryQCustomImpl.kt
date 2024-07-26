@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class TravelRepositoryQCustomImpl(
-    private val jpaQueryFactory: JPAQueryFactory
-): TravelRepositoryQCustom {
+    private val jpaQueryFactory: JPAQueryFactory,
+) : TravelRepositoryQCustom {
 
     override fun existsNotDeletedPlannedTravel(id: Long): Boolean {
         return jpaQueryFactory
@@ -19,7 +19,7 @@ class TravelRepositoryQCustomImpl(
             .where(
                 travel.id.eq(id),
                 travel.status.eq(Status.PLANNED),
-                travel.deleteAt.isNull
+                travel.deleteAt.isNull,
             )
             .fetchFirst() != null
     }
@@ -31,7 +31,7 @@ class TravelRepositoryQCustomImpl(
             .where(
                 travel.id.eq(id),
                 travel.status.eq(Status.PLANNED),
-                travel.deleteAt.isNull
+                travel.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -43,7 +43,7 @@ class TravelRepositoryQCustomImpl(
             .where(
                 travel.id.eq(id),
                 travel.status.eq(Status.PLANNED),
-                travel.deleteAt.isNull
+                travel.deleteAt.isNull,
             )
             .fetchOne() ?: throw TravelIdNotFoundException()
     }

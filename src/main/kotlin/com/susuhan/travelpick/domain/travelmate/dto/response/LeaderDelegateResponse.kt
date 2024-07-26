@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class LeaderDelegateResponse(
     @Schema(description = "여행지의 PK")
-    val travelId: Long
+    val travelId: Long,
 ) {
 
     companion object {

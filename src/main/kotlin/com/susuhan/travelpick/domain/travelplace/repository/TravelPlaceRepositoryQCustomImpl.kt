@@ -3,14 +3,14 @@ package com.susuhan.travelpick.domain.travelplace.repository
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.susuhan.travelpick.domain.travelplace.dto.AddressInfo
-import com.susuhan.travelpick.domain.travelplace.entity.QTravelPlace.*
+import com.susuhan.travelpick.domain.travelplace.entity.QTravelPlace.travelPlace
 import com.susuhan.travelpick.domain.travelplace.entity.TravelPlace
 import org.springframework.stereotype.Repository
 
 @Repository
 class TravelPlaceRepositoryQCustomImpl(
-    private val jpaQueryFactory: JPAQueryFactory
-): TravelPlaceRepositoryQCustom {
+    private val jpaQueryFactory: JPAQueryFactory,
+) : TravelPlaceRepositoryQCustom {
 
     override fun countPlaceTotalNumber(travelId: Long, travelDay: Int): Long {
         return jpaQueryFactory
@@ -19,7 +19,7 @@ class TravelPlaceRepositoryQCustomImpl(
             .where(
                 travelPlace.travel.id.eq(travelId),
                 travelPlace.travelDay.eq(travelDay),
-                travelPlace.deleteAt.isNull
+                travelPlace.deleteAt.isNull,
             )
             .fetchOne() ?: 0
     }
@@ -30,7 +30,7 @@ class TravelPlaceRepositoryQCustomImpl(
             .from(travelPlace)
             .where(
                 travelPlace.id.eq(id),
-                travelPlace.deleteAt.isNull
+                travelPlace.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -42,7 +42,7 @@ class TravelPlaceRepositoryQCustomImpl(
             .where(
                 travelPlace.travel.id.eq(travelId),
                 travelPlace.travelDay.eq(travelDay),
-                travelPlace.deleteAt.isNull
+                travelPlace.deleteAt.isNull,
             )
             .fetch()
     }
@@ -54,7 +54,7 @@ class TravelPlaceRepositoryQCustomImpl(
             .where(
                 travelPlace.travel.id.eq(travelId),
                 travelPlace.travelDay.eq(travelDay),
-                travelPlace.deleteAt.isNull
+                travelPlace.deleteAt.isNull,
             )
             .fetchOne() ?: 0
     }
@@ -65,22 +65,25 @@ class TravelPlaceRepositoryQCustomImpl(
             .from(travelPlace)
             .where(
                 travelPlace.travel.id.eq(travelId),
-                travelPlace.deleteAt.isNull
+                travelPlace.deleteAt.isNull,
             )
             .fetchOne() ?: 0
     }
 
     override fun findPostcodeAndAddress(travelId: Long): List<AddressInfo> {
         return jpaQueryFactory
-            .select(Projections.constructor(AddressInfo::class.java,
-                travelPlace.id,
-                travelPlace.postcode,
-                travelPlace.address
-            ))
+            .select(
+                Projections.constructor(
+                    AddressInfo::class.java,
+                    travelPlace.id,
+                    travelPlace.postcode,
+                    travelPlace.address,
+                ),
+            )
             .from(travelPlace)
             .where(
                 travelPlace.travel.id.eq(travelId),
-                travelPlace.deleteAt.isNull
+                travelPlace.deleteAt.isNull,
             )
             .fetch()
     }

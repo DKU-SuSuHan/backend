@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus
 enum class ErrorCode(
     val code: Int,
     val errorMessage: String,
-    val httpStatus: HttpStatus
+    val httpStatus: HttpStatus,
 ) {
 
     UNHANDLED(1000, "알 수 없는 서버 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),

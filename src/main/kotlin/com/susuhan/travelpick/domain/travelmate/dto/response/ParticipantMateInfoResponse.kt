@@ -8,13 +8,13 @@ data class ParticipantMateInfoResponse(
     val id: Long,
 
     @Schema(description = "여행 메이트의 닉네임")
-    val nickname: String?
+    val nickname: String?,
 ) {
 
     companion object {
         fun from(travelMate: TravelMate) = ParticipantMateInfoResponse(
             travelMate.id!!,
-            travelMate.user.nickname
+            travelMate.user.nickname,
         )
     }
 }

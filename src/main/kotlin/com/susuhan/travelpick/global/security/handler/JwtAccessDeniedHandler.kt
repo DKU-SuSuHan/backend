@@ -21,9 +21,9 @@ class JwtAccessDeniedHandler : AccessDeniedHandler {
     override fun handle(
         request: HttpServletRequest?,
         response: HttpServletResponse?,
-        accessDeniedException: AccessDeniedException?
+        accessDeniedException: AccessDeniedException?,
     ) {
-        logger().error("[Access_Denied_Handler]: 사용자가 필요한 권한이 없는 상태로 접근했습니다.");
+        logger().error("[Access_Denied_Handler]: 사용자가 필요한 권한이 없는 상태로 접근했습니다.")
 
         response?.status = HttpStatus.FORBIDDEN.value()
         response?.contentType = MediaType.APPLICATION_JSON_VALUE
@@ -31,7 +31,7 @@ class JwtAccessDeniedHandler : AccessDeniedHandler {
 
         val errorResponse = ErrorResponse(
             ErrorCode.FORBIDDEN.code,
-            ErrorCode.FORBIDDEN.errorMessage
+            ErrorCode.FORBIDDEN.errorMessage,
         )
 
         ObjectMapper().writeValue(response?.writer, errorResponse)

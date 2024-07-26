@@ -25,13 +25,11 @@ import java.time.Period
 class TravelPlaceCommandService(
     private val travelPlaceRepository: TravelPlaceRepository,
     private val travelRepository: TravelRepository,
-    private val eventListener: ApplicationEventPublisher
+    private val eventListener: ApplicationEventPublisher,
 ) {
 
     @Transactional
-    fun create(
-        userId: Long, travelId: Long, request: TravelPlaceCreateRequest
-    ): TravelPlaceCreateResponse {
+    fun create(userId: Long, travelId: Long, request: TravelPlaceCreateRequest): TravelPlaceCreateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
@@ -42,30 +40,38 @@ class TravelPlaceCommandService(
         val travelPlace = request.toEntity(
             travel,
             travelDay,
-            sequence = travelPlaceRepository.countPlaceTotalNumber(travelId, travelDay) + 1
+            sequence = travelPlaceRepository.countPlaceTotalNumber(travelId, travelDay) + 1,
         )
 
         travelPlaceRepository.save(travelPlace)
 
         // 그룹 알림방의 자동 메시지 생성 이벤트 발행
-        eventListener.publishEvent(TravelEvent(
-            TravelAction.CREATE_PLACE, userId, travelId, travelPlace
-        ))
+        eventListener.publishEvent(
+            TravelEvent(
+                TravelAction.CREATE_PLACE,
+                userId,
+                travelId,
+                travelPlace,
+            ),
+        )
 
         return TravelPlaceCreateResponse.of(travelId)
     }
 
     @Transactional
     fun update(
-        userId: Long, travelId: Long, travelPlaceId: Long, request: TravelPlaceUpdateRequest
+        userId: Long,
+        travelId: Long,
+        travelPlaceId: Long,
+        request: TravelPlaceUpdateRequest,
     ): TravelPlaceUpdateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
         TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
-        val travelPlace = (travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
-            ?: throw TravelPlaceIdNotFoundException())
+        val travelPlace = travelPlaceRepository.findNotDeletedTravelPlace(travelPlaceId)
+            ?: throw TravelPlaceIdNotFoundException()
 
         updateTravelPlace(travelPlace, travel, request)
 
@@ -82,18 +88,26 @@ class TravelPlaceCommandService(
             ?: throw TravelPlaceIdNotFoundException()
 
         travelPlace.softDelete()
-        
+
         travelPlaceRepository.decrementAllSequence(travelPlace.sequence)
 
         // 그룹 알림방의 자동 메시지 생성 이벤트 발행
-        eventListener.publishEvent(TravelEvent(
-            TravelAction.DELETE_PLACE, userId, travelId, travelPlace
-        ))
+        eventListener.publishEvent(
+            TravelEvent(
+                TravelAction.DELETE_PLACE,
+                userId,
+                travelId,
+                travelPlace,
+            ),
+        )
     }
 
     @Transactional
     fun updateTravelPlaceSequence(
-        travelId: Long, travelPlaceId: Long, travelDay: Int, location: String
+        travelId: Long,
+        travelPlaceId: Long,
+        travelDay: Int,
+        location: String,
     ): TravelPlaceSequenceUpdateResponse? {
         if (!travelRepository.existsNotDeletedPlannedTravel(travelId)) {
             throw TravelIdNotFoundException()
@@ -124,9 +138,7 @@ class TravelPlaceCommandService(
         return Period.between(travel.startAt, travelDate).days + 1
     }
 
-    private fun updateTravelPlace(
-        travelPlace: TravelPlace, travel: Travel, request: TravelPlaceUpdateRequest
-    ) {
+    private fun updateTravelPlace(travelPlace: TravelPlace, travel: Travel, request: TravelPlaceUpdateRequest) {
         travelPlace.updateTravelDay(calculateTravelDay(travel, request.travelDate))
         travelPlace.updateName(request.name)
         travelPlace.updatePostcode(request.postcode)
@@ -140,13 +152,13 @@ class TravelPlaceCommandService(
      * 이미 최하단에 존재하는 여행지를 한 칸 아래 또는 최하단으로 이동시키려고 하는 요청라면 유효한 요청이 아니라고 판단
      */
     private fun isValidSequenceRequest(sequence: Long, placeTotalNumber: Long, location: String): Boolean {
-        return !((sequence == 1L && (location == "upper" || location == "top")) ||
-                (sequence == placeTotalNumber && (location == "lower" || location == "bottom")))
+        return !(
+            (sequence == 1L && (location == "upper" || location == "top")) ||
+                (sequence == placeTotalNumber && (location == "lower" || location == "bottom"))
+            )
     }
 
-    private fun updateSequence(
-        location: String, travelPlace: TravelPlace, placeTotalNumber: Long
-    ) {
+    private fun updateSequence(location: String, travelPlace: TravelPlace, placeTotalNumber: Long) {
         val sequence = travelPlace.sequence
 
         when (location) {

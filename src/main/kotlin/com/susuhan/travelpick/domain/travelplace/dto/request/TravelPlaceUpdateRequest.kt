@@ -26,5 +26,5 @@ data class TravelPlaceUpdateRequest(
     val budget: Long,
 
     @Schema(description = "여행지 장소의 참고 링크")
-    val urlLink: String?
+    val urlLink: String?,
 )

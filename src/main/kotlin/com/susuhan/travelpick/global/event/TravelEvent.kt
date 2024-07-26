@@ -8,26 +8,32 @@ data class TravelEvent(
     val userId: Long,
     val travelId: Long,
     val travelPlace: TravelPlace?,
-    val travelMate: TravelMate?
+    val travelMate: TravelMate?,
 ) {
 
     constructor(
-        action: TravelAction, userId: Long, travelId: Long, travelPlace: TravelPlace
+        action: TravelAction,
+        userId: Long,
+        travelId: Long,
+        travelPlace: TravelPlace,
     ) : this(
         action = action,
         userId = userId,
         travelId = travelId,
         travelPlace = travelPlace,
-        travelMate = null
+        travelMate = null,
     )
 
     constructor(
-        action: TravelAction, userId: Long, travelId: Long, travelMate: TravelMate
+        action: TravelAction,
+        userId: Long,
+        travelId: Long,
+        travelMate: TravelMate,
     ) : this(
         action = action,
         userId = userId,
         travelId = travelId,
         travelPlace = null,
-        travelMate = travelMate
+        travelMate = travelMate,
     )
 }

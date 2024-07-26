@@ -4,7 +4,14 @@ import com.susuhan.travelpick.domain.user.constant.LoginType
 import com.susuhan.travelpick.domain.user.constant.Role
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
 import com.susuhan.travelpick.global.common.util.ConstantUtils
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Table(name = "users")
@@ -14,7 +21,7 @@ class User(
     password: String? = null,
     nickname: String? = null,
     socialId: String? = null,
-    loginType: LoginType
+    loginType: LoginType,
 ) : BaseTimeEntity() {
 
     @Id

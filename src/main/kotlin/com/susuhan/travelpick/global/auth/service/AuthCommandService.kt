@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class AuthCommandService(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
     @Transactional

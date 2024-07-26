@@ -13,7 +13,7 @@ data class UserDto(
     val profileImageUrl: String? = null,
     val role: Role? = null,
     val loginType: LoginType,
-    val refreshToken: String? = null
+    val refreshToken: String? = null,
 ) {
 
     companion object {
@@ -27,7 +27,7 @@ data class UserDto(
                 user.profileImageUrl,
                 user.role,
                 user.loginType,
-                user?.refreshToken
+                user?.refreshToken,
             )
         }
     }
@@ -38,7 +38,7 @@ data class UserDto(
             password = this.password,
             nickname = this.nickname,
             socialId = this.socialId,
-            loginType = this.loginType
+            loginType = this.loginType,
         )
     }
 }

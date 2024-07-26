@@ -3,7 +3,15 @@ package com.susuhan.travelpick.domain.travel.entity
 import com.susuhan.travelpick.domain.travel.entity.constant.Status
 import com.susuhan.travelpick.domain.travel.entity.constant.Theme
 import com.susuhan.travelpick.global.common.entity.BaseTimeEntity
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -18,7 +26,7 @@ class Travel(
     endAt: LocalDate,
     address: Address,
     templateNum: Long,
-    leaderId: Long
+    leaderId: Long,
 ) : BaseTimeEntity() {
 
     @Id

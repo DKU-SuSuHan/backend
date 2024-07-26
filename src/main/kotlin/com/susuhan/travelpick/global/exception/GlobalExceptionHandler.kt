@@ -28,60 +28,67 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(ex: BusinessException): ResponseEntity<ErrorResponse> {
         if (ex.isNecessaryToLog()) {
-            logger.error("[Business_Exception]: ${getExceptionStackTraceToString(ex)}");
+            logger.error("[Business_Exception]: ${getExceptionStackTraceToString(ex)}")
         }
 
         return ResponseEntity
             .status(ex.httpStatus)
-            .body(ErrorResponse(
-                ex.code, ex.errorMessage
-            ))
+            .body(
+                ErrorResponse(
+                    ex.code,
+                    ex.errorMessage,
+                ),
+            )
     }
 
     override fun handleMethodArgumentNotValid(
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
         status: HttpStatusCode,
-        request: WebRequest
-    ) : ResponseEntity<Any> {
-        logger.error("[Method_Argument_Not_Valid_Exception]: ${getExceptionStackTraceToString(ex)}");
+        request: WebRequest,
+    ): ResponseEntity<Any> {
+        logger.error("[Method_Argument_Not_Valid_Exception]: ${getExceptionStackTraceToString(ex)}")
 
         val errors = ex.bindingResult.fieldErrors.map { error ->
             FieldError(
                 error.field,
                 error.rejectedValue?.toString() ?: "",
-                error?.defaultMessage ?: ""
+                error?.defaultMessage ?: "",
             )
         }
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ValidationErrorResponse(
-                ErrorCode.METHOD_ARGUMENT_NOT_VALID.code,
-                ErrorCode.METHOD_ARGUMENT_NOT_VALID.errorMessage,
-                errors
-            ))
+            .body(
+                ValidationErrorResponse(
+                    ErrorCode.METHOD_ARGUMENT_NOT_VALID.code,
+                    ErrorCode.METHOD_ARGUMENT_NOT_VALID.errorMessage,
+                    errors,
+                ),
+            )
     }
 
     @ExceptionHandler(ConstraintViolationException::class)
     fun handleBusinessException(ex: ConstraintViolationException): ResponseEntity<ValidationErrorResponse> {
-        logger.error("[Constraint_Violation_Exception]: ${getExceptionStackTraceToString(ex)}");
+        logger.error("[Constraint_Violation_Exception]: ${getExceptionStackTraceToString(ex)}")
 
         val errors = ex.constraintViolations.map { violation ->
             FieldError(
                 getFieldName(violation),
                 violation.invalidValue.toString(),
-                violation.message
+                violation.message,
             )
         }
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ValidationErrorResponse(
-                ErrorCode.CONSTRAINT_VIOLATION.code,
-                ErrorCode.CONSTRAINT_VIOLATION.errorMessage,
-                errors
-            ))
+            .body(
+                ValidationErrorResponse(
+                    ErrorCode.CONSTRAINT_VIOLATION.code,
+                    ErrorCode.CONSTRAINT_VIOLATION.errorMessage,
+                    errors,
+                ),
+            )
     }
 
     override fun handleExceptionInternal(
@@ -89,7 +96,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         body: Any?,
         headers: HttpHeaders,
         statusCode: HttpStatusCode,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<Any> {
         logger.error("[Spring_MVC_Standard_Exception]: ${getExceptionStackTraceToString(ex)}")
 
@@ -101,20 +108,26 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
         return ResponseEntity
             .status(statusCode.value())
-            .body(ErrorResponse(
-                errorCode, ex?.message
-            ))
+            .body(
+                ErrorResponse(
+                    errorCode,
+                    ex?.message,
+                ),
+            )
     }
 
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception): ResponseEntity<ErrorResponse> {
-        logger.error("[Unhandled_Exception]: ${getExceptionStackTraceToString(ex)}");
+        logger.error("[Unhandled_Exception]: ${getExceptionStackTraceToString(ex)}")
 
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorResponse(
-                ErrorCode.UNHANDLED.code, ex?.message
-            ))
+            .body(
+                ErrorResponse(
+                    ErrorCode.UNHANDLED.code,
+                    ex?.message,
+                ),
+            )
     }
 
     companion object {

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class TravelPickApplication
 
 fun main(args: Array<String>) {
-	runApplication<TravelPickApplication>(*args)
+    runApplication<TravelPickApplication>(*args)
 }

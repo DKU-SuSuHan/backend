@@ -40,7 +40,7 @@ data class MyTravelInfoResponse(
     val totalDay: Long,
 
     @Schema(description = "여행지의 총 예산")
-    val totalBudget: Long
+    val totalBudget: Long,
 ) {
 
     companion object {
@@ -55,7 +55,7 @@ data class MyTravelInfoResponse(
             DateUtils.parse(travel.endAt),
             travelMate.groupRole,
             ChronoUnit.DAYS.between(travel.startAt, travel.endAt) + 1,
-            totalBudget
+            totalBudget,
         )
     }
 }

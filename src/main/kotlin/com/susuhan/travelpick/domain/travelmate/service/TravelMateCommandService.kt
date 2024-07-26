@@ -25,7 +25,7 @@ class TravelMateCommandService(
     private val travelMateRepository: TravelMateRepository,
     private val travelRepository: TravelRepository,
     private val userRepository: UserRepository,
-    private val eventListener: ApplicationEventPublisher
+    private val eventListener: ApplicationEventPublisher,
 ) {
 
     @Transactional
@@ -36,7 +36,7 @@ class TravelMateCommandService(
         val travelMate = TravelMate(
             user = user,
             travel = travel,
-            groupRole = GroupRole.LEADER
+            groupRole = GroupRole.LEADER,
         )
 
         travelMateRepository.save(travelMate)
@@ -44,7 +44,9 @@ class TravelMateCommandService(
 
     @Transactional
     fun createTravelParticipants(
-        userId: Long, travelId: Long, request: TravelMateCreateRequest
+        userId: Long,
+        travelId: Long,
+        request: TravelMateCreateRequest,
     ): List<TravelMateCreateResponse> {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
@@ -58,9 +60,14 @@ class TravelMateCommandService(
         return travelMateRepository.saveAll(travelMateList)
             .map { travelMate ->
                 // 그룹 알림방의 자동 메시지 생성 이벤트 발행
-                eventListener.publishEvent(TravelEvent(
-                    TravelAction.ADD_MATE, userId, travelId, travelMate
-                ))
+                eventListener.publishEvent(
+                    TravelEvent(
+                        TravelAction.ADD_MATE,
+                        userId,
+                        travelId,
+                        travelMate,
+                    ),
+                )
                 TravelMateCreateResponse.from(travelMate)
             }
     }
@@ -79,9 +86,14 @@ class TravelMateCommandService(
         travelMate.softDelete()
 
         // 그룹 알림방의 자동 메시지 생성 이벤트 발행
-        eventListener.publishEvent(TravelEvent(
-            TravelAction.DELETE_MATE, userId, travelId, travelMate
-        ))
+        eventListener.publishEvent(
+            TravelEvent(
+                TravelAction.DELETE_MATE,
+                userId,
+                travelId,
+                travelMate,
+            ),
+        )
     }
 
     @Transactional
@@ -90,9 +102,7 @@ class TravelMateCommandService(
     }
 
     @Transactional
-    fun delegateLeaderRole(
-        userId: Long, travelId: Long, request: LeaderDelegateRequest
-    ): LeaderDelegateResponse {
+    fun delegateLeaderRole(userId: Long, travelId: Long, request: LeaderDelegateRequest): LeaderDelegateResponse {
         val travel = travelRepository.findNotDeletedPlannedTravel(travelId)
             ?: throw TravelIdNotFoundException()
 
@@ -103,9 +113,7 @@ class TravelMateCommandService(
         return LeaderDelegateResponse.of(travelId)
     }
 
-    private fun updateTravelMateRole(
-        userId: Long, travelMateId: Long, travel: Travel
-    ) {
+    private fun updateTravelMateRole(userId: Long, travelMateId: Long, travel: Travel) {
         val leader = travelMateRepository.findNotDeletedMateByUser(travel.id!!, userId)
             ?: throw TravelMateIdNotFoundException()
 
@@ -118,8 +126,13 @@ class TravelMateCommandService(
         participant.updateToLeaderRole()
 
         // 그룹 알림방의 자동 메시지 생성 이벤트 발행
-        eventListener.publishEvent(TravelEvent(
-            TravelAction.CHANGE_LEADER, userId, travel.id!!, participant
-        ))
+        eventListener.publishEvent(
+            TravelEvent(
+                TravelAction.CHANGE_LEADER,
+                userId,
+                travel.id!!,
+                participant,
+            ),
+        )
     }
 }

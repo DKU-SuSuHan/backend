@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class UserRepositoryQCustomImpl(
-    private val jpaQueryFactory: JPAQueryFactory
-): UserRepositoryQCustom {
+    private val jpaQueryFactory: JPAQueryFactory,
+) : UserRepositoryQCustom {
 
     override fun existsNotDeletedUserByNickname(nickname: String): Boolean {
         return jpaQueryFactory
@@ -16,7 +16,7 @@ class UserRepositoryQCustomImpl(
             .from(user)
             .where(
                 user.nickname.eq(nickname),
-                user.deleteAt.isNull
+                user.deleteAt.isNull,
             )
             .fetchFirst() != null
     }
@@ -27,7 +27,7 @@ class UserRepositoryQCustomImpl(
             .from(user)
             .where(
                 user.id.eq(id),
-                user.deleteAt.isNull
+                user.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -38,7 +38,7 @@ class UserRepositoryQCustomImpl(
             .from(user)
             .where(
                 user.nickname.eq(nickname),
-                user.deleteAt.isNull
+                user.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -49,7 +49,7 @@ class UserRepositoryQCustomImpl(
             .from(user)
             .where(
                 user.socialId.eq(socialId),
-                user.deleteAt.isNull
+                user.deleteAt.isNull,
             )
             .fetchOne()
     }
@@ -60,7 +60,7 @@ class UserRepositoryQCustomImpl(
             .from(user)
             .where(
                 user.id.`in`(ids),
-                user.deleteAt.isNull
+                user.deleteAt.isNull,
             )
             .fetch()
     }

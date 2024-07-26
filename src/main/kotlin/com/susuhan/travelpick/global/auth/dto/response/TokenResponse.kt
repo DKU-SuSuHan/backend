@@ -7,7 +7,7 @@ data class TokenResponse(
     val accessToken: String,
 
     @Schema(description = "서버에서 내부에서 발급한 리프레시 토큰")
-    val refreshToken: String
+    val refreshToken: String,
 ) {
 
     companion object {

@@ -7,7 +7,7 @@ import java.util.*
 
 class CustomUserDetails(
     val userId: String,
-    val role: String
+    val role: String,
 ) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority?> {
