@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+    id("jacoco")
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
     kotlin("plugin.jpa") version "1.9.23"
@@ -82,6 +83,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport) // 테스트 후 jacoco 리포트 생성
 }
 
 // Querydsl 설정
@@ -96,3 +98,57 @@ tasks.named("clean") {
         file(querydslDirPath).deleteRecursively()
     }
 }
+
+// Jacoco 설정
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = false
+    }
+
+    val qDomains = ('A'..'Z').map { "Q$it*" }
+
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    exclude(qDomains)
+                    include(
+                        "**/api/**",
+                        "**/service/**",
+                        "**/repository/**",
+                    )
+                }
+            },
+        ),
+    )
+}
+
+// TODO: 테스트 코드 어느 정도 작성한 다음 주석 해제 및 자세한 규칙 정의
+// tasks.jacocoTestCoverageVerification {
+//    violationRules {
+//        rule {
+//            enabled = true
+//            element = "CLASS"
+//
+//            limit {
+//                counter = "BRANCH"
+//                value = "COVEREDRATIO"
+//                minimum = BigDecimal("0.80")
+//            }
+//
+//            limit {
+//                counter = "LINE"
+//                value = "COVEREDRATIO"
+//                minimum = BigDecimal("0.80")
+//            }
+//        }
+//    }
+// }
