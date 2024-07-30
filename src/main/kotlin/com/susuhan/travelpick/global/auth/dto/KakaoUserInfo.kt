@@ -27,7 +27,7 @@ data class KakaoUserInfo(
 
     /**
      * 카카오 소셜 로그인의 닉네임은 랜덤한 영어 대소문자와 숫자 5개씩 조합하여 생성
-     * 이 후, 사용자가 닉네임을 수정할 수 있음
+     * 이후, 사용자가 닉네임을 수정할 수 있음
      */
     private fun generateRandomNickname(): String {
         val letters = ('a'..'z') + ('A'..'Z')
