@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 class User(
     email: String? = null,
     password: String? = null,
-    nickname: String? = null,
+    nickname: String,
     socialId: String? = null,
     loginType: LoginType,
 ) : BaseTimeEntity() {
@@ -38,7 +38,7 @@ class User(
         protected set
 
     @Column(name = "nickname", unique = true, length = 10)
-    var nickname: String? = nickname
+    var nickname: String = nickname
         protected set
 
     @Column(name = "social_id", unique = true, updatable = false)
@@ -57,10 +57,6 @@ class User(
     @Enumerated(EnumType.STRING)
     val loginType: LoginType = loginType
 
-    // TODO: redis로 관리할 예정
-    @Column(name = "refresh_token")
-    var refreshToken: String? = null
-
     @Column(name = "delete_at")
     var deleteAt: LocalDateTime? = null
         protected set
@@ -70,9 +66,5 @@ class User(
      */
     fun updateNickname(nickname: String) {
         this.nickname = nickname
-    }
-
-    fun updateRefreshToken(refreshToken: String) {
-        this.refreshToken = refreshToken
     }
 }

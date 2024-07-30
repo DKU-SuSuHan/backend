@@ -33,13 +33,9 @@ class JwtTokenProvider(
         encodeKey = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
     }
 
-    fun createAccessToken(userId: Long, role: Role): String {
-        return createToken(userId, role, accessTokenExpiredTime)
-    }
+    fun createAccessToken(userId: Long, role: Role): String = createToken(userId, role, accessTokenExpiredTime)
 
-    fun createRefreshToken(userId: Long, role: Role): String {
-        return createToken(userId, role, refreshTokenExpiredTime)
-    }
+    fun createRefreshToken(userId: Long, role: Role): String = createToken(userId, role, refreshTokenExpiredTime)
 
     fun getAuthentication(token: String): Authentication {
         val userDetails = CustomUserDetails(getUserId(token), getUserRole(token))
@@ -59,9 +55,9 @@ class JwtTokenProvider(
         }
     }
 
-    fun getUserRole(token: String): String {
-        return getClaims(token)["role"].toString()
-    }
+    fun getUserId(token: String): String = getClaims(token).subject
+
+    fun getUserRole(token: String) = getClaims(token)["role"].toString()
 
     private fun createToken(userId: Long, role: Role, tokenExpiredTime: Long): String {
         val now = Date()
@@ -74,15 +70,9 @@ class JwtTokenProvider(
             .compact()
     }
 
-    private fun getUserId(token: String): String {
-        return getClaims(token).subject
-    }
-
-    private fun getClaims(token: String): Claims {
-        return Jwts.parser()
-            .verifyWith(encodeKey)
-            .build()
-            .parseSignedClaims(token)
-            .payload
-    }
+    private fun getClaims(token: String): Claims = Jwts.parser()
+        .verifyWith(encodeKey)
+        .build()
+        .parseSignedClaims(token)
+        .payload
 }

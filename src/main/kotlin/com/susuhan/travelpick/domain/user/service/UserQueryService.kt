@@ -3,6 +3,7 @@ package com.susuhan.travelpick.domain.user.service
 import com.susuhan.travelpick.domain.user.dto.response.LoginUserInfoResponse
 import com.susuhan.travelpick.domain.user.dto.response.NicknameCheckResponse
 import com.susuhan.travelpick.domain.user.dto.response.UserSearchByNicknameResponse
+import com.susuhan.travelpick.domain.user.entity.User
 import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
 import com.susuhan.travelpick.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserQueryService(
     private val userRepository: UserRepository,
 ) {
+
+    fun getUserById(userId: Long): User = userRepository.findNotDeletedUser(userId) ?: throw UserIdNotFoundException()
 
     fun checkNicknameDuplicated(nickname: String): NicknameCheckResponse {
         val isDuplicated = userRepository.existsNotDeletedUserByNickname(nickname)
