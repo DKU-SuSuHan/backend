@@ -17,6 +17,6 @@ spring:
         port: ${REDIS_PORT}
 
 jwt:
-  secret-key: ${JWT_SECRET_KEY}
-  access-token-expired-time: 10800000 # 3시간
-  refresh-token-expired-time: 1296000000 # 15일
+  secretKey: ${JWT_SECRET_KEY}
+  accessTokenExpiredTime: 10800000 # 3시간
+  refreshTokenExpiredTime: 1296000000 # 15일

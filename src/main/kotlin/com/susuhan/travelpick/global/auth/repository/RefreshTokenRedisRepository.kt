@@ -1,6 +1,6 @@
 package com.susuhan.travelpick.global.auth.repository
 
-import org.springframework.beans.factory.annotation.Value
+import com.susuhan.travelpick.global.properties.JwtProperties
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit
@@ -8,8 +8,7 @@ import java.util.concurrent.TimeUnit
 @Repository
 class RefreshTokenRedisRepository(
     private val redisTemplate: RedisTemplate<String, String>,
-    @Value("\${jwt.refresh-token-expired-time}")
-    private val refreshTokenExpiredTime: Long,
+    private val jwtProperties: JwtProperties,
 ) {
 
     companion object {
@@ -19,7 +18,7 @@ class RefreshTokenRedisRepository(
     fun save(userId: Long, refreshToken: String) = redisTemplate.opsForValue().set(
         "${KEY_PREFIX}:$userId",
         refreshToken,
-        refreshTokenExpiredTime,
+        jwtProperties.refreshTokenExpiredTime,
         TimeUnit.MILLISECONDS,
     )
 

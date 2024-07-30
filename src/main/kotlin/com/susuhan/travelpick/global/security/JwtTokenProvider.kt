@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.global.security
 
 import com.susuhan.travelpick.domain.user.constant.Role
+import com.susuhan.travelpick.global.properties.JwtProperties
 import com.susuhan.travelpick.global.security.exception.TokenExpiredException
 import com.susuhan.travelpick.global.security.exception.TokenNotValidException
 import io.jsonwebtoken.Claims
@@ -8,7 +9,6 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jakarta.annotation.PostConstruct
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
@@ -18,24 +18,23 @@ import javax.crypto.SecretKey
 
 @Component
 class JwtTokenProvider(
-    @Value("\${jwt.access-token-expired-time}")
-    private val accessTokenExpiredTime: Long,
-    @Value("\${jwt.refresh-token-expired-time}")
-    private val refreshTokenExpiredTime: Long,
-    @Value("\${jwt.secret-key}")
-    private val secretKey: String,
+    private val jwtProperties: JwtProperties,
 ) {
 
     private lateinit var encodeKey: SecretKey
 
     @PostConstruct
     private fun init() {
-        encodeKey = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
+        encodeKey = Keys.hmacShaKeyFor(
+            jwtProperties.secretKey.toByteArray(StandardCharsets.UTF_8),
+        )
     }
 
-    fun createAccessToken(userId: Long, role: Role): String = createToken(userId, role, accessTokenExpiredTime)
+    fun createAccessToken(userId: Long, role: Role): String =
+        createToken(userId, role, jwtProperties.accessTokenExpiredTime)
 
-    fun createRefreshToken(userId: Long, role: Role): String = createToken(userId, role, refreshTokenExpiredTime)
+    fun createRefreshToken(userId: Long, role: Role): String =
+        createToken(userId, role, jwtProperties.refreshTokenExpiredTime)
 
     fun getAuthentication(token: String): Authentication {
         val userDetails = CustomUserDetails(getUserId(token), getUserRole(token))
