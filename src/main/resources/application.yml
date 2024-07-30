@@ -11,6 +11,10 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     open-in-view: false
+  data:
+    redis:
+        host: ${REDIS_HOST}
+        port: ${REDIS_PORT}
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
