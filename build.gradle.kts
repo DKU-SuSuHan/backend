@@ -39,6 +39,9 @@ dependencies {
     // DB - MySQL
     runtimeOnly("com.mysql:mysql-connector-j")
 
+    // Redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     // Querydsl
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")

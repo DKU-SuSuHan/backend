@@ -1,36 +1,49 @@
 package com.susuhan.travelpick.global.auth.service
 
-import com.susuhan.travelpick.domain.user.constant.Role
-import com.susuhan.travelpick.domain.user.dto.UserDto
-import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
-import com.susuhan.travelpick.domain.user.repository.UserRepository
+import com.susuhan.travelpick.domain.user.entity.User
+import com.susuhan.travelpick.domain.user.service.UserQueryService
+import com.susuhan.travelpick.global.auth.dto.request.RenewalTokensRequest
 import com.susuhan.travelpick.global.auth.dto.response.TokenResponse
+import com.susuhan.travelpick.global.auth.repository.RefreshTokenRedisRepository
 import com.susuhan.travelpick.global.security.JwtTokenProvider
+import com.susuhan.travelpick.global.security.exception.TokenNotValidException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthCommandService(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val userRepository: UserRepository,
+    private val userService: UserQueryService,
+    private val refreshTokenRedisRepository: RefreshTokenRedisRepository,
 ) {
 
     @Transactional
-    fun join(userDto: UserDto): UserDto {
-        val user = userRepository.save(userDto.toEntity())
-        return UserDto.from(user)
+    fun createJwtTokens(user: User): TokenResponse {
+        val accessToken = jwtTokenProvider.createAccessToken(user.id!!, user.role)
+        val refreshToken = jwtTokenProvider.createRefreshToken(user.id!!, user.role)
+
+        refreshTokenRedisRepository.save(user.id!!, refreshToken)
+
+        return TokenResponse.of(accessToken, refreshToken)
     }
 
     @Transactional
-    fun createJwtTokens(userId: Long, role: Role): TokenResponse {
-        val user = userRepository.findNotDeletedUser(userId)
-            ?: throw UserIdNotFoundException()
+    fun renewalJwtTokens(request: RenewalTokensRequest): TokenResponse {
+        val refreshToken = request.refreshToken
+        val userId = jwtTokenProvider.getUserId(refreshToken)
 
-        val accessToken = jwtTokenProvider.createAccessToken(userId, role)
-        val refreshToken = jwtTokenProvider.createRefreshToken(userId, role)
+        validateRefreshToken(userId, refreshToken)
 
-        user.updateRefreshToken(refreshToken)
+        return createJwtTokens(
+            userService.getUserById(userId.toLong()),
+        )
+    }
 
-        return TokenResponse.of(accessToken, refreshToken)
+    private fun validateRefreshToken(userId: String, refreshToken: String) {
+        val validRefreshToken = refreshTokenRedisRepository.findRefreshToken(userId)
+
+        if (validRefreshToken == null || validRefreshToken != refreshToken) {
+            throw TokenNotValidException()
+        }
     }
 }

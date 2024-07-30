@@ -8,7 +8,7 @@ data class UserDto(
     val id: Long? = null,
     val email: String? = null,
     val password: String? = null,
-    val nickname: String? = null,
+    val nickname: String,
     val socialId: String? = null,
     val profileImageUrl: String? = null,
     val role: Role? = null,
@@ -22,23 +22,12 @@ data class UserDto(
                 user?.id,
                 user?.email,
                 user?.password,
-                user?.nickname,
+                user.nickname,
                 user?.socialId,
                 user.profileImageUrl,
                 user.role,
                 user.loginType,
-                user?.refreshToken,
             )
         }
-    }
-
-    fun toEntity(): User {
-        return User(
-            email = this.email,
-            password = this.password,
-            nickname = this.nickname,
-            socialId = this.socialId,
-            loginType = this.loginType,
-        )
     }
 }
