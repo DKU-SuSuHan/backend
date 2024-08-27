@@ -15,8 +15,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -45,21 +43,17 @@ class TravelController(
     fun create(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody travelCreateRequest: TravelCreateRequest,
-    ): ResponseEntity<TravelCreateResponse> {
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(
-                travelCommandService.create(
-                    customUserDetails.getUserId(),
-                    travelCreateRequest,
-                ),
-            )
+    ): TravelCreateResponse {
+        return travelCommandService.create(
+            customUserDetails.getUserId(),
+            travelCreateRequest,
+        )
     }
 
     @Operation(
         summary = "여행지 수정",
         description = """
-            여행지에 대한 데이터를 받아 여행지의 데이터를 수정합니다. 
+            여행지에 대한 데이터를 받아 여행지의 데이터를 수정합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")],
@@ -69,22 +63,18 @@ class TravelController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelUpdateRequest: TravelUpdateRequest,
-    ): ResponseEntity<TravelUpdateResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelCommandService.update(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelUpdateRequest,
-                ),
-            )
+    ): TravelUpdateResponse {
+        return travelCommandService.update(
+            customUserDetails.getUserId(),
+            travelId,
+            travelUpdateRequest,
+        )
     }
 
     @Operation(
         summary = "여행지 삭제",
         description = """
-            여행지의 PK를 전달받아 해당 여행지를 삭제합니다. 
+            여행지의 PK를 전달받아 해당 여행지를 삭제합니다.
             단, 해당 여행지에 대해 주도자 역할을 가진 사용자만 요청 가능합니다.
         """,
         security = [SecurityRequirement(name = "access-token")],
@@ -93,15 +83,11 @@ class TravelController(
     fun softDelete(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-    ): ResponseEntity<Unit> {
-        return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .body(
-                travelCommandService.softDelete(
-                    customUserDetails.getUserId(),
-                    travelId,
-                ),
-            )
+    ) {
+        travelCommandService.softDelete(
+            customUserDetails.getUserId(),
+            travelId,
+        )
     }
 
     @Operation(
@@ -113,15 +99,11 @@ class TravelController(
     fun getMyTravel(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-    ): ResponseEntity<MyTravelInfoResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelQueryService.getMyTravel(
-                    customUserDetails.getUserId(),
-                    travelId,
-                ),
-            )
+    ): MyTravelInfoResponse {
+        return travelQueryService.getMyTravel(
+            customUserDetails.getUserId(),
+            travelId,
+        )
     }
 
     @Operation(
@@ -137,16 +119,12 @@ class TravelController(
     fun getMyTravelList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestParam @EnumValid(enumClass = Status::class) status: String,
-    ): ResponseEntity<List<MyTravelResponse>> {
+    ): List<MyTravelResponse> {
         val userId = customUserDetails.getUserId()
 
-        val response = when (enumValueOf<Status>(status.uppercase())) {
+        return when (enumValueOf<Status>(status.uppercase())) {
             Status.PLANNED -> travelQueryService.getPlannedTravelList(userId)
             Status.ENDED -> travelQueryService.getEndedTravelList(userId)
         }
-
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(response)
     }
 }

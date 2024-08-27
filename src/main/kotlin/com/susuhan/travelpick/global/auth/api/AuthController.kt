@@ -8,8 +8,6 @@ import com.susuhan.travelpick.global.kakao.service.KakaoService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -29,10 +27,8 @@ class AuthController(
         description = "카카오 액세스 토큰을 전달 받아 카카오 소셜 로그인을 진행합니다.",
     )
     @PostMapping("/login/kakao")
-    fun kakaoLogin(@Valid @RequestBody request: KakaoLoginRequest): ResponseEntity<TokenResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(kakaoService.login(request))
+    fun kakaoLogin(@Valid @RequestBody request: KakaoLoginRequest): TokenResponse {
+        return kakaoService.login(request)
     }
 
     @Operation(
@@ -40,9 +36,7 @@ class AuthController(
         description = "기존에 발급한 리프레시 토큰을 전달받아 액세스, 리프레시 토큰을 재발급합니다.",
     )
     @PatchMapping("/tokens/renewal")
-    fun renewalTokens(@Valid @RequestBody request: RenewalTokensRequest): ResponseEntity<TokenResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(authCommandService.renewalJwtTokens(request))
+    fun renewalTokens(@Valid @RequestBody request: RenewalTokensRequest): TokenResponse {
+        return authCommandService.renewalJwtTokens(request)
     }
 }

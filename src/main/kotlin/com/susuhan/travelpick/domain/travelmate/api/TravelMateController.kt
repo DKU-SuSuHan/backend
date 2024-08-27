@@ -12,8 +12,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -45,16 +43,12 @@ class TravelMateController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelMateCreateRequest: TravelMateCreateRequest,
-    ): ResponseEntity<List<TravelMateCreateResponse>> {
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(
-                travelMateCommandService.createTravelParticipants(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelMateCreateRequest,
-                ),
-            )
+    ): List<TravelMateCreateResponse> {
+        return travelMateCommandService.createTravelParticipants(
+            customUserDetails.getUserId(),
+            travelId,
+            travelMateCreateRequest,
+        )
     }
 
     @Operation(
@@ -70,16 +64,12 @@ class TravelMateController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelMateId") travelMateId: Long,
-    ): ResponseEntity<Unit> {
-        return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .body(
-                travelMateCommandService.softDelete(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelMateId,
-                ),
-            )
+    ) {
+        return travelMateCommandService.softDelete(
+            customUserDetails.getUserId(),
+            travelId,
+            travelMateId,
+        )
     }
 
     @Operation(
@@ -94,15 +84,11 @@ class TravelMateController(
     fun getParticipantMateList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-    ): ResponseEntity<List<ParticipantMateInfoResponse>> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelMateQueryService.getParticipantMateList(
-                    customUserDetails.getUserId(),
-                    travelId,
-                ),
-            )
+    ): List<ParticipantMateInfoResponse> {
+        return travelMateQueryService.getParticipantMateList(
+            customUserDetails.getUserId(),
+            travelId,
+        )
     }
 
     @Operation(
@@ -118,15 +104,11 @@ class TravelMateController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody leaderDelegateRequest: LeaderDelegateRequest,
-    ): ResponseEntity<LeaderDelegateResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelMateCommandService.delegateLeaderRole(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    leaderDelegateRequest,
-                ),
-            )
+    ): LeaderDelegateResponse {
+        return travelMateCommandService.delegateLeaderRole(
+            customUserDetails.getUserId(),
+            travelId,
+            leaderDelegateRequest,
+        )
     }
 }
