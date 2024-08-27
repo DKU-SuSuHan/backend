@@ -23,6 +23,7 @@ enum class ErrorCode(
 ) {
 
     UNHANDLED(1000, "알 수 없는 서버 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    JSON_PROCESS_ERROR(1001, "JSON 데이터를 처리하는 과정에서 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
     /**
      * Validation Exception

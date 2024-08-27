@@ -1,6 +1,7 @@
 package com.susuhan.travelpick.global.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.susuhan.travelpick.global.common.response.ApiResponse
 import com.susuhan.travelpick.global.exception.ErrorCode
 import com.susuhan.travelpick.global.exception.dto.ErrorResponse
 import com.susuhan.travelpick.global.security.exception.TokenExpiredException
@@ -47,6 +48,9 @@ class JwtExceptionFilter : OncePerRequestFilter() {
             errorMessage,
         )
 
-        ObjectMapper().writeValue(response.writer, errorResponse)
+        ObjectMapper().writeValue(
+            response.writer,
+            ApiResponse.fail(HttpStatus.UNAUTHORIZED.value(), errorResponse),
+        )
     }
 }
