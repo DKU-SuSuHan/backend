@@ -17,6 +17,7 @@ import java.time.LocalDateTime
 @Table(name = "users")
 @Entity
 class User(
+    id: Long = 0L,
     email: String? = null,
     password: String? = null,
     nickname: String,
@@ -27,7 +28,7 @@ class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    val id: Long? = null
+    val id: Long = id
 
     @Column(name = "email", unique = true, updatable = false)
     var email: String? = email

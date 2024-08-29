@@ -18,6 +18,7 @@ import java.time.LocalDateTime
 @Table(name = "travel_places")
 @Entity
 class TravelPlace(
+    id: Long = 0L,
     travel: Travel,
     travelDay: Int,
     name: String,
@@ -31,7 +32,7 @@ class TravelPlace(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "travel_place_id", nullable = false)
-    val id: Long? = null
+    val id: Long = id
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_id", nullable = false)

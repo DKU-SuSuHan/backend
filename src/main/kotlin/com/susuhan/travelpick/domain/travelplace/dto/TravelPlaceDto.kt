@@ -31,7 +31,7 @@ data class TravelPlaceDto(
 
     companion object {
         fun from(travelPlace: TravelPlace) = TravelPlaceDto(
-            travelPlace.id!!,
+            travelPlace.id,
             travelPlace.travelDay,
             travelPlace.name,
             travelPlace.postcode,

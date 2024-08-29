@@ -31,7 +31,7 @@ data class MyTravelResponse(
 
     companion object {
         fun from(travel: Travel) = MyTravelResponse(
-            travel.id!!,
+            travel.id,
             travel.templateNum,
             travel.title,
             travel.theme,
