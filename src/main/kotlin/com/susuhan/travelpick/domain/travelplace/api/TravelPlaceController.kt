@@ -14,8 +14,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -48,16 +46,12 @@ class TravelPlaceController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @Valid @RequestBody travelPlaceCreateRequest: TravelPlaceCreateRequest,
-    ): ResponseEntity<TravelPlaceCreateResponse> {
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(
-                travelPlaceCommandService.create(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelPlaceCreateRequest,
-                ),
-            )
+    ): TravelPlaceCreateResponse {
+        return travelPlaceCommandService.create(
+            customUserDetails.getUserId(),
+            travelId,
+            travelPlaceCreateRequest,
+        )
     }
 
     @Operation(
@@ -74,17 +68,13 @@ class TravelPlaceController(
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
         @Valid @RequestBody travelPlaceUpdateRequest: TravelPlaceUpdateRequest,
-    ): ResponseEntity<TravelPlaceUpdateResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelPlaceCommandService.update(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelPlaceId,
-                    travelPlaceUpdateRequest,
-                ),
-            )
+    ): TravelPlaceUpdateResponse {
+        return travelPlaceCommandService.update(
+            customUserDetails.getUserId(),
+            travelId,
+            travelPlaceId,
+            travelPlaceUpdateRequest,
+        )
     }
 
     @Operation(
@@ -100,16 +90,12 @@ class TravelPlaceController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
-    ): ResponseEntity<Unit> {
-        return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .body(
-                travelPlaceCommandService.softDelete(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelPlaceId,
-                ),
-            )
+    ) {
+        travelPlaceCommandService.softDelete(
+            customUserDetails.getUserId(),
+            travelId,
+            travelPlaceId,
+        )
     }
 
     @Operation(
@@ -122,16 +108,12 @@ class TravelPlaceController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
         @RequestParam(name = "travelDay") travelDay: Int,
-    ): ResponseEntity<ConfirmTravelPlaceListResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelPlaceQueryService.getConfirmPlaceList(
-                    customUserDetails.getUserId(),
-                    travelId,
-                    travelDay,
-                ),
-            )
+    ): ConfirmTravelPlaceListResponse {
+        return travelPlaceQueryService.getConfirmPlaceList(
+            customUserDetails.getUserId(),
+            travelId,
+            travelDay,
+        )
     }
 
     @Operation(
@@ -143,15 +125,11 @@ class TravelPlaceController(
     fun getAllConfirmPlaceAddressList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable(name = "travelId") travelId: Long,
-    ): ResponseEntity<List<AddressInfo>> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelPlaceQueryService.getAllConfirmPlaceAddressList(
-                    customUserDetails.getUserId(),
-                    travelId,
-                ),
-            )
+    ): List<AddressInfo> {
+        return travelPlaceQueryService.getAllConfirmPlaceAddressList(
+            customUserDetails.getUserId(),
+            travelId,
+        )
     }
 
     @Operation(
@@ -173,16 +151,12 @@ class TravelPlaceController(
         @PathVariable(name = "travelPlaceId") travelPlaceId: Long,
         @RequestParam(name = "travelDay") travelDay: Int,
         @RequestParam(name = "location") location: String,
-    ): ResponseEntity<TravelPlaceSequenceUpdateResponse?> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                travelPlaceCommandService.updateTravelPlaceSequence(
-                    travelId,
-                    travelPlaceId,
-                    travelDay,
-                    location,
-                ),
-            )
+    ): TravelPlaceSequenceUpdateResponse? {
+        return travelPlaceCommandService.updateTravelPlaceSequence(
+            travelId,
+            travelPlaceId,
+            travelDay,
+            location,
+        )
     }
 }

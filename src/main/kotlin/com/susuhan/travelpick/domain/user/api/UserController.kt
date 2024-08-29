@@ -15,8 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -44,15 +42,11 @@ class UserController(
     fun updateNickname(
         @Parameter(hidden = true) @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @Valid @RequestBody nicknameUpdateRequest: NicknameUpdateRequest,
-    ): ResponseEntity<NicknameUpdateResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(
-                userCommandService.updateNickname(
-                    customUserDetails.getUserId(),
-                    nicknameUpdateRequest,
-                ),
-            )
+    ): NicknameUpdateResponse {
+        return userCommandService.updateNickname(
+            customUserDetails.getUserId(),
+            nicknameUpdateRequest,
+        )
     }
 
     @Operation(
@@ -61,12 +55,8 @@ class UserController(
         security = [SecurityRequirement(name = "access-token")],
     )
     @GetMapping("/check/nickname")
-    fun checkNicknameDuplicated(
-        @NotBlank @Size(max = 10) @RequestParam nickname: String,
-    ): ResponseEntity<NicknameCheckResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(userQueryService.checkNicknameDuplicated(nickname))
+    fun checkNicknameDuplicated(@NotBlank @Size(max = 10) @RequestParam nickname: String): NicknameCheckResponse {
+        return userQueryService.checkNicknameDuplicated(nickname)
     }
 
     @Operation(
@@ -75,10 +65,8 @@ class UserController(
         security = [SecurityRequirement(name = "access-token")],
     )
     @GetMapping("/search")
-    fun search(@NotBlank @Size(max = 10) @RequestParam nickname: String): ResponseEntity<UserSearchByNicknameResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(userQueryService.searchByNickname(nickname))
+    fun search(@NotBlank @Size(max = 10) @RequestParam nickname: String): UserSearchByNicknameResponse {
+        return userQueryService.searchByNickname(nickname)
     }
 
     @Operation(
@@ -87,11 +75,7 @@ class UserController(
         security = [SecurityRequirement(name = "access-token")],
     )
     @GetMapping("/login")
-    fun getLoginUserInfo(
-        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-    ): ResponseEntity<LoginUserInfoResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(userQueryService.getLoginUserInfo(customUserDetails.getUserId()))
+    fun getLoginUserInfo(@AuthenticationPrincipal customUserDetails: CustomUserDetails): LoginUserInfoResponse {
+        return userQueryService.getLoginUserInfo(customUserDetails.getUserId())
     }
 }

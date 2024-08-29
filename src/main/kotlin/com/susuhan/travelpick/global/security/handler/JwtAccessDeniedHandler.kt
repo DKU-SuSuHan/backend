@@ -2,6 +2,7 @@ package com.susuhan.travelpick.global.security.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.susuhan.travelpick.global.common.log.logger
+import com.susuhan.travelpick.global.common.response.ApiResponse
 import com.susuhan.travelpick.global.exception.ErrorCode
 import com.susuhan.travelpick.global.exception.dto.ErrorResponse
 import jakarta.servlet.http.HttpServletRequest
@@ -34,6 +35,9 @@ class JwtAccessDeniedHandler : AccessDeniedHandler {
             ErrorCode.FORBIDDEN.errorMessage,
         )
 
-        ObjectMapper().writeValue(response?.writer, errorResponse)
+        ObjectMapper().writeValue(
+            response?.writer,
+            ApiResponse.fail(HttpStatus.FORBIDDEN.value(), errorResponse),
+        )
     }
 }
