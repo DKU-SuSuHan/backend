@@ -19,7 +19,7 @@ data class GroupMessageInfoResponse(
 
     companion object {
         fun from(notification: Notification) = GroupMessageInfoResponse(
-            notification.id!!,
+            notification.id,
             notification.createAt,
             "${notification.sendUser.nickname}${notification.travelAction.message}",
             UserProfileInfo(

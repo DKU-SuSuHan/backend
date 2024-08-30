@@ -45,8 +45,8 @@ data class MyTravelInfoResponse(
 
     companion object {
         fun from(travel: Travel, travelMate: TravelMate, totalBudget: Long) = MyTravelInfoResponse(
-            travel.id!!,
-            travelMate.id!!,
+            travel.id,
+            travelMate.id,
             travel.title,
             travel.theme,
             travel.address.sido,

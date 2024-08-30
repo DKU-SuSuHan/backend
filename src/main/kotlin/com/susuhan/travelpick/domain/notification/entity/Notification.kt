@@ -20,6 +20,7 @@ import jakarta.persistence.Table
 @Table(name = "notifications")
 @Entity
 class Notification(
+    id: Long = 0L,
     sendUser: User,
     travelPlace: TravelPlace? = null,
     travelMate: TravelMate? = null,
@@ -31,7 +32,7 @@ class Notification(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id", nullable = false)
-    val id: Long? = null
+    val id: Long = id
 
     // TODO: 여행 투표에 대한 연관관계 추가
 

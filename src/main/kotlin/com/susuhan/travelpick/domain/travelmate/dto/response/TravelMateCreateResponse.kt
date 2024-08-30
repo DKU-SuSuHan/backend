@@ -9,6 +9,6 @@ data class TravelMateCreateResponse(
 ) {
 
     companion object {
-        fun from(travelMate: TravelMate) = TravelMateCreateResponse(travelMate.id!!)
+        fun from(travelMate: TravelMate) = TravelMateCreateResponse(travelMate.id)
     }
 }

@@ -20,6 +20,7 @@ import java.time.LocalDateTime
 @Table(name = "travels")
 @Entity
 class Travel(
+    id: Long = 0L,
     theme: Theme,
     title: String,
     startAt: LocalDate,
@@ -32,7 +33,7 @@ class Travel(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "travel_id", nullable = false)
-    val id: Long? = null
+    val id: Long = id
 
     @Column(name = "theme", nullable = false)
     @Enumerated(EnumType.STRING)

@@ -30,7 +30,7 @@ data class TravelUpdateResponse(
 
     companion object {
         fun from(travel: Travel) = TravelUpdateResponse(
-            travel.id!!,
+            travel.id,
             travel.title,
             travel.theme,
             travel.address.sido,

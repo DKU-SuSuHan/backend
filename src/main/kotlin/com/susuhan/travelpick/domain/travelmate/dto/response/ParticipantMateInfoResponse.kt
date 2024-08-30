@@ -13,7 +13,7 @@ data class ParticipantMateInfoResponse(
 
     companion object {
         fun from(travelMate: TravelMate) = ParticipantMateInfoResponse(
-            travelMate.id!!,
+            travelMate.id,
             travelMate.user.nickname,
         )
     }

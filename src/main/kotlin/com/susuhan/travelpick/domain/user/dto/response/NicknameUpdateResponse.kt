@@ -11,7 +11,7 @@ data class NicknameUpdateResponse(
     val email: String?,
 
     @Schema(description = "회원의 닉네임")
-    val nickname: String?,
+    val nickname: String,
 ) {
 
     companion object {
