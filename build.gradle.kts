@@ -36,8 +36,9 @@ dependencies {
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    // DB - MySQL
+    // DB - MySQL, H2
     runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("com.h2database:h2")
 
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -55,8 +56,17 @@ dependencies {
     // Validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    // Test
+    // Test - Kotest, Mockk, KotlinFixture
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.1")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.1")
+    implementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
+
+    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
+
+    testImplementation("com.appmattus.fixture:fixture:1.2.0")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
