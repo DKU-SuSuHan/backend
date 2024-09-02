@@ -3,8 +3,8 @@ package com.susuhan.travelpick.domain.auth.api
 import com.susuhan.travelpick.domain.auth.dto.request.KakaoLoginRequest
 import com.susuhan.travelpick.domain.auth.dto.request.RenewalTokensRequest
 import com.susuhan.travelpick.domain.auth.dto.response.TokenResponse
-import com.susuhan.travelpick.domain.auth.service.JwtTokenService
 import com.susuhan.travelpick.domain.auth.service.AuthCommandService
+import com.susuhan.travelpick.domain.auth.service.JwtTokenService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
