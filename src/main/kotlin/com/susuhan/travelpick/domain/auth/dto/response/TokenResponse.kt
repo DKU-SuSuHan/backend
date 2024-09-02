@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.global.auth.dto.response
+package com.susuhan.travelpick.domain.auth.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
 

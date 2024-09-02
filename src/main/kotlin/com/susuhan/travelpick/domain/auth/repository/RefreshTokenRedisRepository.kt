@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.global.auth.repository
+package com.susuhan.travelpick.domain.auth.repository
 
 import com.susuhan.travelpick.global.properties.JwtProperties
 import org.springframework.data.redis.core.RedisTemplate
@@ -16,11 +16,11 @@ class RefreshTokenRedisRepository(
     }
 
     fun save(userId: Long, refreshToken: String) = redisTemplate.opsForValue().set(
-        "${KEY_PREFIX}:$userId",
+        "$KEY_PREFIX:$userId",
         refreshToken,
         jwtProperties.refreshTokenExpiredTime,
         TimeUnit.MILLISECONDS,
     )
 
-    fun findRefreshToken(userId: String): String? = redisTemplate.opsForValue().get("${KEY_PREFIX}:$userId")
+    fun findRefreshToken(userId: String): String? = redisTemplate.opsForValue().get("$KEY_PREFIX:$userId")
 }

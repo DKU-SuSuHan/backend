@@ -1,28 +1,28 @@
-package com.susuhan.travelpick.global.auth.service
+package com.susuhan.travelpick.domain.auth.service
 
+import com.susuhan.travelpick.domain.auth.dto.request.RenewalTokensRequest
+import com.susuhan.travelpick.domain.auth.dto.response.TokenResponse
+import com.susuhan.travelpick.domain.auth.repository.RefreshTokenRedisRepository
 import com.susuhan.travelpick.domain.user.entity.User
 import com.susuhan.travelpick.domain.user.service.UserQueryService
-import com.susuhan.travelpick.global.auth.dto.request.RenewalTokensRequest
-import com.susuhan.travelpick.global.auth.dto.response.TokenResponse
-import com.susuhan.travelpick.global.auth.repository.RefreshTokenRedisRepository
 import com.susuhan.travelpick.global.security.JwtTokenProvider
 import com.susuhan.travelpick.global.security.exception.TokenNotValidException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class AuthCommandService(
+class JwtTokenService(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val userService: UserQueryService,
+    private val userQueryService: UserQueryService,
     private val refreshTokenRedisRepository: RefreshTokenRedisRepository,
 ) {
 
     @Transactional
     fun createJwtTokens(user: User): TokenResponse {
-        val accessToken = jwtTokenProvider.createAccessToken(user.id!!, user.role)
-        val refreshToken = jwtTokenProvider.createRefreshToken(user.id!!, user.role)
+        val accessToken = jwtTokenProvider.createAccessToken(user.id, user.role)
+        val refreshToken = jwtTokenProvider.createRefreshToken(user.id, user.role)
 
-        refreshTokenRedisRepository.save(user.id!!, refreshToken)
+        refreshTokenRedisRepository.save(user.id, refreshToken)
 
         return TokenResponse.of(accessToken, refreshToken)
     }
@@ -35,7 +35,7 @@ class AuthCommandService(
         validateRefreshToken(userId, refreshToken)
 
         return createJwtTokens(
-            userService.getUserById(userId.toLong()),
+            userQueryService.getUserById(userId.toLong()),
         )
     }
 

@@ -1,6 +1,6 @@
 package com.susuhan.travelpick.global.kakao.client
 
-import com.susuhan.travelpick.global.auth.dto.KakaoUserInfo
+import com.susuhan.travelpick.domain.auth.dto.KakaoUserInfo
 import com.susuhan.travelpick.global.config.openfeign.KakaoFeignConfig
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.HttpHeaders

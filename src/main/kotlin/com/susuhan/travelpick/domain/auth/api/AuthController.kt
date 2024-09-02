@@ -1,10 +1,10 @@
-package com.susuhan.travelpick.global.auth.api
+package com.susuhan.travelpick.domain.auth.api
 
-import com.susuhan.travelpick.global.auth.dto.request.KakaoLoginRequest
-import com.susuhan.travelpick.global.auth.dto.request.RenewalTokensRequest
-import com.susuhan.travelpick.global.auth.dto.response.TokenResponse
-import com.susuhan.travelpick.global.auth.service.AuthCommandService
-import com.susuhan.travelpick.global.kakao.service.KakaoService
+import com.susuhan.travelpick.domain.auth.dto.request.KakaoLoginRequest
+import com.susuhan.travelpick.domain.auth.dto.request.RenewalTokensRequest
+import com.susuhan.travelpick.domain.auth.dto.response.TokenResponse
+import com.susuhan.travelpick.domain.auth.service.AuthCommandService
+import com.susuhan.travelpick.domain.auth.service.JwtTokenService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Tag(name = "소셜 로그인 관련 API")
 class AuthController(
+    private val jwtTokenService: JwtTokenService,
     private val authCommandService: AuthCommandService,
-    private val kakaoService: KakaoService,
 ) {
 
     @Operation(
@@ -28,7 +28,7 @@ class AuthController(
     )
     @PostMapping("/login/kakao")
     fun kakaoLogin(@Valid @RequestBody request: KakaoLoginRequest): TokenResponse {
-        return kakaoService.login(request)
+        return authCommandService.login(request)
     }
 
     @Operation(
@@ -37,6 +37,6 @@ class AuthController(
     )
     @PatchMapping("/tokens/renewal")
     fun renewalTokens(@Valid @RequestBody request: RenewalTokensRequest): TokenResponse {
-        return authCommandService.renewalJwtTokens(request)
+        return jwtTokenService.renewalJwtTokens(request)
     }
 }

@@ -68,4 +68,8 @@ class User(
     fun updateNickname(nickname: String) {
         this.nickname = nickname
     }
+
+    fun withdrawal() {
+        this.deleteAt = LocalDateTime.now()
+    }
 }

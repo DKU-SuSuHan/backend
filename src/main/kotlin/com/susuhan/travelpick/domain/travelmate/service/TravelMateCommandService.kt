@@ -54,7 +54,7 @@ class TravelMateCommandService(
         TravelPolicy.isTravelLeader(userId, travel.leaderId)
 
         val travelMateList = userRepository.findAllNotDeletedUserById(request.userIds)
-            .filter { user -> !travelMateRepository.existsNotDeletedMate(user.id!!, travelId) }
+            .filter { user -> !travelMateRepository.existsNotDeletedMate(user.id, travelId) }
             .map { user -> request.toEntity(user, travel) }
 
         return travelMateRepository.saveAll(travelMateList)
@@ -114,7 +114,7 @@ class TravelMateCommandService(
     }
 
     private fun updateTravelMateRole(userId: Long, travelMateId: Long, travel: Travel) {
-        val leader = travelMateRepository.findNotDeletedMateByUser(travel.id!!, userId)
+        val leader = travelMateRepository.findNotDeletedMateByUser(travel.id, userId)
             ?: throw TravelMateIdNotFoundException()
 
         val participant = travelMateRepository.findNotDeletedMate(travelMateId)
