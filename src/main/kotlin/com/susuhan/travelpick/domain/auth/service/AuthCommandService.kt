@@ -1,18 +1,17 @@
-package com.susuhan.travelpick.global.kakao.service
+package com.susuhan.travelpick.domain.auth.service
 
+import com.susuhan.travelpick.domain.auth.dto.request.KakaoLoginRequest
+import com.susuhan.travelpick.domain.auth.dto.response.TokenResponse
 import com.susuhan.travelpick.domain.user.repository.UserRepository
-import com.susuhan.travelpick.global.auth.dto.request.KakaoLoginRequest
-import com.susuhan.travelpick.global.auth.dto.response.TokenResponse
-import com.susuhan.travelpick.global.auth.service.AuthCommandService
 import com.susuhan.travelpick.global.kakao.client.KakaoApiClient
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional(readOnly = true)
 @Service
-class KakaoService(
+class AuthCommandService(
     private val kakaoApiClient: KakaoApiClient,
-    private val authCommandService: AuthCommandService,
+    private val jwtTokenService: JwtTokenService,
     private val userRepository: UserRepository,
 ) {
 
@@ -24,6 +23,6 @@ class KakaoService(
         val user = userRepository.findNotDeletedUserBySocialId(userInfo.id)
             ?: userRepository.save(userInfo.toEntity())
 
-        return authCommandService.createJwtTokens(user)
+        return jwtTokenService.createJwtTokens(user)
     }
 }

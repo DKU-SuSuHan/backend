@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.global.auth.dto
+package com.susuhan.travelpick.domain.auth.dto
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming

@@ -1,4 +1,4 @@
-package com.susuhan.travelpick.global.auth.dto.request
+package com.susuhan.travelpick.domain.auth.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
