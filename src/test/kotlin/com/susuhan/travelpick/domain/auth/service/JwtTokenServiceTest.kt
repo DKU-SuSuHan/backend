@@ -8,7 +8,6 @@ import com.susuhan.travelpick.domain.user.service.UserQueryService
 import com.susuhan.travelpick.global.security.JwtTokenProvider
 import com.susuhan.travelpick.global.security.exception.TokenNotValidException
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -42,7 +41,7 @@ class JwtTokenServiceTest : BehaviorSpec({
                 verify(exactly = 1) { jwtTokenProvider.createRefreshToken(user.id, user.role) }
                 verify(exactly = 1) { refreshTokenRedisRepository.save(user.id, refreshToken) }
             }
-            Then("생성한 토큰을 반환한다.") {
+            Then("생성한 토큰을 반환해야 한다.") {
                 result.accessToken shouldBe accessToken
                 result.refreshToken shouldBe refreshToken
             }
@@ -51,7 +50,7 @@ class JwtTokenServiceTest : BehaviorSpec({
 
     Given("유효한 리프레시 토큰이 주어졌을 때") {
         val user = KotlinFixture.fixture<User>()
-        val request = RenewalTokensRequest("valid-refresh-token")
+        val request = KotlinFixture.fixture<RenewalTokensRequest>()
         val newAccessToken = "new-access-token"
         val newRefreshToken = "new-refresh-token"
 
@@ -73,7 +72,7 @@ class JwtTokenServiceTest : BehaviorSpec({
                 verify(exactly = 1) { refreshTokenRedisRepository.save(user.id, newRefreshToken) }
                 verify(exactly = 1) { userQueryService.getUserById(user.id) }
             }
-            Then("생성한 토큰을 반환한다.") {
+            Then("생성한 토큰을 반환해야 한다.") {
                 result.accessToken shouldBe newAccessToken
                 result.refreshToken shouldBe newRefreshToken
             }
@@ -82,7 +81,7 @@ class JwtTokenServiceTest : BehaviorSpec({
 
     Given("유효하지 않은 리프레시 토큰이 주어졌을 때") {
         val user = KotlinFixture.fixture<User>()
-        val request = RenewalTokensRequest("invalid-refresh-token")
+        val request = KotlinFixture.fixture<RenewalTokensRequest>()
 
         every { jwtTokenProvider.getUserId(request.refreshToken) } returns user.id.toString()
         every { refreshTokenRedisRepository.findRefreshToken(user.id.toString()) } returns "xx"
@@ -98,7 +97,7 @@ class JwtTokenServiceTest : BehaviorSpec({
 
     Given("존재하지 않은 리프레시 토큰이 주어졌을 때") {
         val user = KotlinFixture.fixture<User>()
-        val request = RenewalTokensRequest("invalid-refresh-token")
+        val request = KotlinFixture.fixture<RenewalTokensRequest>()
 
         every { jwtTokenProvider.getUserId(request.refreshToken) } returns user.id.toString()
         every { refreshTokenRedisRepository.findRefreshToken(user.id.toString()) } returns null
@@ -111,7 +110,4 @@ class JwtTokenServiceTest : BehaviorSpec({
             }
         }
     }
-}) {
-
-    override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
-}
+})
