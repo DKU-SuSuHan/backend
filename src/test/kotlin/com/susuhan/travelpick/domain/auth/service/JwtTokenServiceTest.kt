@@ -11,9 +11,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
 
 class JwtTokenServiceTest : BehaviorSpec({
@@ -31,7 +30,7 @@ class JwtTokenServiceTest : BehaviorSpec({
 
         every { jwtTokenProvider.createAccessToken(user.id, user.role) } returns accessToken
         every { jwtTokenProvider.createRefreshToken(user.id, user.role) } returns refreshToken
-        every { refreshTokenRedisRepository.save(user.id, refreshToken) } just runs
+        justRun { refreshTokenRedisRepository.save(user.id, refreshToken) }
 
         When("토큰 생성을 요청하면") {
             val result = sut.createJwtTokens(user)
@@ -58,8 +57,8 @@ class JwtTokenServiceTest : BehaviorSpec({
         every { refreshTokenRedisRepository.findRefreshToken(user.id.toString()) } returns request.refreshToken
         every { jwtTokenProvider.createAccessToken(user.id, user.role) } returns newAccessToken
         every { jwtTokenProvider.createRefreshToken(user.id, user.role) } returns newRefreshToken
-        every { refreshTokenRedisRepository.save(user.id, newRefreshToken) } just runs
         every { userQueryService.getUserById(user.id) } returns user
+        justRun { refreshTokenRedisRepository.save(user.id, newRefreshToken) }
 
         When("토큰 갱신을 요청하면") {
             val result = sut.renewalJwtTokens(request)
