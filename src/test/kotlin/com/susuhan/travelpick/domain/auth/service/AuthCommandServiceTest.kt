@@ -11,8 +11,10 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.springframework.test.context.ActiveProfiles
 import kotlin.random.Random
 
+@ActiveProfiles("test")
 class AuthCommandServiceTest : BehaviorSpec({
 
     val kakaoApiClient = mockk<KakaoApiClient>()

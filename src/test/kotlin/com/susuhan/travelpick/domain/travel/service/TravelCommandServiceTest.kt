@@ -16,8 +16,10 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import org.springframework.test.context.ActiveProfiles
 import kotlin.random.Random
 
+@ActiveProfiles("test")
 class TravelCommandServiceTest : BehaviorSpec({
 
     val travelRepository = mockk<TravelRepository>()

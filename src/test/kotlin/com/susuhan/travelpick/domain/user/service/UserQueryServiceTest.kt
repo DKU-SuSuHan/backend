@@ -5,13 +5,14 @@ import com.susuhan.travelpick.domain.user.entity.User
 import com.susuhan.travelpick.domain.user.exception.UserIdNotFoundException
 import com.susuhan.travelpick.domain.user.repository.UserRepository
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.springframework.test.context.ActiveProfiles
 
+@ActiveProfiles("test")
 class UserQueryServiceTest : BehaviorSpec({
 
     val userRepository = mockk<UserRepository>()
@@ -154,7 +155,4 @@ class UserQueryServiceTest : BehaviorSpec({
             }
         }
     }
-}) {
-
-    override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
-}
+})

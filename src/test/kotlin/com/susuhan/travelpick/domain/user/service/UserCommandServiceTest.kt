@@ -11,7 +11,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.springframework.test.context.ActiveProfiles
 
+@ActiveProfiles("test")
 class UserCommandServiceTest : BehaviorSpec({
 
     val userRepository = mockk<UserRepository>()

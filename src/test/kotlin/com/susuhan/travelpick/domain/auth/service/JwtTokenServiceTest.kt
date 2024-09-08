@@ -14,7 +14,9 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import org.springframework.test.context.ActiveProfiles
 
+@ActiveProfiles("test")
 class JwtTokenServiceTest : BehaviorSpec({
 
     val jwtTokenProvider = mockk<JwtTokenProvider>()
