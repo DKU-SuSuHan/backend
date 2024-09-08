@@ -130,7 +130,7 @@ class TravelMateCommandService(
             TravelEvent(
                 TravelAction.CHANGE_LEADER,
                 userId,
-                travel.id!!,
+                travel.id,
                 participant,
             ),
         )
